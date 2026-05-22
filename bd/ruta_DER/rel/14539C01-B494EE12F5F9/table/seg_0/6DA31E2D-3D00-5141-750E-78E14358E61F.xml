@@ -1,0 +1,140 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="6DA31E2D-3D00-5141-750E-78E14358E61F" name="control_view_master_passwords">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>4CA31458-2AC0-B6E4-25E3-4B8EDCBABB6E</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="user_id" id="1646D1F4-0763-C7CD-34ED-442F006F148C">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>F631C971-D5EF-516F-0517-083047346F55</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1DCA9453-C494-5057-F8B3-7787F5DEC23E" referredColumn="C8DCBE40-475C-EA4C-112A-2D04F7C471E7"/>
+</associations>
+</Column>
+<Column name="client_id" id="9E2285E6-D299-E14F-2C0A-D0CF94534F85">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>F8DD1487-08F1-7DF8-3895-69264CEF5676</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1DCA9453-C494-5057-F8B3-7787F5DEC23E" referredColumn="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+</associations>
+</Column>
+<Column name="master_password_hash" id="694E647B-23DC-6538-9BAA-4C2B286F4259">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>384D2620-192A-CABD-96F8-C5B2FDADD7BA</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>890F2C6D-7037-7C60-55B6-608C9D2F3936</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="can_use_control_view" id="B5432B6F-26E4-1A7A-122A-FC1ABDAF3603">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>D7B35CAB-DC6E-C3C0-EBB3-0CFBC29A32C2</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<domain>F677439E-EB0C-F125-FCE2-4B17B7996020</domain>
+<defaultValue>&apos;N&apos;</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="set_at" id="F23AB30B-052A-E572-D590-99A63E8F9D4C">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>F2B10F9D-189B-F5CB-70B1-5387E0D089FF</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="expires_at" id="867826A3-3AF5-999B-A329-7C00D04D3651">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>9078FB62-FFC5-453E-B24C-98D04008407E</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="1608AFF8-D355-8BC9-FBF0-369A14CCA3F5" name="pk_cvmp">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>2DE85C9D-E34A-3ED1-B7C8-B1BF136D0FA3</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1646D1F4-0763-C7CD-34ED-442F006F148C"/>
+<colUsage columnID="9E2285E6-D299-E14F-2C0A-D0CF94534F85"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FA03EA4B-B681-1E27-FB0A-BA113F49DF38" name="fk_cvmp_user">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1646D1F4-0763-C7CD-34ED-442F006F148C"/>
+<colUsage columnID="9E2285E6-D299-E14F-2C0A-D0CF94534F85"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="chk_cvmp_admin_ruta" directorySegmentName="seg_0" id="0727D42A-CCDF-9315-ECD8-02A928B1BF3A">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>06128824-6844-3DB5-192E-C48A424522A0</importedID>
+<rule><![CDATA[client_id = 0]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="chk_cvmp_can_use" directorySegmentName="seg_0" id="ECD7BE84-AAEA-5F09-D8A2-6A8B1DD5541B">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>D677EF6F-2D27-7D53-FEF6-C5BB9820BBBC</importedID>
+<rule><![CDATA[can_use_control_view IN ('Y', 'N')]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

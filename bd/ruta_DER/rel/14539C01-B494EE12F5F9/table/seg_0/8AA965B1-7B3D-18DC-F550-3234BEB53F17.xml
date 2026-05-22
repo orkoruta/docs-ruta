@@ -1,0 +1,145 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="8AA965B1-7B3D-18DC-F550-3234BEB53F17" name="courier_profiles">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>D726924B-E854-7771-7DD1-AC3C8191B54D</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="user_id" id="152C0BE9-885D-8A2A-C329-2EE0EE7AA3F7">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>073E403B-58B7-6E49-128F-1901A388FC12</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="032D639B-13DA-D38F-9FBB-7772D1562AAA" referredColumn="C8DCBE40-475C-EA4C-112A-2D04F7C471E7"/>
+</associations>
+</Column>
+<Column name="client_id" id="5128B191-55D1-D72A-C844-68A45737B38F">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>FE3D77F6-532B-7F23-8D5B-7DE9824C8FC1</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="032D639B-13DA-D38F-9FBB-7772D1562AAA" referredColumn="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+</associations>
+</Column>
+<Column name="transport_method" id="60D3C386-48A7-7880-60B8-C16F57C7819A">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>5114E2A1-2460-81EA-087E-F25D6D66A10D</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>A350A853-69A7-2AEF-6F04-E60FF18CF120</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="vehicle_plate" id="56C9FFCA-AE8A-FA90-8413-989D443F712A">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>1A04ED0B-CB86-06BA-CD0C-EE8CF11D62A8</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>CF63540C-2D93-6900-C2F2-A9CDC2E3C26D</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="additional_data" id="4F0D5855-CAED-A361-EFDC-29D004DEFE99">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>454709DB-F88B-CD1F-58CB-208E62AB058F</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<domain>36C77EE2-2574-114D-89EE-57A7738F9BC7</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="C6C691E9-B798-C8B6-F769-01BAE11D8145">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>E0154318-FEBC-FA0A-77F9-04089AE462ED</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="updated_at" id="6B0D1EEF-5706-CAF5-0D46-F447813F0D26">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>28C01FEA-C935-1565-C1B9-B4C6C423DC3F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="3C8AE74F-C395-6620-42C8-1D45996A6A84" name="pk_courier_profiles">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>6AD1E807-3531-C184-524C-66150DB30F9B</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="152C0BE9-885D-8A2A-C329-2EE0EE7AA3F7"/>
+<colUsage columnID="5128B191-55D1-D72A-C844-68A45737B38F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D490B704-904A-4FBD-6880-BA1E74CE46DE" name="fk_cp_user">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="152C0BE9-885D-8A2A-C329-2EE0EE7AA3F7"/>
+<colUsage columnID="5128B191-55D1-D72A-C844-68A45737B38F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="chk_cp_additional_json" directorySegmentName="seg_0" id="9964A651-280B-FD2E-44CA-504DBB516522">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>CBD4531B-543B-207B-CD2D-AB4D457EE2A1</importedID>
+<rule><![CDATA[additional_data IS JSON]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

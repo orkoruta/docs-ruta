@@ -1,0 +1,146 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="C19747F3-7FBE-DA2B-9CA3-D19A9302AFBF" name="product categories">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>FEB0E130-0811-72E5-FBF0-1C51BC7F70FF</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id" id="ADC697F7-107E-CDD5-6740-109A75E3ED75">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>DCC82505-522B-2822-C521-96195C644716</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="client id" id="3534982E-05BC-92FA-23E9-7316623F926B">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>3CFF22A0-11CD-8920-0F9A-BBA0558ADADC</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<referedAttribute>707BA587-60B3-E90C-0E9A-02836593348C</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="name" id="0D566FAE-6DAD-422E-1F95-9F630A239FE2">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>7142C367-4CED-F65B-32C4-9D25E0D9C59F</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C90E8361-120C-EA6F-AF4C-BCCDC188E6C3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="parent category id" id="CB22761B-BA27-6D8B-F661-AEAC99CF99E0">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>1E12C834-CBC7-6334-D707-145C440710DF</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="display order" id="AD637A89-D4DA-E7A0-F003-03C53F087D21">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>38050484-F78E-AABD-0012-0889BC204C92</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>21290985-86E3-4B2D-8F9D-DFA2D59450BE</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="status" id="F61C11D0-8B26-DAD4-3049-F2D8E220EB4B">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>2FA370AE-FE53-8FB6-906A-F44BE57D54F3</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6B758F6D-8028-AC26-8E41-8F155C389590</domain>
+<defaultValue>&apos;ACTIVE&apos;</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="created at" id="B9249982-96E9-5370-7F22-598084AF40B2">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>3CB6505C-F194-B37F-282C-FEE38A7FB6EB</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="updated at" id="227E71BD-0642-2B4F-2ECC-C35EC6C244FF">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>A7B1D168-A60B-4647-86B2-02A309444110</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="F5027224-0F59-0385-53F4-7C8982F5AFD1" name="pk product categories">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>5D6CB46B-B590-8E78-9452-0D7EA4199FCD</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>ADC697F7-107E-CDD5-6740-109A75E3ED75</attributeRef>
+<attributeRef>3534982E-05BC-92FA-23E9-7316623F926B</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

@@ -1,0 +1,289 @@
+NOMBRE DEL FLUJO:
+Flujo 4 — Flujo REFUND completo (Reembolso)
+
+ARCHIVO:
+flujo_4_refund_completo.txt
+
+CONTEXTO:
+Este archivo hace parte del flujo completo de procesos de RUTA.
+RUTA es una aplicación web orientada a la administración de operaciones
+comerciales entre Clientes y Compradores. El proceso completo está
+organizado en 7 flujos principales y cada flujo corresponde a un diagrama
+independiente. Este archivo contiene el FLUJO 4 — REEMBOLSO, que es un
+subproceso financiero que NO reemplaza el estado principal del pedido.
+El reembolso se ejecuta según dos atributos clave: refund_modality
+(STORE_CREDIT o BANK_REFUND) y, cuando aplica, payment_method (que
+define si el reembolso es interno del Cliente o vía proveedor).
+
+RUTA soporta dos tipos de Cliente: Cliente API (Tipo A, solo logística)
+y Cliente Full (Tipo B, ciclo completo). Este flujo aplica
+exclusivamente a Cliente Full.
+
+REFERENCIAS OBLIGATORIAS:
+- reglas_para_diagramar_flujos.txt
+- docs/arquitectura/estrategia_multi_tenant_ruta.md
+- flujo_1_comun_y_decision_de_pago.txt
+- flujo_2_ship_completo.txt
+- flujo_3_pickup_completo.txt
+- flujo_7_devoluciones_post_cierre.txt
+
+INSTRUCCIONES PARA CODEX / IA:
+- Interpretar este archivo como parte de un sistema mayor (los 7 flujos
+  de RUTA).
+- No modificar reglas, estados ni lógica del proceso sin revisar los
+  archivos relacionados.
+- Consultar siempre reglas_para_diagramar_flujos.txt antes de generar o
+  modificar diagramas.
+- Consultar la estrategia multi-tenant. Este flujo aplica solo a
+  Cliente Full. RUTA rechaza cualquier mutación de refund_status sobre
+  pedidos de Cliente API con HTTP 422 y código
+  LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+- Este flujo se dispara como subproceso financiero desde cualquier
+  punto del sistema donde un pedido pagado (payment_status = PAID)
+  cierre prematuramente, o desde una devolución aprobada en
+  flujo_7_devoluciones_post_cierre.txt.
+- Entradas (refund_status = REFUND_PENDING) provienen de:
+    * flujo_1_comun_y_decision_de_pago.txt — cancelaciones / rechazo de
+      validación con PAID
+    * flujo_2_ship_completo.txt — pérdidas en tránsito, devolución al
+      origen con PAID, cancelaciones post-despacho con PAID, disputas
+    * flujo_3_pickup_completo.txt — pickup expirado con PAID,
+      cancelaciones en pickup con PAID, disputas
+    * flujo_7_devoluciones_post_cierre.txt — devolución aprobada
+- El pedido puede estar ya en CLOSED mientras refund_status avanza.
+- El reembolso bifurca primero por refund_modality y luego, si es
+  BANK_REFUND, por payment_method (reembolso interno del Cliente vs
+  reembolso vía proveedor de pagos).
+
+===============================================================================
+  APLICABILIDAD POR TIPO DE CLIENTE
+===============================================================================
+
+Cliente API (Tipo A): NO APLICA
+
+  Los reembolsos para pedidos de Cliente API los gestiona el Cliente
+  íntegramente en su sistema externo, dado que el cobro original
+  también ocurrió allí (payment_method = EXTERNAL_PREPAID) o se hizo
+  contra entrega y el dinero pertenece operativamente al Cliente.
+
+  RUTA NO traza refund_status para pedidos con order_origin de Cliente
+  API. Cualquier intento de transición de refund_status sobre estos
+  pedidos será rechazado con HTTP 422 y código
+  LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+
+Cliente Full (Tipo B): APLICA EN SU TOTALIDAD
+
+  Todos los pedidos de Cliente Full pasan por este flujo cuando se
+  cumplen las condiciones de disparo (cancelación con PAID, devolución
+  aprobada, disputa con reembolso, etc.).
+
+CONTENIDO DEL FLUJO:
+
+===============================================================================
+  BLOQUE 12 — REEMBOLSO (REDISEÑADO EN v10.0)
+  Subproceso financiero; no reemplaza el estado principal del pedido
+===============================================================================
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PRINCIPIO TRANSVERSAL: ROL NO FINANCIERO DE RUTA
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RUTA NO ejecuta movimientos de dinero. En todos los sub-bloques de
+  este flujo, las acciones de "procesar", "acreditar", "transferir" y
+  "ejecutar" reembolso son responsabilidad del Cliente (comercio) o de
+  los proveedores de pago que el Cliente utilice.
+
+  RUTA únicamente:
+    - Recibe la solicitud de reembolso (típicamente disparada por una
+      cancelación o devolución aprobada).
+    - Marca refund_status = REFUND_PENDING.
+    - Bifurca según refund_modality y payment_method para informar al
+      Admin/Operator del Cliente qué tipo de reembolso corresponde.
+    - Registra las transiciones de refund_status según lo que el
+      Cliente (o el proveedor de pagos vía webhook) reporta haber
+      ejecutado.
+    - Guarda evidencia (comprobantes, IDs de transacción) en metadata.
+
+  Las acciones marcadas como "Sistema procesa..." en este flujo
+  significan: el sistema del Cliente acredita o transfiere, y reporta
+  a RUTA el resultado mediante la UI del Admin/Operator o vía webhook
+  entrante desde su proveedor.
+
+  RUTA nunca custodia dinero ni ejecuta transferencias.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  El reembolso se ejecuta según dos atributos clave:
+
+    refund_modality (definido al contratar los servicios de ruta):
+      STORE_CREDIT  — se devuelve el monto como crédito interno
+      BANK_REFUND   — se devuelve el dinero a la cuenta bancaria
+                      del comprador
+
+    payment_method (definido al crear el pedido):
+      ONLINE_AT_ORDER         (pasarela de pagos)
+      ELECTRONIC_ON_DELIVERY  (datáfono, transferencia, QR, link)
+      CASH_ON_DELIVERY        (efectivo contra entrega)
+
+  Este bloque se activa cuando:
+    - El pedido estaba pagado y fue cancelado
+    - El pedido estaba pagado y falló la entrega definitivamente
+    - El pedido estaba pagado y se perdió en tránsito o en retorno
+    - El pedido estaba pagado y venció el plazo de pickup
+    - Una devolución post-cierre fue aprobada y el producto recibido
+
+  12-1. Reembolso pendiente
+        → refund_status = REFUND_PENDING
+
+  12-2. Bifurcación por modalidad de reembolso
+
+        Si refund_modality = STORE_CREDIT  → continúa en 12-A
+        Si refund_modality = BANK_REFUND   → continúa en 12-B
+
+
+  ─────────────────────────────────────────────────────
+  12-A. MODALIDAD STORE_CREDIT
+  ─────────────────────────────────────────────────────
+
+  No es necesario conocer el método de pago original.
+  El monto pagado se acredita como crédito interno del comprador,
+  utilizable en futuros pedidos dentro del comercio del cliente.
+
+  12-A-1. Sistema procesa el crédito
+          → refund_status = REFUND_PROCESSING
+
+          (El Cliente acredita el crédito en su sistema interno y
+          reporta a RUTA mediante la UI del Admin/Operator.)
+
+  Desde REFUND_PROCESSING (STORE_CREDIT) puede:
+
+     a) Crédito acreditado por el monto total
+        → refund_status = REFUNDED
+        → notificación al comprador
+
+     b) Crédito acreditado por monto parcial
+        → refund_status = PARTIALLY_REFUNDED
+        → notificación al comprador
+
+     c) Fallo técnico al acreditar
+        → refund_status = REFUND_FAILED
+        → requiere gestión manual
+
+
+  ─────────────────────────────────────────────────────
+  12-B. MODALIDAD BANK_REFUND
+  ─────────────────────────────────────────────────────
+
+  Es indispensable identificar el método de pago original porque
+  define el canal de devolución y quién la ejecuta.
+
+  12-B-1. Sistema inicia procesamiento
+          → refund_status = REFUND_PROCESSING
+
+  12-B-2. Bifurcación por payment_method:
+
+
+    ─────────────────────────────────────────────────
+    Caso 12-B-1 — Reembolso interno por parte del cliente
+    Aplica cuando:
+      payment_method = CASH_ON_DELIVERY
+      o
+      payment_method = ELECTRONIC_ON_DELIVERY
+        con submétodo = BANK_TRANSFER
+    ─────────────────────────────────────────────────
+
+    El cliente (comercio) ejecuta el reembolso de forma interna:
+      - Realiza la transferencia bancaria al comprador desde
+        sus cuentas propias.
+      - Envía comprobante al comprador.
+      - Marca el pago del pedido como reembolsado en la UI de RUTA.
+
+    Desde aquí puede:
+
+       a) Transferencia ejecutada y comprobante enviado
+          → refund_status = REFUNDED
+          o
+          → refund_status = PARTIALLY_REFUNDED (si fue parcial)
+
+       b) Fallo en la ejecución interna (datos bancarios inválidos,
+          rechazo bancario, etc.)
+          → refund_status = REFUND_FAILED
+          → requiere gestión manual
+
+
+    ─────────────────────────────────────────────────
+    Caso 12-B-2 — Reembolso vía proveedor de pagos
+    Aplica cuando:
+      payment_method = ONLINE_AT_ORDER (pasarela)
+      o
+      payment_method = ELECTRONIC_ON_DELIVERY
+        con submétodo = DATAFONO
+      o
+      payment_method = ELECTRONIC_ON_DELIVERY
+        con submétodo = QR_OR_PAYMENT_LINK
+    ─────────────────────────────────────────────────
+
+    El cliente solicita el reembolso al proveedor correspondiente
+    (configurado en client_payment_providers):
+      - Pasarela de pagos → ej. Wompi
+      - Datáfono          → proveedor del datáfono (ej. Gold)
+      - QR/Link           → proveedor de la pasarela asociada
+
+    Flujo:
+      → refund_status = REFUND_PROVIDER_REQUESTED
+
+    Desde REFUND_PROVIDER_REQUESTED puede:
+
+       a) Proveedor confirma reembolso total
+          (vía webhook entrante a RUTA, validado con webhook_secret
+          del provider)
+          → cliente envía comprobante al comprador
+          → cliente marca el pago del pedido como reembolsado
+          → refund_status = REFUNDED
+
+       b) Proveedor confirma reembolso parcial
+          → cliente envía comprobante al comprador
+          → cliente marca el pago del pedido como reembolsado
+          → refund_status = PARTIALLY_REFUNDED
+
+       c) Proveedor rechaza la solicitud o falla técnicamente
+          → refund_status = REFUND_FAILED
+          → requiere gestión manual
+
+  NOTAS PARA DIAGRAMA:
+    - El pedido puede estar ya en CLOSED mientras refund_status avanza.
+    - El comprobante de reembolso se envía SIEMPRE al comprador
+      (por el Cliente, no por RUTA).
+    - En STORE_CREDIT no importa el payment_method original.
+    - En BANK_REFUND el payment_method original es decisivo para
+      elegir entre reembolso interno o vía proveedor.
+    - RUTA no transfiere dinero en ningún caso; solo registra el
+      estado declarado por el Cliente o confirmado por el proveedor
+      vía webhook.
+
+
+===============================================================================
+  CONECTOR RECOMENDADO — DIAGRAMA 4 (FLUJO REFUND COMPLETO - REDISEÑADO)
+===============================================================================
+
+  Entrada: REFUND_PENDING (disparado desde Diagramas 1, 2, 3 o 7)
+  Solo aplica para Cliente Full.
+
+  Primera bifurcación: refund_modality
+    STORE_CREDIT → REFUND_PROCESSING (Cliente acredita en su sistema)
+                   → REFUNDED / PARTIALLY_REFUNDED / REFUND_FAILED
+
+    BANK_REFUND  → REFUND_PROCESSING
+                   → segunda bifurcación por payment_method:
+
+      Caso 1: CASH_ON_DELIVERY o ELECTRONIC_ON_DELIVERY+BANK_TRANSFER
+        Reembolso interno del cliente
+        → transferencia bancaria desde cuenta del cliente
+        → envía comprobante + marca como reembolsado
+        → REFUNDED / PARTIALLY_REFUNDED / REFUND_FAILED
+
+      Caso 2: ONLINE_AT_ORDER o ELECTRONIC_ON_DELIVERY+DATAFONO
+              o ELECTRONIC_ON_DELIVERY+QR_OR_PAYMENT_LINK
+        Reembolso vía proveedor
+        → REFUND_PROVIDER_REQUESTED
+        → respuesta del proveedor (webhook entrante a RUTA):
+            REFUNDED / PARTIALLY_REFUNDED / REFUND_FAILED
+        → cliente envía comprobante y marca como reembolsado

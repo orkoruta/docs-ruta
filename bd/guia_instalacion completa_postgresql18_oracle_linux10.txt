@@ -1,0 +1,595 @@
+================================================================================
+  INSTALACIÓN Y SEGURIZACIÓN DE POSTGRESQL 18 EN ORACLE LINUX 10
+  Guía Completa con Mejores Prácticas de Seguridad y Configuración
+================================================================================
+
+ÍNDICE
+------
+  FASE 1  — Preparación del Sistema Operativo
+  FASE 2  — Creación del Usuario del Sistema Operativo
+  FASE 3  — Instalación de PostgreSQL
+  FASE 4  — Inicialización y Arranque del Servicio
+              (PGDATA configurado en /pgdata)
+  FASE 5  — Configuración de Seguridad: postgresql.conf
+  FASE 6  — Configuración de Autenticación: pg_hba.conf
+  FASE 7  — Configurar SSL para conexiones cifradas
+  FASE 8  — Configurar el Firewall
+  FASE 9  — Configuración Inicial de PostgreSQL (roles y seguridad interna)
+  FASE 10 — Aplicar cambios y reiniciar
+  FASE 11 — Automatizar Backups
+  FASE 12 — Verificación Final
+  RESUMEN — Mejores Prácticas Aplicadas
+
+
+================================================================================
+  FASE 1 — PREPARACIÓN DEL SISTEMA OPERATIVO
+================================================================================
+
+1.1 Actualizar el sistema
+-------------------------
+    sudo dnf update -y
+    sudo dnf install -y vim curl wget net-tools bash-completion
+
+
+1.2 Configurar el hostname
+--------------------------
+    sudo hostnamectl set-hostname pgserver01.dominio.local
+
+    # Verificar
+    hostnamectl
+
+
+1.3 Configurar /etc/hosts
+--------------------------
+    sudo vim /etc/hosts
+    # Agregar la siguiente línea (ajustar IP):
+    192.168.1.100   pgserver01.dominio.local   pgserver01
+
+
+1.4 Configurar la zona horaria
+-------------------------------
+    sudo timedatectl set-timezone America/Bogota
+    timedatectl status
+
+
+1.5 Configurar SELinux en modo permissive
+-----------------------------------------
+    # Ver estado actual
+    getenforce
+
+    # Modo permissive temporalmente:
+    sudo setenforce 0
+
+    # Deshabilitar permanentemente (editar archivo):
+    sudo sed -i 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
+
+    NOTA: En producción madura es mejor configurar políticas SELinux
+    específicas en lugar de deshabilitarlo por completo.
+
+
+1.6 Configurar límites del sistema para PostgreSQL
+---------------------------------------------------
+    sudo vim /etc/security/limits.conf
+    # Agregar al final del archivo:
+
+    postgres   soft   nofile   65536
+    postgres   hard   nofile   65536
+    postgres   soft   nproc    16384
+    postgres   hard   nproc    16384
+    postgres   soft   stack    unlimited
+    postgres   hard   stack    unlimited
+
+
+1.7 Parámetros del kernel (sysctl)
+------------------------------------
+    sudo vim /etc/sysctl.d/99-postgresql.conf
+    # Pegar el siguiente contenido:
+
+    # Shared Memory
+    kernel.shmmax = 68719476736        # 64GB — ajustar al 50% de RAM
+    kernel.shmall = 4294967296
+
+    # Virtual Memory
+    vm.swappiness = 10
+    vm.dirty_ratio = 15
+    vm.dirty_background_ratio = 5
+    vm.overcommit_memory = 2
+    vm.overcommit_ratio = 80
+
+    # Network
+    net.core.somaxconn = 65535
+    net.ipv4.tcp_keepalive_time = 300
+    net.ipv4.tcp_keepalive_intvl = 30
+    net.ipv4.tcp_keepalive_probes = 10
+
+    # Aplicar los cambios:
+    sudo sysctl -p /etc/sysctl.d/99-postgresql.conf
+
+
+================================================================================
+  FASE 2 — CREACIÓN DEL USUARIO DEL SISTEMA OPERATIVO
+================================================================================
+
+NOTA: El paquete de PostgreSQL crea automáticamente el usuario 'postgres'
+del SO durante la instalación. Los pasos a continuación permiten crearlo
+manualmente antes, o verificar y ajustar su configuración después.
+
+2.1 Crear el usuario postgres manualmente (si se desea antes de instalar)
+--------------------------------------------------------------------------
+    sudo groupadd -g 5432 postgres
+    sudo useradd -u 5432 -g postgres -m -s /bin/bash \
+      -c "PostgreSQL Database Administrator" \
+      -d /var/lib/pgsql postgres
+
+    # Establecer contraseña fuerte
+    sudo passwd postgres
+
+
+2.2 Crear usuario DBA para administración diaria
+-------------------------------------------------
+    IMPORTANTE: No usar el usuario 'postgres' para las operaciones diarias.
+    Crear un usuario DBA separado que opere a través de sudo.
+
+    sudo useradd -m -s /bin/bash -c "PostgreSQL DBA" pgadmin
+    sudo passwd pgadmin
+
+    # Darle acceso controlado via sudo solo a comandos pg
+    sudo visudo
+    # Agregar la siguiente línea:
+    pgadmin ALL=(postgres) NOPASSWD: /usr/pgsql-18/bin/psql, /usr/pgsql-18/bin/pg_dump, /usr/pgsql-18/bin/pg_restore
+
+
+2.3 Crear directorio PGDATA personalizado
+------------------------------------------
+    sudo mkdir -p /pgdata
+    sudo chown postgres:postgres /pgdata
+    sudo chmod 700 /pgdata
+
+    # Si SELinux está en modo enforcing (no permissive), aplicar contexto correcto:
+    # sudo semanage fcontext -a -t postgresql_db_t "/pgdata(/.*)?"
+    # sudo restorecon -Rv /pgdata
+
+
+2.4 Crear directorios para backups y logs
+------------------------------------------
+    sudo mkdir -p /backup/postgresql
+    sudo chown postgres:postgres /backup/postgresql
+    sudo chmod 750 /backup/postgresql
+
+    sudo mkdir -p /var/log/postgresql
+    sudo chown postgres:postgres /var/log/postgresql
+    sudo chmod 700 /var/log/postgresql
+
+
+================================================================================
+  FASE 3 — INSTALACIÓN DE POSTGRESQL
+================================================================================
+
+3.1 Agregar el repositorio oficial PGDG para Oracle Linux 10
+-------------------------------------------------------------
+    sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-10-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+
+3.2 Deshabilitar el módulo PostgreSQL del sistema base
+------------------------------------------------------
+    sudo dnf module disable -y postgresql
+
+
+3.3 Instalar PostgreSQL 18
+---------------------------
+    sudo dnf install -y postgresql18-server postgresql18 postgresql18-contrib
+
+
+3.4 Verificar la instalación
+------------------------------
+    /usr/pgsql-18/bin/postgres --version
+    # Debe mostrar: postgres (PostgreSQL) 18.x
+
+
+================================================================================
+  FASE 4 — INICIALIZACIÓN Y ARRANQUE DEL SERVICIO
+================================================================================
+
+  IMPORTANTE: El script postgresql-18-setup toma el valor de PGDATA
+  directamente del entorno de systemd, NO del archivo /etc/sysconfig/pgsql/.
+  Por eso el método correcto es crear un override de systemd antes del initdb.
+
+
+4.1 Crear el override de systemd para PGDATA=/pgdata
+-----------------------------------------------------
+    sudo mkdir -p /etc/systemd/system/postgresql-18.service.d/
+
+    sudo tee /etc/systemd/system/postgresql-18.service.d/override.conf <<EOF
+[Service]
+Environment=PGDATA=/pgdata
+EOF
+
+    # Recargar systemd para que lea el override:
+    sudo systemctl daemon-reload
+
+    # Verificar que PGDATA quedó correctamente configurado:
+    sudo systemctl show postgresql-18 | grep 'Environment='
+    # Debe mostrar: Environment=PGDATA=/pgdata PG_OOM_ADJUST_FILE=...
+
+
+4.2 Inicializar el cluster de base de datos en /pgdata
+-------------------------------------------------------
+    sudo /usr/pgsql-18/bin/postgresql-18-setup initdb
+    # Salida esperada: Initializing database ... OK
+
+    # Verificar que los archivos del cluster quedaron en /pgdata:
+    ls -la /pgdata
+    # Debe mostrar: PG_VERSION, postgresql.conf, pg_hba.conf, base/, pg_wal/, etc.
+
+
+4.3 Habilitar e iniciar el servicio
+-------------------------------------
+    sudo systemctl enable postgresql-18
+    sudo systemctl start postgresql-18
+    sudo systemctl status postgresql-18
+
+    # Confirmar que el proceso usa /pgdata:
+    sudo -u postgres psql -c "SHOW data_directory;"
+    # Debe mostrar: /pgdata
+
+
+================================================================================
+  FASE 5 — CONFIGURACIÓN DE SEGURIDAD: postgresql.conf
+================================================================================
+
+    sudo vim /pgdata/postgresql.conf
+
+    Ajustar o agregar los siguientes parámetros:
+
+    # ─── CONEXIONES ────────────────────────────────────────────────────────────
+    listen_addresses = 'localhost'      # Solo local por defecto.
+                                        # Cambiar a IP específica si hay clientes remotos.
+    port = 5432
+    max_connections = 100               # Ajustar según carga esperada
+
+    # ─── AUTENTICACIÓN ─────────────────────────────────────────────────────────
+    password_encryption = scram-sha-256  # Más seguro que md5
+    authentication_timeout = 1min
+
+    # ─── SSL ───────────────────────────────────────────────────────────────────
+    ssl = on
+    ssl_cert_file = 'server.crt'
+    ssl_key_file = 'server.key'
+    ssl_min_protocol_version = 'TLSv1.2'
+    ssl_ciphers = 'HIGH:MEDIUM:!aNULL:!MD5:!RC4'
+
+    # ─── LOGGING Y AUDITORÍA ───────────────────────────────────────────────────
+    log_destination = 'csvlog'
+    logging_collector = on
+    log_directory = '/var/log/postgresql'
+    log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
+    log_rotation_age = 1d
+    log_rotation_size = 100MB
+    log_min_duration_statement = 1000   # Log queries que tarden > 1 segundo
+    log_connections = on
+    log_disconnections = on
+    log_failed_authentications = on
+    log_lock_waits = on
+    log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '
+    log_statement = 'ddl'               # Registrar CREATE, ALTER, DROP
+
+    # ─── MEMORIA (ajustar según RAM disponible) ────────────────────────────────
+    shared_buffers = 256MB              # ~25% de RAM total
+    effective_cache_size = 768MB        # ~75% de RAM total
+    work_mem = 4MB
+    maintenance_work_mem = 64MB
+
+    # ─── WAL Y CHECKPOINTS ─────────────────────────────────────────────────────
+    wal_level = replica
+    checkpoint_completion_target = 0.9
+    wal_buffers = 16MB
+
+    # ─── MISC SEGURIDAD ────────────────────────────────────────────────────────
+    row_security = on
+
+
+================================================================================
+  FASE 6 — CONFIGURACIÓN DE AUTENTICACIÓN: pg_hba.conf
+================================================================================
+
+    sudo vim /pgdata/pg_hba.conf
+
+    Reemplazar el contenido con la siguiente política estricta:
+
+# TYPE  DATABASE  USER       ADDRESS            METHOD
+# Superusuario solo localmente por socket Unix (peer auth)
+local   all       postgres                      peer
+# Conexiones locales autenticadas con scram-sha-256
+local   all       all                           scram-sha-256
+# Conexiones IPv4 locales
+host    all       all        127.0.0.1/32       scram-sha-256
+hostssl rutadb    rutauser   10.77.0.0/24       scram-sha-256
+# Conexiones IPv6 locales
+host    all       all        ::1/128            scram-sha-256
+# Conexiones remotas (solo desde red interna LB, con SSL obligatorio)
+hostssl all       postgres   10.88.255.240/28   scram-sha-256	
+hostssl all       dbauser    10.88.255.240/28   scram-sha-256	
+hostssl all       rutauser   10.88.255.240/28   scram-sha-256	
+
+
+    ADVERTENCIA: NUNCA usar la siguiente configuración en producción:
+    # host  all             all             0.0.0.0/0               trust   <-- PELIGROSO
+
+
+================================================================================
+  FASE 7 — CONFIGURAR SSL PARA CONEXIONES CIFRADAS
+================================================================================
+
+    # Cambiar al usuario postgres
+    sudo -i -u postgres
+    cd /pgdata
+
+    # Generar certificado autofirmado
+    # NOTA: Para producción usar certificado firmado por CA corporativa o pública
+    openssl req -new -x509 -days 365 -nodes -out serverRUTA.crt -keyout serverRUTA.key -subj "/C=CO/ST=Bogota/L=Bogota/O=MiEmpresa/CN=pgserver01"
+
+    # Establecer permisos correctos (OBLIGATORIO)
+    chmod 600 serverRUTA.key
+    chmod 644 serverRUTA.crt
+    chown postgres:postgres serverRUTA.key serverRUTA.crt
+
+    # Volver al usuario anterior
+    exit
+
+
+================================================================================
+  FASE 8 — CONFIGURAR EL FIREWALL
+================================================================================
+
+    # Opción 1 — Abrir puerto para toda la red (menos seguro):
+    sudo firewall-cmd --permanent --add-service=postgresql
+    sudo firewall-cmd --reload
+    sudo firewall-cmd --list-all
+
+    # Opción 2 — Restringir solo a IPs específicas (RECOMENDADO):
+    sudo firewall-cmd --permanent --remove-service=postgresql
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" service name="postgresql" accept'
+    sudo firewall-cmd --reload
+
+# Red del load balancer
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.88.255.240/28" port port="26432" protocol="tcp" accept'
+# Red de la aplicación
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.77.1.0/24" port port="26432" protocol="tcp" accept'
+# Localhost (por si acaso)
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.77.0.3/32" port port="26432" protocol="tcp" accept'
+# Aplicar
+sudo firewall-cmd --reload
+# Verificar
+sudo firewall-cmd --list-rich-rules
+
+
+================================================================================
+  FASE 9 — CONFIGURACIÓN INICIAL DE POSTGRESQL (ROLES Y SEGURIDAD INTERNA)
+================================================================================
+
+9.1 Conectarse como superusuario
+---------------------------------
+    sudo -u postgres psql
+
+
+9.2 Cambiar contraseña del superusuario postgres
+-------------------------------------------------
+    ALTER USER postgres PASSWORD 'TemporaL_123#';
+
+
+9.3 Crear roles con privilegios mínimos (principio de mínimo privilegio)
+------------------------------------------------------------------------
+    -- Rol de solo lectura (sin login, se asigna a usuarios)
+    CREATE ROLE rol_lectura NOLOGIN;
+
+    -- Rol de escritura (sin login, se asigna a usuarios)
+    CREATE ROLE rol_escritura NOLOGIN;
+
+    -- Usuario de aplicación (NUNCA usar postgres directamente en apps)
+	
+    CREATE USER rutauser WITH
+      PASSWORD 'TemporaL_123#'
+      NOSUPERUSER
+      NOCREATEDB
+      NOCREATEROLE
+      LOGIN
+      CONNECTION LIMIT 20;
+
+    -- Usuario DBA con privilegios limitados
+    CREATE USER dbauser WITH
+      PASSWORD 'TemporaL_123#'
+      NOSUPERUSER
+      CREATEDB
+      NOCREATEROLE
+      LOGIN;
+
+
+9.4 Crear base de datos de producción
+--------------------------------------
+    CREATE DATABASE rutadb
+      OWNER rutauser
+      ENCODING 'UTF8'
+      LC_COLLATE 'en_US.UTF-8'
+      LC_CTYPE 'en_US.UTF-8'
+      TEMPLATE template0;
+
+    -- Revocar acceso público por defecto (MUY IMPORTANTE)
+    REVOKE ALL ON DATABASE rutadb FROM PUBLIC;
+
+    -- Conectarse a la base de datos
+    \c rutadb
+
+
+9.5 Configurar privilegios por schema
+--------------------------------------
+-- Revocar acceso al schema public
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+
+-- Crear schema principal
+CREATE SCHEMA ruta AUTHORIZATION rutauser;
+
+-- Acceso a la base de datos
+GRANT CONNECT ON DATABASE rutadb TO rutauser;
+GRANT USAGE ON SCHEMA ruta TO rol_lectura, rol_escritura;
+
+-- Privilegios para objetos futuros en el schema ruta
+ALTER DEFAULT PRIVILEGES IN SCHEMA ruta
+  GRANT SELECT ON TABLES TO rol_lectura;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA ruta
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO rol_escritura;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA ruta
+  GRANT USAGE, SELECT ON SEQUENCES TO rol_escritura;
+
+-- Asignar rol de escritura al rutauser
+GRANT rol_escritura TO rutauser;
+
+
+9.6 Eliminar base de datos y objetos de prueba
+------------------------------------------------
+    DROP DATABASE IF EXISTS test;
+
+    -- Salir de psql
+    \q
+
+
+================================================================================
+  FASE 10 — APLICAR CAMBIOS Y REINICIAR
+================================================================================
+
+    sudo systemctl restart postgresql-18
+    sudo systemctl status postgresql-18
+
+
+================================================================================
+  FASE 11 — AUTOMATIZAR BACKUPS
+================================================================================
+
+11.1 Crear el script de backup
+--------------------------------
+    sudo -u postgres vim /backup/postgresql/backup.sh
+
+    ---- Contenido del archivo backup.sh ----
+
+    #!/bin/bash
+    # Backup diario de PostgreSQL
+    FECHA=$(date +%Y%m%d_%H%M%S)
+    BDIR="/backup/postgresql"
+    PG_DUMP="/usr/pgsql-18/bin/pg_dump"
+    PGDUMPALL="/usr/pgsql-18/bin/pg_dumpall"
+    RETENTION_DAYS=7
+
+    # Backup de globals (roles, tablespaces)
+    $PGDUMPALL --globals-only > "$BDIR/globals_$FECHA.sql"
+
+    # Backup individual por base de datos
+    for DB in $(psql -t -c "SELECT datname FROM pg_database WHERE datistemplate = false;"); do
+        $PG_DUMP -Fc "$DB" > "$BDIR/${DB}_$FECHA.dump"
+        echo "Backup de $DB completado: ${DB}_$FECHA.dump"
+    done
+
+    # Eliminar backups más antiguos que RETENTION_DAYS días
+    find "$BDIR" -name "*.dump" -mtime +$RETENTION_DAYS -delete
+    find "$BDIR" -name "*.sql"  -mtime +$RETENTION_DAYS -delete
+
+    echo "Backup completado: $FECHA"
+
+    ---- Fin del archivo backup.sh ----
+
+
+11.2 Dar permisos y programar en cron
+--------------------------------------
+    sudo chmod +x /backup/postgresql/backup.sh
+    sudo chown postgres:postgres /backup/postgresql/backup.sh
+
+    # Editar crontab del usuario postgres
+    sudo -u postgres crontab -e
+
+    # Agregar la siguiente línea (ejecuta backup a las 2:00 AM todos los días):
+    0 2 * * * /backup/postgresql/backup.sh >> /var/log/postgresql/backup.log 2>&1
+
+
+================================================================================
+  FASE 12 — VERIFICACIÓN FINAL
+================================================================================
+
+    # 1. Estado del servicio
+    sudo systemctl status postgresql-18
+
+    # 2. Verificar que el puerto está escuchando
+    ss -tlnp | grep 26432
+
+    # 3. Conectar con usuario de aplicación
+    psql -U rutauser -h 10.77.0.3 -p 26432 -d rutadb -W
+
+    # 4. Verificar que SSL está activo en la sesión
+    psql -U appuser -h 10.77.0.3 -p 26432 -d rutadb -W  -c "SELECT ssl, version, cipher FROM pg_stat_ssl WHERE pid = pg_backend_pid();"
+
+    # 5. Ver todos los roles y usuarios
+    sudo -u postgres psql -p 26432 -c "\du"
+
+    # 6. Ver todas las bases de datos
+    sudo -u postgres psql -p 26432 -c "\l"
+
+    # 7. Verificar parámetros de seguridad críticos
+    sudo -u postgres psql -p 26432 -c "SHOW password_encryption;"
+    sudo -u postgres psql -p 26432 -c "SHOW ssl;"
+    sudo -u postgres psql -p 26432 -c "SHOW log_connections;"
+    sudo -u postgres psql -p 26432 -c "SHOW log_statement;"
+
+
+================================================================================
+  RESUMEN — MEJORES PRÁCTICAS APLICADAS
+================================================================================
+
+  ÁREA                  PRÁCTICA APLICADA
+  ─────────────────────────────────────────────────────────────────────────────
+  Sistema Operativo     Límites de recursos, parámetros sysctl optimizados,
+                        zona horaria correcta, hostname definido.
+
+  Usuarios del SO       Usuario 'postgres' del OS separado del sistema.
+                        Usuario DBA (pgadmin) con sudo limitado a binarios pg.
+                        Usuario de app (appuser) sin privilegios de superuser.
+
+  Autenticación         scram-sha-256 en pg_hba.conf.
+                        Prohibido: trust, md5, y acceso desde 0.0.0.0/0.
+
+  Red y SSL             SSL/TLS activo con TLS 1.2 mínimo.
+                        Firewall con restricción por red origen.
+                        listen_addresses restringido.
+
+  Privilegios           Principio de mínimo privilegio.
+                        Roles separados: rol_lectura y rol_escritura.
+                        REVOKE ALL en schema public y en la base de datos.
+                        Schema de app separado del schema public.
+
+  Auditoría y Logs      Log de conexiones, desconexiones, DDL, queries lentas
+                        y autenticaciones fallidas.
+                        Rotación diaria de logs con retención.
+
+  Backups               Script automatizado vía cron.
+                        Backup de globals + backup por base de datos.
+                        Retención de 7 días con limpieza automática.
+
+  Configuración         shared_buffers, work_mem y effective_cache_size
+                        ajustados. WAL configurado para replicación futura.
+                        row_security habilitado.
+
+  ─────────────────────────────────────────────────────────────────────────────
+
+  PASOS ADICIONALES RECOMENDADOS PARA PRODUCCIÓN AVANZADA
+  ─────────────────────────────────────────────────────────────────────────────
+  - Replicación streaming (servidor standby / alta disponibilidad)
+  - Instalar pg_audit para auditoría avanzada de DML
+  - Monitoreo con pgBadger, pganalyze o Prometheus + postgres_exporter
+  - Rotación periódica de contraseñas de usuarios PostgreSQL
+  - Certificados SSL firmados por CA corporativa (no autofirmados)
+  - Política de VACUUM y ANALYZE automática revisada y ajustada
+  - Tablespaces en discos separados para datos, índices y WAL
+
+================================================================================
+  Guía generada para Oracle Linux 10 + PostgreSQL 18
+  PGDATA configurado en: /pgdata
+  Última revisión: Mayo 2026
+================================================================================

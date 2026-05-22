@@ -1,0 +1,188 @@
+Define e implementa la estrategia de autenticación y revocación de sesiones para RUTA usando el siguiente criterio obligatorio:
+
+La estrategia recomendada para RUTA será:
+
+JWT con access tokens de corta duración + refresh tokens revocables en servidor.
+
+No usar tokens opacos con validación obligatoria en Redis para cada request en la primera versión, salvo que más adelante se definan módulos críticos que requieran revocación inmediata absoluta.
+
+Reglas obligatorias:
+
+1. Access Token JWT
+
+El access token debe ser un JWT de corta duración.
+
+Duración recomendada:
+
+- 5 minutos para ADMIN_RUTA.
+- 10 minutos para ADMIN_CLIENTE y OPERADOR_CLIENTE.
+- 10 a 15 minutos para COMPRADOR y REPARTIDOR.
+
+El access token debe incluir los claims mínimos necesarios para autorización:
+
+- user_id
+- rol
+- cliente_id
+- actor_id
+- actor_type
+- scope
+- iat
+- exp
+
+Ejemplo conceptual:
+
+{
+  "user_id": 1001,
+  "rol": "REPARTIDOR",
+  "cliente_id": 1,
+  "actor_id": 50,
+  "actor_type": "REPARTIDOR",
+  "scope": "CLIENTE",
+  "iat": 1710000000,
+  "exp": 1710000900
+}
+
+2. Refresh Token
+
+El refresh token debe ser revocable desde el servidor.
+
+Debe almacenarse de forma segura, preferiblemente en cookie HttpOnly, Secure y SameSite.
+
+El refresh token debe estar registrado en servidor en una tabla de sesiones o mecanismo equivalente.
+
+Debe permitir revocación inmediata en estos casos:
+
+- Logout del usuario.
+- Bloqueo o desactivación del usuario.
+- Cambio de permisos.
+- Cambio de rol.
+- Desactivación del Cliente.
+- Desactivación del Comprador.
+- Desactivación del Repartidor.
+- Sospecha de compromiso de sesión.
+
+3. Revocación
+
+Se acepta que un access token ya emitido pueda seguir vivo hasta su expiración.
+
+El tiempo máximo de exposición será igual a la duración restante del access token.
+
+Por eso los access tokens deben ser cortos, máximo entre 5 y 15 minutos.
+
+La revocación inmediata aplica sobre el refresh token.
+
+Cuando el refresh token esté revocado, el sistema no debe emitir nuevos access tokens.
+
+4. Validación en cada request
+
+Cada request protegida debe validar:
+
+- Que el access token sea válido.
+- Que no esté expirado.
+- Que el rol tenga permiso para la operación.
+- Que el cliente_id del token sea el autorizado.
+- Que el actor_id corresponda al usuario operativo cuando aplique.
+- Que la operación solicitada pertenezca al mismo cliente_id.
+
+5. Multi-tenancy
+
+RUTA es una aplicación multi-tenant.
+
+Todas las operaciones deben estar filtradas por cliente_id.
+
+El cliente_id debe venir del token o de un contexto seguro validado por backend.
+
+No se debe confiar en cliente_id enviado libremente desde el frontend, URL, query params o body.
+
+Ejemplo correcto:
+
+SELECT *
+FROM pedidos
+WHERE cliente_id = :cliente_id_token;
+
+Ejemplo incorrecto:
+
+SELECT *
+FROM pedidos
+WHERE cliente_id = :cliente_id_enviado_por_frontend;
+
+6. Reglas por rol
+
+ADMIN_RUTA:
+
+- Debe tener access token de menor duración, preferiblemente 5 minutos.
+- Puede tener scope GLOBAL.
+- Sus acciones críticas deben auditarse.
+- Para acciones sensibles se recomienda revalidación o confirmación adicional.
+
+ADMIN_CLIENTE:
+
+- Solo puede operar dentro de su cliente_id.
+- Puede consultar y administrar información de su Cliente.
+
+OPERADOR_CLIENTE:
+
+- Solo puede operar dentro de su cliente_id.
+- Sus permisos deben limitarse según configuración del Cliente.
+
+COMPRADOR:
+
+- Solo puede operar dentro del cliente_id donde inició sesión.
+- Solo puede consultar sus propios pedidos, pagos, devoluciones y reembolsos.
+- Las consultas deben filtrar por cliente_id y comprador_id.
+
+Ejemplo:
+
+SELECT *
+FROM pedidos
+WHERE cliente_id = :cliente_id_token
+  AND comprador_id = :comprador_id_token;
+
+REPARTIDOR:
+
+- Solo puede operar dentro del cliente_id donde inició sesión.
+- Solo puede consultar y actualizar pedidos asignados a él.
+- Las consultas deben filtrar por cliente_id y repartidor_id.
+
+Ejemplo:
+
+SELECT *
+FROM pedidos
+WHERE cliente_id = :cliente_id_token
+  AND repartidor_id = :repartidor_id_token;
+
+7. Endpoint del Cliente
+
+Cuando un Comprador o Repartidor entra por el endpoint del Cliente, el backend debe resolver el Cliente desde el slug o identificador corporativo.
+
+Ejemplo:
+
+/c/restaurante-el-prado/login
+
+El backend debe resolver:
+
+restaurante-el-prado -> clientes.id
+
+Luego debe validar que el usuario exista y esté activo dentro de ese cliente_id.
+
+Si el login es correcto, el JWT debe emitirse con ese cliente_id.
+
+8. Decisión final
+
+Para RUTA se implementará:
+
+JWT corto + refresh token revocable en servidor.
+
+No se implementará en primera versión una validación de token opaco contra Redis en cada request.
+
+Redis o tokens opacos solo se considerarán en una fase posterior si se requiere revocación inmediata absoluta para todos los requests o si se crean módulos de riesgo alto.
+
+9. Principio de seguridad
+
+El access token sirve para autenticar y autorizar temporalmente.
+
+El refresh token sirve para mantener la sesión y controlar la revocación.
+
+El backend siempre debe validar rol, cliente_id, actor_id y permisos.
+
+La base de datos debe reforzar el aislamiento por cliente_id mediante filtros, llaves foráneas, índices y, si aplica, RLS.

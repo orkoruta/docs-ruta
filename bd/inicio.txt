@@ -1,0 +1,15 @@
+Cómo crear un Cliente nuevo (Postgres)
+
+sql-- Insertar un nuevo Cliente Full
+INSERT INTO ruta.clients (business_code, slug, name, client_type, frontend_mode)
+VALUES ('CLI-0001', 'restaurante-el-prado', 'Restaurante El Prado', 'FULL', 'NATIVE_RUTA');
+
+-- Las 19 particiones se crean automáticamente vía trigger.
+
+-- Insertar un Cliente API
+INSERT INTO ruta.clients (business_code, slug, name, client_type, frontend_mode)
+VALUES ('CLI-0002', 'tienda-online-xyz', 'Tienda Online XYZ', 'API', NULL);
+
+Cómo crear el primer ADMIN_RUTA
+sqlINSERT INTO ruta.users (client_id, user_type, email, password_hash, auth_mode, full_name, status)
+VALUES (0, 'ADMIN_RUTA', 'admin@ruta.com', '<argon2id hash>', 'PASSWORD', 'Admin Principal', 'ACTIVE');

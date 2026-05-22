@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="fk_payments_provider" directorySegmentName="seg_0" id="2F5E00AA-D70B-DDDB-EB9A-DAF9EC5191B7">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>6F83671F-EC15-853E-5878-760EB21F74E4</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<sourcePk>48823EF2-3D7A-870B-3832-BA10F0DF46BF</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>6876AAA2-714C-1F3E-5D31-C3BBEB211EB7</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>82CDB4E5-9109-BFE9-CF99-FF4513A9014D</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

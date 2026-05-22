@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="fk_orders_pickup_point" directorySegmentName="seg_0" id="7D10B14A-117A-56E5-F7D3-BFB01EF98213">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>1CE6B11B-5B8D-8C39-6521-C6BCABBA0614</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<sourcePk>E6575998-680E-D40E-C565-BD62756F1467</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>9BF101F4-29BF-169C-8C6D-B21514A13512</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>F9F7780B-24DB-15E9-3E9F-0FA9326342C4</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

@@ -1,0 +1,237 @@
+NOMBRE DEL FLUJO:
+Flujo 7 — Flujo DEVOLUCIONES post-cierre
+
+ARCHIVO:
+flujo_7_devoluciones_post_cierre.txt
+
+CONTEXTO:
+Este archivo hace parte del flujo completo de procesos de RUTA.
+RUTA es una aplicación web orientada a la administración de operaciones
+comerciales entre Clientes y Compradores. El proceso completo está
+organizado en 7 flujos principales y cada flujo corresponde a un diagrama
+independiente. Este archivo contiene el FLUJO 7 — DEVOLUCIONES
+POST-CIERRE, un subproceso posterior a CLOSED que NO reabre el pedido
+principal. La devolución se maneja en return_status y dispara reembolso
+en paralelo. El mecanismo de devolución se define al contratar los
+servicios de ruta (return_mechanism: BUYER_SHIPS_VIA_COURIER o
+CLIENT_PICKS_UP).
+
+RUTA soporta dos tipos de Cliente: Cliente API (Tipo A, solo logística)
+y Cliente Full (Tipo B, ciclo completo). Este flujo aplica
+exclusivamente a Cliente Full.
+
+REFERENCIAS OBLIGATORIAS:
+- reglas_para_diagramar_flujos.txt
+- docs/arquitectura/estrategia_multi_tenant_ruta.md
+- flujo_2_ship_completo.txt
+- flujo_3_pickup_completo.txt
+- flujo_4_refund_completo.txt
+
+INSTRUCCIONES PARA CODEX / IA:
+- Interpretar este archivo como parte de un sistema mayor (los 7 flujos
+  de RUTA).
+- No modificar reglas, estados ni lógica del proceso sin revisar los
+  archivos relacionados.
+- Consultar siempre reglas_para_diagramar_flujos.txt antes de generar o
+  modificar diagramas.
+- Consultar la estrategia multi-tenant. Este flujo aplica solo a
+  Cliente Full. Cualquier intento de mutar return_status sobre pedidos
+  de Cliente API será rechazado con HTTP 422 y código
+  LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+- Condición de entrada:
+    order_status = CLOSED
+    closure_reason = COMPLETED_SUCCESSFULLY
+- Las entradas a este flujo provienen de:
+    * flujo_2_ship_completo.txt — desde COMPLETED_SUCCESSFULLY si el
+      comprador pone queja
+    * flujo_3_pickup_completo.txt — desde COMPLETED_SUCCESSFULLY si el
+      comprador pone queja
+    * BLOQUE 15 (Disputas) cuando el administrador aprueba devolución
+      (este bloque vive dentro de flujo_2_ship_completo.txt y
+      flujo_3_pickup_completo.txt).
+- Salida principal: al aprobarse la devolución se dispara reembolso en
+  paralelo → continúa en flujo_4_refund_completo.txt
+- El mecanismo CLIENT_PICKS_UP reutiliza el BLOQUE 6B (asignación de
+  pedido a repartidor) que vive dentro de flujo_2_ship_completo.txt.
+- IMPORTANTE: el reembolso se dispara al aprobarse la devolución, no
+  al recibirse el producto. El reembolso real (REFUND_PROCESSING) suele
+  esperar a la recepción del producto. La política exacta depende del
+  cliente.
+
+===============================================================================
+  APLICABILIDAD POR TIPO DE CLIENTE
+===============================================================================
+
+Cliente API (Tipo A): NO APLICA
+
+  Las devoluciones post-cierre las gestiona el Cliente íntegramente en
+  su sistema externo. Si necesita programar una recogida del producto
+  vía la red logística de RUTA, lo hace creando un nuevo pedido con
+  delivery_type = PICKUP o un servicio específico que el Cliente diseñe
+  en su integración. RUTA no expone endpoints de gestión de
+  return_status para pedidos de Cliente API.
+
+  Cualquier intento de mutación de return_status será rechazado con
+  HTTP 422 y código LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+
+Cliente Full (Tipo B): APLICA EN SU TOTALIDAD
+
+  Los Compradores pueden poner queja desde la UI nativa o landing
+  custom de RUTA después de que el pedido esté en
+  COMPLETED_SUCCESSFULLY. Todo el flujo de aprobación, mecanismo de
+  retorno físico y disparo de reembolso paralelo aplica sin
+  restricciones.
+
+CONTENIDO DEL FLUJO:
+
+===============================================================================
+  BLOQUE 14 — DEVOLUCIÓN POST-CIERRE (REDISEÑADO EN v10.0)
+  Subproceso posterior a CLOSED; no reabre el pedido principal
+===============================================================================
+
+  El mecanismo de devolución se define al contratar los servicios
+  de ruta:
+
+    return_mechanism:
+      BUYER_SHIPS_VIA_COURIER
+        El comprador envía el producto usando un proveedor externo
+        (servientrega, coordinadora, etc.). El cliente le indica los
+        proveedores autorizados y el plazo máximo.
+
+      CLIENT_PICKS_UP
+        El cliente envía un repartidor propio a recoger el pedido
+        devuelto en la dirección del comprador.
+
+  Condición de entrada:
+    order_status = CLOSED
+    closure_reason = COMPLETED_SUCCESSFULLY
+
+  14-1. Comprador pone queja para devolver el pedido
+        → return_status = RETURN_REQUESTED
+
+  14-2. Cliente tiene un tiempo definido de aprobación
+        → return_status = RETURN_UNDER_REVIEW
+
+  Desde RETURN_UNDER_REVIEW puede:
+
+     a) Cliente aprueba dentro del plazo
+        → return_status = RETURN_APPROVED
+        → continúa en 14-3
+
+     b) Cliente rechaza
+        → return_status = RETURN_REJECTED
+        → fin del subproceso (order_status permanece CLOSED)
+
+     c) Cliente no responde dentro del plazo (según política):
+        → auto-aprobar  → RETURN_APPROVED
+        → auto-rechazar → RETURN_REJECTED
+
+  14-3. Devolución aprobada
+        → return_status = RETURN_APPROVED
+        → refund_status = REFUND_PENDING  (dispara BLOQUE 12 en paralelo)
+        → cliente envía al comprador las condiciones según
+          return_mechanism
+
+  14-4. Bifurcación por return_mechanism:
+
+
+    ─────────────────────────────────────────────────
+    Caso 14-A — return_mechanism = BUYER_SHIPS_VIA_COURIER
+    ─────────────────────────────────────────────────
+
+    14-A-1. Cliente envía al comprador:
+              - lista de proveedores autorizados
+                (servientrega, coordinadora, etc.)
+              - tiempo máximo de espera para recibir el producto
+
+    14-A-2. Comprador envía el producto por courier
+            → return_status = CUSTOMER_RETURN_IN_TRANSIT
+
+    Desde CUSTOMER_RETURN_IN_TRANSIT puede:
+
+       a) Producto llega a bodega del cliente
+          → return_status = CUSTOMER_RETURN_RECEIVED
+          → el reembolso (ya en REFUND_PENDING) continúa en BLOQUE 12
+
+       b) Producto no llega dentro del plazo máximo
+          → return_status = CUSTOMER_RETURN_EXPIRED
+          → según política del cliente:
+              - cancelar reembolso → refund_status = REFUND_NOT_REQUIRED
+              - aprobar igualmente → continúa en BLOQUE 12
+
+       c) Producto se pierde en tránsito
+          → return_status = CUSTOMER_RETURN_LOST
+          → gestión manual (decisión caso a caso sobre el reembolso)
+
+
+    ─────────────────────────────────────────────────
+    Caso 14-B — return_mechanism = CLIENT_PICKS_UP
+    ─────────────────────────────────────────────────
+
+    14-B-1. Cliente programa la recogida y asigna repartidor propio
+            (mismo mecanismo que BLOQUE 6B)
+            → return_status = PICKUP_SCHEDULED
+            → courier_id = (id del repartidor asignado)
+
+    14-B-2. Repartidor sale a recoger
+            → return_status = PICKUP_OUT_FOR_COLLECTION
+
+    Desde PICKUP_OUT_FOR_COLLECTION puede:
+
+       a) Repartidor recoge el producto exitosamente
+          → return_status = PICKUP_COLLECTED
+
+          Al llegar a bodega:
+          → return_status = CUSTOMER_RETURN_RECEIVED
+          → el reembolso (ya en REFUND_PENDING) continúa en BLOQUE 12
+
+       b) Comprador no está o se niega a entregar el producto
+          → return_status = PICKUP_FAILED
+          → opciones:
+              - reprogramar  → vuelve a PICKUP_SCHEDULED
+              - cancelar devolución
+                → return_status = RETURN_CANCELLED
+                → refund_status = REFUND_NOT_REQUIRED
+
+       c) Repartidor pierde el producto en el retorno
+          → return_status = CUSTOMER_RETURN_LOST
+          → gestión manual
+
+  NOTAS PARA DIAGRAMA:
+    - El reembolso (BLOQUE 12) se dispara al aprobarse la devolución,
+      no al recibirse el producto. Esto permite paralelizar.
+    - Sin embargo, el reembolso real (REFUND_PROCESSING) suele esperar
+      a la recepción del producto. La política exacta depende del cliente.
+
+
+===============================================================================
+  CONECTOR RECOMENDADO — DIAGRAMA 7 (FLUJO DEVOLUCIONES POST-CIERRE - NUEVO)
+===============================================================================
+
+  Solo aplica para Cliente Full.
+
+  Entrada: order_status = CLOSED, closure_reason = COMPLETED_SUCCESSFULLY
+
+  RETURN_REQUESTED
+  → RETURN_UNDER_REVIEW
+      → RETURN_REJECTED (fin)
+      → RETURN_APPROVED
+          → dispara REFUND_PENDING en paralelo (Diagrama 4)
+          → bifurca por return_mechanism:
+
+            BUYER_SHIPS_VIA_COURIER:
+              Cliente envía condiciones (proveedores autorizados +
+              plazo máximo)
+              → CUSTOMER_RETURN_IN_TRANSIT
+                  → CUSTOMER_RETURN_RECEIVED → Diagrama 4 ejecuta refund
+                  → CUSTOMER_RETURN_EXPIRED → política (refund o no)
+                  → CUSTOMER_RETURN_LOST → gestión manual
+
+            CLIENT_PICKS_UP:
+              Cliente asigna repartidor (usa BLOQUE 6B)
+              → PICKUP_SCHEDULED → PICKUP_OUT_FOR_COLLECTION
+                  → PICKUP_COLLECTED → CUSTOMER_RETURN_RECEIVED
+                                     → Diagrama 4 ejecuta refund
+                  → PICKUP_FAILED → reprogramar o cancelar
+                                    (cancelar → REFUND_NOT_REQUIRED)
+                  → CUSTOMER_RETURN_LOST → gestión manual

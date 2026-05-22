@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="2F5E8BC0-9C9E-3ADC-8A02-A80CCFA91E3B" containerWithKeyObject="3B719D8D-4B06-9B7C-B71B-591791E53FDD" localFKIndex="D3B628BD-B92E-65E0-B9CB-8810828D2D72" name="fk_orders_recurrence">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>1A6F6387-68CC-2E97-B104-9312C91092D7</importedID>
+<referredTableLongName>recurrence_templates</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>E5F44B71-0DFB-B653-4D69-FC0DB511E512</referredTableID>
+<keyObject>0D0B6DEE-1E42-2708-3291-136617AC5BE1</keyObject>
+<referredKeyID>0D0B6DEE-1E42-2708-3291-136617AC5BE1</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>id,client_id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

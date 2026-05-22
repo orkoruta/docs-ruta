@@ -1,0 +1,11 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TriggerOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TriggerOraclev10g" name="trg_cpp_upd" directorySegmentName="seg_0" id="5475B0A7-44F5-2FCF-8C75-E3215C0A50B9">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:17 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<actions>UPDATE</actions>
+<body><![CDATA[BEGIN :NEW.updated_at := SYSTIMESTAMP; END;]]></body>
+<triggerTime>BEFORE</triggerTime>
+<table>16FD1E12-05C2-3F98-4F6C-E690C56859F8</table>
+</TriggerOraclev10g>

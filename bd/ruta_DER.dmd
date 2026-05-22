@@ -1,0 +1,13 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="ruta_DER" id="ED11824E-8D32-FA22-0487-AEA837D929FB" version="3.5">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:40:34 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>ED11824E-8D32-FA22-0487-AEA837D929FB</designId>
+<usedDesignStorageDescriptors>
+<designDescr class="oracle.dbtools.crest.model.design.Design$DesignStorageDesc" id="20827286-971B-A9C5-FD5F-4BAAEACC631E">
+<designStoragePath>C:\ruta_oracle</designStoragePath>
+</designDescr>
+</usedDesignStorageDescriptors>
+</OSDM_Design>

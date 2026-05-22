@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="8C633A6A-9C6C-8E20-EBD4-6E1EE6136773" containerWithKeyObject="AFD33838-9B21-4527-10E5-29D613C52BE5" localFKIndex="20F7A1E1-E247-F9CB-3ECD-D4D3E7F714B6" name="fk_sessions_cvs">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>0F6A8EA4-98DA-73BD-A3CB-24FCB3D36E45</importedID>
+<referredTableLongName>control_view_sessions</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>BE0449EE-2DBC-F20F-2AD7-004E6DA9D199</referredTableID>
+<keyObject>C299E535-49FA-4780-3B5B-5172FBB73E33</keyObject>
+<referredKeyID>C299E535-49FA-4780-3B5B-5172FBB73E33</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

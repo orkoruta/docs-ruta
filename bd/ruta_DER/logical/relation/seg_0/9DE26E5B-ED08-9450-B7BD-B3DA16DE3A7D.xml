@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="fk_refunds_payment" directorySegmentName="seg_0" id="9DE26E5B-ED08-9450-B7BD-B3DA16DE3A7D">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>0121F2F1-67DD-D802-1271-E990C3B12868</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<sourcePk>85F18978-D6B3-880F-E6DA-C21AF0928D24</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>82CDB4E5-9109-BFE9-CF99-FF4513A9014D</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>AAA6CE24-60BA-C919-03FE-8F2ACF68F86B</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

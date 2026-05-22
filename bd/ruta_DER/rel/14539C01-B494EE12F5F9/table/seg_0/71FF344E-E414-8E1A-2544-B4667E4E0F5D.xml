@@ -1,0 +1,348 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="71FF344E-E414-8E1A-2544-B4667E4E0F5D" name="users">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>47C932B0-FD87-3018-EA57-6F88545EA6F8</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="C8DCBE40-475C-EA4C-112A-2D04F7C471E7">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>D2911AC1-963D-E2F0-61FE-BDA148D0D90D</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="client_id" id="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>8EBBD8CD-95C9-97F5-A701-AE77BC9D9C2B</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="525FC7BC-DF6E-336E-C4ED-E906C5A79F33" referredColumn="AB389438-EFCC-5660-97BC-85BFAF2E1E86"/>
+</associations>
+</Column>
+<Column name="user_type" id="97C88F99-CC97-532C-0DE0-9EEEDF38E1D9">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>B92600EA-E595-4E7C-54F8-62472BC804FE</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>EE8D7A89-A559-87D2-3E38-AF6FBBCB02EF</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="email" id="3E961F0E-C0BB-559D-1657-D52BB5B1A0AC">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>80F1A0DE-2DE1-B86E-F78C-BB59F3ED0106</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C90E8361-120C-EA6F-AF4C-BCCDC188E6C3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="password_hash" id="72BA66E6-0946-D46D-6A67-3DC1AFAE271C">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>79DE38CE-96D9-D5B5-1D99-6D7902CE141E</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>890F2C6D-7037-7C60-55B6-608C9D2F3936</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="auth_mode" id="4C4243FC-3CC1-4D6A-137F-227295243172">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>93505E70-7F9A-6B2A-664A-B737E4A56141</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>EE8D7A89-A559-87D2-3E38-AF6FBBCB02EF</domain>
+<defaultValue>&apos;PASSWORD&apos;</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="external_buyer_id" id="30F5C398-17EC-2B85-FA12-298753B9FFCA">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>6A9C2A94-5E34-EA6F-7867-0B01C71C1394</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>3C40814A-B566-4165-5C34-D2007D89AE2D</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="full_name" id="413BCE0B-9EDA-0DF1-3D68-607E71A5FF70">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>DF8F33BB-15AF-B355-F027-90D89A8B2878</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C90E8361-120C-EA6F-AF4C-BCCDC188E6C3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="document_type" id="8D54AE55-B08B-A0BF-A642-107412484242">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>2516CBC4-EE8E-1E8A-3991-2AB56AC1380E</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>CF63540C-2D93-6900-C2F2-A9CDC2E3C26D</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="document_number" id="0842BF3E-917E-A404-58F2-92BFA3631A16">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>7AE935DF-9AC9-7B5A-70D5-91765FE1F099</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>A350A853-69A7-2AEF-6F04-E60FF18CF120</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="phone" id="202C5368-5CA6-2535-3A2D-C47C464BBAB1">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>02498445-FCEA-2783-A24C-1CF54769D5DF</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>CF63540C-2D93-6900-C2F2-A9CDC2E3C26D</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="status" id="D0226928-C16B-29D3-D553-0493E2756828">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>35D2747C-418E-198E-2B46-B97A91788510</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6B758F6D-8028-AC26-8E41-8F155C389590</domain>
+<defaultValue>&apos;ACTIVE&apos;</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="last_login_at" id="C5DEC47B-1921-D923-4A99-50CE9B0B8558">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>E3F16C6C-32E7-39EE-B71A-844D0DAA9ED0</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="password_changed_at" id="99BD3A47-3DE3-6F7E-0612-C1972BFF718C">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>2C3BCBAD-64A5-A8ED-09CF-8F8EC6D16225</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="64A0F728-7F23-547D-4F2C-D564CECB5194">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>75472150-4C96-889C-1E28-7484B922E60F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="updated_at" id="B6E3DA77-8F79-66B3-BF4B-EC160EE37FFE">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>22CCD59E-5A58-8A4D-8386-59C7E0B36EC3</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="3B01CF6A-134C-0C51-410E-3649C6DD0354" name="pk_users">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>3B88E1B9-26C6-EEBA-986D-6050AB1C7068</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C8DCBE40-475C-EA4C-112A-2D04F7C471E7"/>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="186EE08D-B1FC-107E-FB52-9B0F52ED4935" name="uk_users_client_email">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>BD072D40-32AC-E5BB-5CA1-F1B099715570</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+<colUsage columnID="3E961F0E-C0BB-559D-1657-D52BB5B1A0AC"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B141F779-5FD3-BDA3-1239-A65AE73EDD48" name="uk_users_client_external">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>F7896690-A64F-DAEE-3773-2DFC8759F21B</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+<colUsage columnID="30F5C398-17EC-2B85-FA12-298753B9FFCA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DB642F76-3024-95FA-32FA-639DF06011BE" name="idx_users_client_email">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>7B755A0F-2496-E697-D20B-D858D53986C1</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+<colUsage columnID="3E961F0E-C0BB-559D-1657-D52BB5B1A0AC"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="93FDE903-BE0A-CCA5-3495-623FD62A5F87" name="idx_users_client_type_status">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>120DEF36-AA3D-31B8-3CC7-7933C29DA6D9</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+<colUsage columnID="97C88F99-CC97-532C-0DE0-9EEEDF38E1D9"/>
+<colUsage columnID="D0226928-C16B-29D3-D553-0493E2756828"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="EFE41F69-0018-16D4-B9DE-CD40ACA1473F" name="idx_users_client_document">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>4BF4D7D5-007A-2A46-6C22-6E7FB614FFCD</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+<colUsage columnID="8D54AE55-B08B-A0BF-A642-107412484242"/>
+<colUsage columnID="0842BF3E-917E-A404-58F2-92BFA3631A16"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D6E7A439-8030-A11D-61ED-E47D8C4F73F7" name="fk_users_client">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E598A4-C8F8-73AB-E48C-5F94E56BBE1B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="chk_users_type" directorySegmentName="seg_1" id="FC032E09-4B25-FF11-8201-7E25B72BD391">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>53A2802A-8785-359E-651A-00B287231C80</importedID>
+<rule><![CDATA[user_type IN ('ADMIN_RUTA', 'ADMIN_CLIENT', 'OPERATOR_CLIENT', 'BUYER', 'COURIER')]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="chk_users_auth_mode" directorySegmentName="seg_1" id="62775F1E-3201-672F-B978-D9DB6B845D4F">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>FE04DF01-1512-8F14-01EA-3F048B6C6DD0</importedID>
+<rule><![CDATA[auth_mode IN ('PASSWORD', 'EXTERNAL_REFERENCE')]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="chk_users_status" directorySegmentName="seg_1" id="23D8250C-91CD-38CB-49DD-8F0F1E67A8D2">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>D191D3A1-69CC-53EA-21AA-EAC96BA9E421</importedID>
+<rule><![CDATA[status IN ('ACTIVE', 'INACTIVE', 'SUSPENDED')]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="chk_users_password_consistency" directorySegmentName="seg_1" id="C0F9F5E1-E2D4-4C63-6B63-B0C525793D87">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>3DDFB448-37C1-7DA4-6F78-1EC8F4CB2DA8</importedID>
+<rule><![CDATA[(auth_mode = 'PASSWORD' AND password_hash IS NOT NULL) OR (auth_mode = 'EXTERNAL_REFERENCE' AND password_hash IS NULL)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

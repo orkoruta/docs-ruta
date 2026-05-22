@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="fk_disputes_buyer" directorySegmentName="seg_0" id="2C1F2A3C-9A3A-0018-AC49-15D4C671E444">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>80542217-C455-34E2-E255-1E40CDC4FBB1</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<sourcePk>37D91995-A94C-9DF7-79AB-BC7C88471648</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>74D1B3C7-0A92-4980-F665-6C9E55EC5571</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>30FC7683-078D-662B-7EF7-35343D1DCE60</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

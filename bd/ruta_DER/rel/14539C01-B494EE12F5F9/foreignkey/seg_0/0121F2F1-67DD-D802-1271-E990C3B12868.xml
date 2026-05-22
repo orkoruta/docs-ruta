@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="0121F2F1-67DD-D802-1271-E990C3B12868" containerWithKeyObject="678989F0-B2FB-C0EC-14A7-842BBA4252BA" localFKIndex="943BDC4F-5623-E40E-9AE7-DAA4C5AC09EE" name="fk_refunds_payment">
+<sourceDDLFile>ruta_oracle.sql</sourceDDLFile>
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:41:23 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<importedID>ABA31E28-B4E8-1952-6F50-20F4413033E1</importedID>
+<referredTableLongName>payments</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>937E4462-1BD9-B423-9D86-F04C885D9131</referredTableID>
+<keyObject>0D1E7D29-8F2F-D466-602E-A96593398E61</keyObject>
+<referredKeyID>0D1E7D29-8F2F-D466-602E-A96593398E61</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>id,client_id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,338 @@
+NOMBRE DEL FLUJO:
+Flujo 3 — Flujo PICKUP completo (Recogida en tienda o punto físico)
+
+ARCHIVO:
+flujo_3_pickup_completo.txt
+
+CONTEXTO:
+Este archivo hace parte del flujo completo de procesos de RUTA.
+RUTA es una aplicación web orientada a la administración de operaciones
+comerciales entre Clientes y Compradores. El proceso completo está
+organizado en 7 flujos principales y cada flujo corresponde a un diagrama
+independiente. Este archivo contiene el FLUJO 3, que cubre toda la ruta
+logística de recogida en tienda o punto físico (PICKUP), incluyendo:
+disponibilidad en el punto físico, llegada del comprador, validación de
+identidad, handoff y cobro en el punto, finalización exitosa y disputas
+desde DELIVERED.
+
+RUTA soporta dos tipos de Cliente: Cliente API (Tipo A, solo logística)
+y Cliente Full (Tipo B, ciclo completo). Este flujo aplica a ambos
+tipos con matices que se detallan en la sección "APLICABILIDAD POR
+TIPO DE CLIENTE" y en notas inline.
+
+REFERENCIAS OBLIGATORIAS:
+- reglas_para_diagramar_flujos.txt
+- docs/arquitectura/estrategia_multi_tenant_ruta.md
+- flujo_1_comun_y_decision_de_pago.txt
+- flujo_2_ship_completo.txt
+- flujo_4_refund_completo.txt
+- flujo_5_recurrencia.txt
+- flujo_6_pedidos_corporativos.txt
+- flujo_7_devoluciones_post_cierre.txt
+
+INSTRUCCIONES PARA CODEX / IA:
+- Interpretar este archivo como parte de un sistema mayor (los 7 flujos
+  de RUTA).
+- No modificar reglas, estados ni lógica del proceso sin revisar los
+  archivos relacionados.
+- Consultar siempre reglas_para_diagramar_flujos.txt antes de generar o
+  modificar diagramas.
+- Consultar la estrategia multi-tenant para entender el modelo Cliente
+  API vs Cliente Full y las funcionalidades bloqueadas por tipo.
+- La entrada principal a este flujo proviene de:
+    * Cliente Full: flujo_1_comun_y_decision_de_pago.txt cuando
+      delivery_type = PICKUP (desde PREPARING → READY_FOR_PICKUP).
+    * Cliente API: directamente vía API en READY_FOR_PICKUP.
+- Salidas / disparadores:
+    * Cualquier cancelación con payment_status = PAID dispara reembolso
+      (solo Cliente Full) → continúa en flujo_4_refund_completo.txt.
+    * Desde COMPLETED_SUCCESSFULLY, si el comprador pone queja (solo
+      Cliente Full) → continúa en flujo_7_devoluciones_post_cierre.txt.
+- El BLOQUE 9 (Handoff y cobro común) y BLOQUE 13 (Finalización exitosa)
+  son etapas compartidas con el flujo SHIP. Aparecen también en
+  flujo_2_ship_completo.txt sin cambios; las dos copias deben
+  mantenerse coherentes entre sí.
+- Si desde el flujo SHIP se redirige el pedido a un punto físico
+  autorizado (caso DELIVERY_ATTEMPTED → AT_PICKUP_POINT), el control
+  entra a este flujo en el BLOQUE 8.
+
+===============================================================================
+  APLICABILIDAD POR TIPO DE CLIENTE
+===============================================================================
+
+Cliente API (Tipo A): APLICA CON MATICES
+
+  - Punto de entrada del pedido vía API:
+      * READY_FOR_PICKUP
+
+  - BLOQUE 8 (recogida en punto físico): APLICA.
+      * Las cancelaciones "del Comprador" en realidad provienen de
+        llamadas API del Cliente (el Comprador no tiene acceso a RUTA).
+        Ver nota inline en BLOQUE 8.
+      * La validación de identidad en el punto (IDENTITY_VALIDATED)
+        funciona normalmente: el operador del Cliente valida en el
+        punto físico, sin que el Comprador esté logueado en RUTA.
+
+  - BLOQUE 9 (Handoff y cobro):
+      * Sub-caso 9A (ONLINE_AT_ORDER): NO APLICA en Cliente API porque
+        el pago online se ejecutó previamente en la plataforma del
+        Cliente. El pedido entra con payment_status = PAID y
+        payment_method = EXTERNAL_PREPAID.
+      * Sub-casos 9B (ELECTRONIC_ON_DELIVERY) y 9C (CASH_ON_DELIVERY):
+        APLICAN cuando el Cliente API decide que RUTA cobre en el
+        handoff.
+
+  - BLOQUE 13 (Finalización exitosa): APLICA hasta CLOSED. La rama de
+    disputa (DELIVERY_DISPUTED → BLOQUE 15) NO APLICA.
+
+  - BLOQUE 15 (Disputas): NO APLICA. Las quejas las maneja el Cliente
+    en su sistema externo.
+
+Cliente Full (Tipo B): APLICA EN SU TOTALIDAD
+
+  - Entrada normal desde flujo_1.
+  - Todos los bloques aplican sin restricciones.
+
+CONTENIDO DEL FLUJO:
+
+===============================================================================
+  BLOQUE 8 — FLUJO PICKUP: RECOGIDA EN TIENDA O PUNTO FÍSICO
+===============================================================================
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NOTA SOBRE EL ACTOR EN CLIENTE API
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Las acciones del "Comprador" descritas en este bloque (cancelar,
+  no recoger en plazo, decidir no retirar) en Cliente Full provienen
+  directamente del Comprador en la UI de RUTA o de la landing custom.
+
+  En Cliente API, el Comprador no tiene acceso a RUTA. Estas acciones
+  llegan como llamadas API del Cliente cuando este las gestiona en su
+  propio sistema:
+    POST /api/orders/{id}/cancel
+    POST /api/orders/{id}/pickup-decline
+
+  Los nombres de los estados se mantienen por consistencia del modelo
+  (CANCELLED_BY_CUSTOMER, PICKUP_CANCELLED_BY_CUSTOMER) pero la
+  auditoría registra al actor real (api_key del Cliente).
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  8-1. Pedido listo para recogida
+       → order_status = READY_FOR_PICKUP
+
+  Desde READY_FOR_PICKUP puede:
+
+     a) Pedido queda disponible en punto físico
+        → order_status = AT_PICKUP_POINT
+
+     b) Comprador cancela antes de que quede disponible
+        → CANCELLED_BY_CUSTOMER → CLOSED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING → BLOQUE 12
+
+     c) Problema operativo antes de publicar disponibilidad
+        → PICKUP_POINT_ISSUE
+        → si se resuelve: vuelve a READY_FOR_PICKUP
+        → si no: CANCELLED_BY_ADMIN → CLOSED
+
+  8-2. Pedido disponible en punto físico
+       → order_status = AT_PICKUP_POINT
+
+  Desde AT_PICKUP_POINT puede:
+
+     a) Comprador llega a recoger
+        → CUSTOMER_ARRIVED_AT_PICKUP_POINT
+
+     b) Comprador no recoge dentro del plazo
+        → PICKUP_EXPIRED → CLOSED
+        → closure_reason = PICKUP_EXPIRED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING → BLOQUE 12
+
+     c) Comprador cancela antes de recoger
+        → CANCELLED_BY_CUSTOMER → CLOSED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING → BLOQUE 12
+
+     d) Problema operativo en el punto físico
+        → PICKUP_POINT_ISSUE
+        → si se resuelve: vuelve a AT_PICKUP_POINT
+        → si no: CANCELLED_BY_ADMIN → CLOSED
+
+  8-3. Comprador llegó al punto de recogida
+       → order_status = CUSTOMER_ARRIVED_AT_PICKUP_POINT
+
+  Desde aquí puede:
+
+     a) Validar identidad
+        → IDENTITY_VALIDATED → BLOQUE 9
+
+     b) Identidad no válida
+        → PICKUP_AUTH_FAILED → vuelve a AT_PICKUP_POINT
+
+     c) Comprador decide no retirar
+        → PICKUP_CANCELLED_BY_CUSTOMER → CLOSED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING → BLOQUE 12
+
+
+===============================================================================
+  BLOQUE 9 — HANDOFF Y COBRO COMÚN
+===============================================================================
+
+  Punto común para SHIP y PICKUP, donde el comprador ya está frente al pedido.
+  El comportamiento depende de payment_method.
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NOTA SOBRE EL ROL FINANCIERO DE RUTA
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RUTA no es recaudador ni custodio de dinero. En los sub-casos 9B y
+  9C, el operador del Cliente (o el Repartidor en SHIP) registra en
+  RUTA el cobro realizado en el handoff con evidencia operativa
+  (monto, método, fecha, ID de transacción si aplica, novedades).
+  El dinero recolectado pertenece operativamente al Cliente. RUTA
+  solo deja trazabilidad para que el Cliente realice su conciliación
+  financiera.
+
+  En el sub-caso 9A, el pago ya ocurrió antes del handoff:
+    - Cliente Full: en la pasarela del Cliente durante el flujo 1
+      (BLOQUE 3). RUTA recibió confirmación vía webhook.
+    - Cliente API: en la plataforma del Cliente (pre-pago externo).
+      RUTA recibió el pedido con payment_status = PAID.
+
+  En ningún caso RUTA transfiere ni custodia dinero.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ─────────────────────────────────────────────────────
+  CASO 9A — payment_method = ONLINE_AT_ORDER
+  (o EXTERNAL_PREPAID para Cliente API)
+  ─────────────────────────────────────────────────────
+
+    Condición de entrada: payment_status = PAID
+
+    SHIP:
+      ARRIVED_AT_CUSTOMER → DELIVERED → BLOQUE 13
+
+    PICKUP:
+      IDENTITY_VALIDATED → PICKED_UP → DELIVERED → BLOQUE 13
+
+
+  ─────────────────────────────────────────────────────
+  CASO 9B — payment_method = ELECTRONIC_ON_DELIVERY
+  ─────────────────────────────────────────────────────
+
+    Condición de entrada: payment_status = PENDING_COLLECTION
+
+    Se inicia cobro electrónico:
+      → payment_status = COLLECTION_PROCESSING
+      → order_status = PAYMENT_COLLECTION_PENDING
+
+    Desde PAYMENT_COLLECTION_PENDING puede:
+
+      a) Cobro exitoso
+         → payment_status = PAYMENT_COLLECTED
+         → order_status = PAYMENT_COLLECTED_ELECTRONIC
+         SHIP: → DELIVERED → BLOQUE 13
+         PICKUP: → PICKED_UP → DELIVERED → BLOQUE 13
+
+      b) Fallo reintentable
+         → payment_status = PAYMENT_COLLECTION_FAILED
+         → loop: vuelve a PAYMENT_COLLECTION_PENDING
+
+      c) Fallo definitivo
+         → payment_status = PAYMENT_NOT_COLLECTED
+         SHIP: → RETURN_TO_ORIGIN → BLOQUE 10
+         PICKUP: → CANCELLED_NO_PAYMENT → CLOSED
+
+
+  ─────────────────────────────────────────────────────
+  CASO 9C — payment_method = CASH_ON_DELIVERY
+  ─────────────────────────────────────────────────────
+
+    Condición de entrada: payment_status = PENDING_COLLECTION
+
+    → order_status = CASH_COLLECTION_PENDING
+
+    Desde CASH_COLLECTION_PENDING puede:
+
+      a) Comprador paga correctamente
+         → payment_status = PAYMENT_COLLECTED
+         → order_status = PAYMENT_COLLECTED_CASH
+         SHIP: → DELIVERED → BLOQUE 13
+         PICKUP: → PICKED_UP → DELIVERED → BLOQUE 13
+
+      b) Comprador no paga
+         → payment_status = PAYMENT_NOT_COLLECTED
+         → order_status = CASH_PAYMENT_REJECTED
+         SHIP: → RETURN_TO_ORIGIN → BLOQUE 10
+         PICKUP: → CANCELLED_NO_PAYMENT → CLOSED
+
+
+===============================================================================
+  BLOQUE 13 — FINALIZACIÓN EXITOSA
+===============================================================================
+
+  13-1. Pedido entregado físicamente y pago resuelto
+        → order_status = DELIVERED
+
+  Desde DELIVERED puede:
+
+     a) Comprador confirma recepción
+        → CONFIRMED_BY_CUSTOMER
+
+     b) Comprador no confirma dentro del plazo
+        → sistema confirma automáticamente → CONFIRMED_BY_SYSTEM
+
+     c) Comprador abre disputa
+        → DELIVERY_DISPUTED → BLOQUE 15
+        NOTA: Esta transición SOLO APLICA para Cliente Full.
+        En Cliente API, las disputas/quejas las maneja el Cliente
+        en su sistema externo. El sistema rechazará la transición
+        DELIVERED → DELIVERY_DISPUTED con HTTP 422 y código
+        LOGISTICS_ONLY_FEATURE_UNAVAILABLE si el pedido tiene
+        order_origin de Cliente API.
+
+  13-2. Recepción confirmada
+        → CONFIRMED_BY_CUSTOMER o CONFIRMED_BY_SYSTEM
+        → COMPLETED_SUCCESSFULLY → CLOSED
+        → closure_reason = COMPLETED_SUCCESSFULLY
+
+
+===============================================================================
+  BLOQUE 15 — DISPUTAS
+===============================================================================
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ESTE BLOQUE APLICA SOLO A CLIENTE FULL
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  En Cliente API, las disputas las gestiona el Cliente en su sistema
+  externo. RUTA rechaza cualquier mutación de dispute_status sobre
+  pedidos con order_origin de Cliente API con HTTP 422 y código
+  LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  15-1. Comprador abre disputa
+        → dispute_status = DISPUTED
+
+  Desde DISPUTED puede:
+
+     a) Administrador resuelve sin acción adicional
+        → DISPUTE_RESOLVED
+
+     b) Administrador aprueba devolución
+        → DISPUTE_RESOLVED
+        → return_status = RETURN_REQUESTED → BLOQUE 14
+
+     c) Administrador aprueba reembolso sin devolución física
+        → DISPUTE_RESOLVED
+        → refund_status = REFUND_PENDING → BLOQUE 12
+
+
+===============================================================================
+  CONECTOR RECOMENDADO — DIAGRAMA 3 (FLUJO PICKUP COMPLETO)
+===============================================================================
+
+  Sin cambios estructurales respecto a v9.0.
+
+  Disparadores a Diagrama 4 (Refund) y Diagrama 7 (Devoluciones):
+  solo aplican para Cliente Full.

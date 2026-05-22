@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="fk_rt_buyer" directorySegmentName="seg_0" id="C0E24AF0-0191-CB89-70E5-92D74A11F84B">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:06 UTC</createdTime>
+<generatorID>7A6E920D-F3CC-1494-3B48-DFED40F66575</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<sourcePk>37D91995-A94C-9DF7-79AB-BC7C88471648</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>74D1B3C7-0A92-4980-F665-6C9E55EC5571</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>177AF9CB-E361-447F-E367-2DD0DC2B9DA5</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

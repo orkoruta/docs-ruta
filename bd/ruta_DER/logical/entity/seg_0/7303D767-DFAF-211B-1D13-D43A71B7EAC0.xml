@@ -1,0 +1,120 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="7303D767-DFAF-211B-1D13-D43A71B7EAC0" name="control view master passwords">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>6DA31E2D-3D00-5141-750E-78E14358E61F</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="user id" id="B3F5DAB7-7ADB-7928-0D82-061EBB3D1BF9">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>373FF457-F5B0-F547-E450-BD32750ED123</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<referedAttribute>64104B33-C953-4440-3E0F-EE5126E14F16</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="client id" id="491AF06A-D46F-FEF4-B225-3D97B429546A">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>373FF457-F5B0-F547-E450-BD32750ED123</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<referedAttribute>ED3608C9-80AE-C03C-DF58-7945AE7E71B9</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>52333EE3-5B49-4FB6-CACB-726EC9F21E52</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="master password hash" id="9FB61423-8522-2764-D0FC-F308D5A0EA46">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>694E647B-23DC-6538-9BAA-4C2B286F4259</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>890F2C6D-7037-7C60-55B6-608C9D2F3936</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="can use control view" id="FEC4F8B4-3D73-0C0A-51A0-B0AA8FBA8439">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>B5432B6F-26E4-1A7A-122A-FC1ABDAF3603</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<domain>F677439E-EB0C-F125-FCE2-4B17B7996020</domain>
+<defaultValue>&apos;N&apos;</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="set at" id="5A085E36-5E86-A5B7-D896-60CBA5C91613">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>F23AB30B-052A-E572-D590-99A63E8F9D4C</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<defaultValue>SYSTIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="expires at" id="157CADBE-3D82-657B-E77D-EB5D74ED79BD">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>867826A3-3AF5-999B-A329-7C00D04D3651</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT046</logicalDatatype>
+<domain>FE5B73FA-C4A9-303B-E5FA-B632FCDC0CF8</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="939CECB3-5FB1-E32A-A947-FC12356D818D" name="pk cvmp">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:55:05 UTC</createdTime>
+<generatorID>1608AFF8-D355-8BC9-FBF0-369A14CCA3F5</generatorID>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<engineerTo>
+<item key="14539C01-353C-90F2-2DCE-B494EE12F5F9" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>B3F5DAB7-7ADB-7928-0D82-061EBB3D1BF9</attributeRef>
+<attributeRef>491AF06A-D46F-FEF4-B225-3D97B429546A</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

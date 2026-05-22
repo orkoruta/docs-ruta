@@ -1,0 +1,205 @@
+NOMBRE DEL FLUJO:
+Flujo 5 — Flujo RECURRENCIA (Pedidos recurrentes y repetir último pedido)
+
+ARCHIVO:
+flujo_5_recurrencia.txt
+
+CONTEXTO:
+Este archivo hace parte del flujo completo de procesos de RUTA.
+RUTA es una aplicación web orientada a la administración de operaciones
+comerciales entre Clientes y Compradores. El proceso completo está
+organizado en 7 flujos principales y cada flujo corresponde a un diagrama
+independiente. Este archivo contiene el FLUJO 5 — RECURRENCIA, que es
+un subproceso independiente del ciclo de vida del pedido. La recurrencia
+es una plantilla activa que genera nuevos pedidos. Cada pedido generado
+tiene su propio ciclo de vida independiente. Existen dos modalidades:
+SCHEDULED_RECURRING (programada) y REPEAT_LAST_ORDER (repetir manualmente
+el último pedido).
+
+RUTA soporta dos tipos de Cliente: Cliente API (Tipo A, solo logística)
+y Cliente Full (Tipo B, ciclo completo). Este flujo aplica
+exclusivamente a Cliente Full.
+
+REFERENCIAS OBLIGATORIAS:
+- reglas_para_diagramar_flujos.txt
+- docs/arquitectura/estrategia_multi_tenant_ruta.md
+- flujo_1_comun_y_decision_de_pago.txt
+- flujo_6_pedidos_corporativos.txt
+
+INSTRUCCIONES PARA CODEX / IA:
+- Interpretar este archivo como parte de un sistema mayor (los 7 flujos
+  de RUTA).
+- No modificar reglas, estados ni lógica del proceso sin revisar los
+  archivos relacionados.
+- Consultar siempre reglas_para_diagramar_flujos.txt antes de generar o
+  modificar diagramas.
+- Consultar la estrategia multi-tenant. Este flujo aplica solo a
+  Cliente Full. Cualquier intento de crear una plantilla de recurrencia
+  para un Cliente API será rechazado con HTTP 422 y código
+  LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+- La recurrencia NO es un estado del pedido. La plantilla y su
+  recurrence_status no son estados del pedido. Cada pedido generado
+  tiene su propio ciclo de vida.
+- Salidas de este flujo hacia flujo_1_comun_y_decision_de_pago.txt:
+    * SCHEDULED_RECURRING: cada vez que se cumple la periodicidad,
+      se crea un pedido nuevo que entra directamente en
+      ORDER_SUBMITTED en el flujo común.
+    * REPEAT_LAST_ORDER: el sistema clona el último pedido como DRAFT
+      y el comprador continúa el flujo común desde BLOQUE 1.
+- Este flujo también es invocado desde flujo_6_pedidos_corporativos.txt
+  (cuando un pedido corporativo se marca como recurrente).
+
+===============================================================================
+  APLICABILIDAD POR TIPO DE CLIENTE
+===============================================================================
+
+Cliente API (Tipo A): NO APLICA
+
+  Los Clientes API tienen su propio engine de recurrencia en su
+  plataforma externa. Cada pedido recurrente generado en el sistema
+  del Cliente llega a RUTA como una llamada API independiente
+  (un pedido nuevo, sin relación con plantillas de RUTA).
+
+  RUTA no expone endpoints de gestión de plantillas recurrentes para
+  Cliente API. Cualquier intento será rechazado con HTTP 422 y código
+  LOGISTICS_ONLY_FEATURE_UNAVAILABLE.
+
+Cliente Full (Tipo B): APLICA EN SU TOTALIDAD
+
+  Los Compradores en la UI nativa o landing custom de RUTA pueden:
+    - Marcar un pedido como recurrente (SCHEDULED_RECURRING) en
+      PENDING_CONFIRM.
+    - Solicitar repetir el último pedido (REPEAT_LAST_ORDER) desde
+      su perfil.
+
+  Los Admin/Operator del Cliente Full también pueden crear pedidos
+  corporativos recurrentes vía flujo_6_pedidos_corporativos.txt.
+
+CONTENIDO DEL FLUJO:
+
+===============================================================================
+  BLOQUE 17 — RECURRENCIA DE PEDIDOS (NUEVO EN v10.0)
+  Subproceso que genera pedidos automáticamente o permite repetir uno previo
+===============================================================================
+
+  Existen dos modalidades, ambas iniciadas por el comprador:
+
+    recurrence_mode:
+      SCHEDULED_RECURRING
+        El comprador, al hacer un pedido nuevo, lo marca como
+        recurrente. Configura la periodicidad y el sistema
+        recreará el pedido automáticamente con las mismas
+        condiciones de pago y entrega.
+
+      REPEAT_LAST_ORDER
+        El comprador ingresa a la página y solicita repetir el
+        último pedido. Puede aceptar tal cual o editarlo antes
+        de confirmarlo.
+
+  ─────────────────────────────────────────────────────
+  17-A. MODALIDAD SCHEDULED_RECURRING
+  ─────────────────────────────────────────────────────
+
+  17-A-1. Comprador hace un pedido por primera vez
+          → entra al flujo común desde BLOQUE 1 (DRAFT)
+
+  17-A-2. En PENDING_CONFIRM marca el pedido como recurrente
+          → recurrence_mode = SCHEDULED_RECURRING
+          → recurrence_periodicity = (DAILY | WEEKLY | BIWEEKLY |
+                                       MONTHLY | CUSTOM_INTERVAL)
+          → recurrence_status = RECURRENCE_ACTIVE
+
+          Se guarda la plantilla del pedido:
+            - ítems y cantidades
+            - dirección de entrega
+            - payment_method (y submétodo si aplica)
+            - delivery_type
+            - condiciones acordadas
+
+  17-A-3. Pedido original sigue el flujo común normal
+          → BLOQUE 2 en adelante
+
+  17-A-4. Cuando se cumple la periodicidad
+          → el sistema crea automáticamente un pedido nuevo
+            usando la plantilla guardada
+          → nuevo pedido nace en order_status = ORDER_SUBMITTED
+            con los mismos atributos de la plantilla
+          → continúa flujo común desde BLOQUE 5 (validación)
+
+          NOTA: en pagos ONLINE_AT_ORDER, el sistema reutiliza el
+          método de pago guardado y dispara el cobro automático
+          igualmente antes de la validación operativa. El pago se
+          procesa contra la pasarela del Cliente (no de RUTA);
+          ver sección 18 de la estrategia multi-tenant.
+
+  17-A-5. Comprador puede en cualquier momento:
+
+     a) Pausar la recurrencia
+        → recurrence_status = RECURRENCE_PAUSED
+        → no se generan pedidos nuevos hasta reactivar
+
+     b) Cancelar la recurrencia
+        → recurrence_status = RECURRENCE_CANCELLED
+        → no se generarán más pedidos automáticos
+        → los pedidos ya generados siguen su ciclo de vida
+
+     c) Editar la plantilla
+        - cambia ítems, dirección, periodicidad o método de pago
+        - los próximos pedidos usan la plantilla actualizada
+
+
+  ─────────────────────────────────────────────────────
+  17-B. MODALIDAD REPEAT_LAST_ORDER
+  ─────────────────────────────────────────────────────
+
+  17-B-1. Comprador ingresa a la página
+          → sistema le ofrece la opción de "repetir último pedido"
+
+  17-B-2. Comprador acepta repetir
+          → recurrence_mode = REPEAT_LAST_ORDER
+          → sistema clona el último pedido como DRAFT
+          → order_status = DRAFT
+
+  17-B-3. Comprador puede editar:
+          - añadir o quitar ítems
+          - cambiar dirección
+          - cambiar método de pago
+
+  17-B-4. Comprador confirma
+          → continúa flujo común desde BLOQUE 1
+            (PENDING_CONFIRM → ORDER_SUBMITTED → ...)
+
+  NOTA PARA DIAGRAMA:
+    REPEAT_LAST_ORDER no genera pedidos automáticos. Es solo un
+    mecanismo para acelerar la creación manual. Cada repetición
+    es un pedido nuevo independiente con su propio ciclo.
+
+
+===============================================================================
+  CONECTOR RECOMENDADO — DIAGRAMA 5 (FLUJO RECURRENCIA - NUEVO)
+===============================================================================
+
+  Solo aplica para Cliente Full.
+
+  Dos sub-diagramas:
+
+    5-A: SCHEDULED_RECURRING
+      DRAFT → PENDING_CONFIRM (marca recurrente)
+      → guarda plantilla
+      → recurrence_status = RECURRENCE_ACTIVE
+      → pedido original sigue flujo común
+      → ciclo automático:
+          [trigger temporal] → genera nuevo pedido
+          → entra a Diagrama 1 en ORDER_SUBMITTED
+
+      Acciones del comprador:
+        Pausar    → RECURRENCE_PAUSED
+        Reanudar  → RECURRENCE_ACTIVE
+        Cancelar  → RECURRENCE_CANCELLED
+        Editar    → actualiza plantilla
+
+    5-B: REPEAT_LAST_ORDER
+      Comprador → "repetir último pedido"
+      → sistema clona último pedido como DRAFT
+      → comprador edita (opcional)
+      → entra a Diagrama 1 en DRAFT

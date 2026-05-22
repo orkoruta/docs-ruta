@@ -1,0 +1,159 @@
+NOMBRE DEL FLUJO:
+Flujo 6 — Flujo PEDIDOS CORPORATIVOS / EMPRESARIALES
+
+ARCHIVO:
+flujo_6_pedidos_corporativos.txt
+
+CONTEXTO:
+Este archivo hace parte del flujo completo de procesos de RUTA.
+RUTA es una aplicación web orientada a la administración de operaciones
+comerciales entre Clientes y Compradores. El proceso completo está
+organizado en 7 flujos principales y cada flujo corresponde a un diagrama
+independiente. Este archivo contiene el FLUJO 6 — PEDIDOS CORPORATIVOS,
+que es el flujo de creación manual por parte del Cliente (Admin/Operator)
+para Compradores B2B. Un Comprador corporativo normalmente no usa la
+página de e-commerce directamente: contacta al Cliente (comercio) por
+canales externos y el Cliente registra el pedido en el sistema. Los
+pedidos corporativos comparten flujo común con los individuales; solo
+cambian el origen y buyer_type.
+
+RUTA soporta dos tipos de Cliente: Cliente API (Tipo A, solo logística)
+y Cliente Full (Tipo B, ciclo completo). Este flujo aplica
+exclusivamente a Cliente Full.
+
+REFERENCIAS OBLIGATORIAS:
+- reglas_para_diagramar_flujos.txt
+- docs/arquitectura/estrategia_multi_tenant_ruta.md
+- flujo_1_comun_y_decision_de_pago.txt
+- flujo_5_recurrencia.txt
+
+INSTRUCCIONES PARA CODEX / IA:
+- Interpretar este archivo como parte de un sistema mayor (los 7 flujos
+  de RUTA).
+- No modificar reglas, estados ni lógica del proceso sin revisar los
+  archivos relacionados.
+- Consultar siempre reglas_para_diagramar_flujos.txt antes de generar o
+  modificar diagramas.
+- Consultar la estrategia multi-tenant. Este flujo aplica solo a
+  Cliente Full. En Cliente API el manejo de compradores corporativos
+  vive en el sistema externo del Cliente.
+- Este flujo es un punto de entrada externo al ciclo principal. Sus
+  salidas son:
+    * Pedido corporativo nuevo o repetido
+      → DRAFT con buyer_type = CORPORATE
+      → continúa flujo común desde BLOQUE 1 en
+        flujo_1_comun_y_decision_de_pago.txt
+    * Pedido corporativo marcado como recurrente
+      → DRAFT con buyer_type = CORPORATE
+      → continúa en BLOQUE 17-A en flujo_5_recurrencia.txt y luego
+        flujo común en flujo_1_comun_y_decision_de_pago.txt
+- buyer_type permanece como CORPORATE durante todo el ciclo del pedido.
+
+===============================================================================
+  APLICABILIDAD POR TIPO DE CLIENTE
+===============================================================================
+
+Cliente API (Tipo A): NO APLICA
+
+  En Cliente API, el Cliente maneja su propio modelo de Compradores
+  (incluyendo corporativos) en su sistema externo. Los pedidos
+  corporativos del Cliente llegan a RUTA vía API como cualquier otro
+  pedido (order_origin de Cliente API), entrando en PREPARING,
+  READY_TO_SHIP o READY_FOR_PICKUP.
+
+  El campo buyer_type se mantiene en el modelo de datos por
+  consistencia, pero RUTA no expone flujos específicos de creación
+  corporativa para Cliente API.
+
+Cliente Full (Tipo B): APLICA EN SU TOTALIDAD
+
+  El Admin o el Operator del Cliente Full puede crear pedidos
+  corporativos manualmente desde la UI de gestión (/c/{slug}/admin/...).
+  El Comprador corporativo no necesita estar registrado como BUYER en
+  RUTA: el pedido se registra a nombre de una entidad corporativa
+  identificada (con sus datos básicos de contacto).
+
+  Si el Cliente Full lo prefiere, también puede registrar al Comprador
+  corporativo como BUYER con buyer_type = CORPORATE para tener historial
+  y permitirle login en la UI nativa o landing custom.
+
+CONTENIDO DEL FLUJO:
+
+===============================================================================
+  BLOQUE 18 — PEDIDOS CORPORATIVOS / EMPRESARIALES (NUEVO EN v10.0)
+  Flujo de creación manual por parte del cliente para compradores B2B
+===============================================================================
+
+  Un comprador corporativo normalmente no usa la página de e-commerce
+  directamente. Contacta al cliente (comercio) por canales externos
+  (correo, WhatsApp, llamada) y le solicita el pedido. El cliente lo
+  registra en el sistema.
+
+  buyer_type:
+    INDIVIDUAL  — comprador estándar que usa la página
+    CORPORATE   — comprador empresarial gestionado por el cliente
+
+  18-1. Comprador corporativo contacta al cliente por canal externo
+        → mensaje recibido con el detalle del pedido deseado
+
+  18-2. Cliente decide cómo registrar el pedido. Tres opciones:
+
+     a) Crear pedido corporativo nuevo
+        → order_status = DRAFT
+        → buyer_type = CORPORATE
+        → cliente captura ítems, dirección, método de pago acordado,
+          delivery_type
+        → continúa flujo común desde BLOQUE 1
+
+     b) Crear pedido corporativo y marcarlo como recurrente
+        → order_status = DRAFT
+        → buyer_type = CORPORATE
+        → recurrence_mode = SCHEDULED_RECURRING
+        → recurrence_periodicity = (valor acordado con la empresa)
+        → continúa en BLOQUE 17-A y luego flujo común
+
+     c) Repetir el último pedido corporativo del mismo comprador
+        → sistema clona el último pedido de ese comprador corporativo
+        → order_status = DRAFT
+        → buyer_type = CORPORATE
+        → cliente edita si es necesario
+        → continúa flujo común desde BLOQUE 1
+
+  18-3. A partir de aquí el pedido sigue el flujo común igual que
+        un pedido individual.
+
+        Diferencias relevantes:
+          - buyer_type permanece como CORPORATE durante todo el ciclo
+          - el cliente puede gestionarlo directamente sin interacción
+            del comprador en la página
+          - condiciones de pago y entrega pueden estar pactadas por
+            fuera del flujo estándar (ej. crédito empresarial, plazos
+            especiales) pero deben mapearse a uno de los payment_method
+            válidos del sistema
+
+  NOTA PARA DIAGRAMA:
+    El pedido corporativo entra al flujo común en DRAFT (o directamente
+    en ORDER_SUBMITTED si viene por recurrencia programada). Solo cambia
+    el origen y el atributo buyer_type.
+
+
+===============================================================================
+  CONECTOR RECOMENDADO — DIAGRAMA 6 (FLUJO PEDIDOS CORPORATIVOS - NUEVO)
+===============================================================================
+
+  Solo aplica para Cliente Full.
+
+  Comprador corporativo contacta al cliente por canal externo
+    → Cliente elige una de tres opciones:
+
+       a) Crear pedido nuevo
+          → DRAFT con buyer_type = CORPORATE
+          → Diagrama 1
+
+       b) Crear pedido recurrente
+          → DRAFT con buyer_type = CORPORATE
+          → Diagrama 5-A (SCHEDULED_RECURRING)
+
+       c) Repetir último pedido del mismo comprador corporativo
+          → DRAFT clonado con buyer_type = CORPORATE
+          → Diagrama 1

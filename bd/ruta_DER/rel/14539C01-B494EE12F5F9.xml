@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<relationalModel class="oracle.dbtools.crest.model.design.relational.RelationalDesign" name="Relational_1" id="14539C01-353C-90F2-2DCE-B494EE12F5F9" mainViewID="47E70ED7-5C5E-9DC5-4C17-AD6941B9F414">
+<createdBy>Alexander Marquez</createdBy>
+<createdTime>2026-05-20 19:40:36 UTC</createdTime>
+<ownerDesignName>ruta_DER</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+<selectedRDBMSSite>01F6E6D1-21D0-CFBD-ABDD-3988D1813575</selectedRDBMSSite>
+<importDDLFileStamps>
+<importDDLFileStamp class="oracle.dbtools.crest.imports.DDLFileStamp">
+<fileName>ruta_oracle.sql</fileName>
+<pathName>C:\Dropbox\ORKO\ruta\docs-ruta\bd</pathName>
+<dbType>17</dbType>
+</importDDLFileStamp>
+</importDDLFileStamps>
+</relationalModel>

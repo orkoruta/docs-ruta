@@ -1,0 +1,352 @@
+NOMBRE DEL FLUJO:
+Flujo 1 — Flujo Común + Decisión de Pago Online
+
+ARCHIVO:
+flujo_1_comun_y_decision_de_pago.txt
+
+CONTEXTO:
+Este archivo hace parte del flujo completo de procesos de RUTA.
+RUTA es una aplicación web orientada a la administración de operaciones
+comerciales entre Clientes y Compradores. El proceso completo está
+organizado en 7 flujos principales y cada flujo corresponde a un diagrama
+independiente. Este archivo contiene el FLUJO 1, que es el punto de
+entrada del ciclo de vida del pedido para Clientes Full: creación,
+confirmación, selección de método de pago y de tipo de entrega, ruta de
+pago (al momento del pedido o al momento de entrega/retiro), validación
+operativa, aceptación del vendedor y preparación. Desde este flujo se
+bifurca hacia los flujos SHIP o PICKUP según delivery_type.
+
+RUTA soporta dos tipos de Cliente: Cliente API (Tipo A, solo logística)
+y Cliente Full (Tipo B, ciclo completo). Este flujo aplica exclusivamente
+a Cliente Full. Para los detalles del modelo de tipos de Cliente, ver
+docs/arquitectura/estrategia_multi_tenant_ruta.md.
+
+REFERENCIAS OBLIGATORIAS:
+- reglas_para_diagramar_flujos.txt
+- docs/arquitectura/estrategia_multi_tenant_ruta.md
+- flujo_2_ship_completo.txt
+- flujo_3_pickup_completo.txt
+- flujo_4_refund_completo.txt
+- flujo_5_recurrencia.txt
+- flujo_6_pedidos_corporativos.txt
+- flujo_7_devoluciones_post_cierre.txt
+
+INSTRUCCIONES PARA CODEX / IA:
+- Interpretar este archivo como parte de un sistema mayor (los 7 flujos
+  de RUTA).
+- No modificar reglas, estados ni lógica del proceso sin revisar los
+  archivos relacionados.
+- Consultar siempre reglas_para_diagramar_flujos.txt antes de generar o
+  modificar diagramas.
+- Consultar la estrategia multi-tenant para entender el modelo Cliente
+  API vs Cliente Full.
+- Este flujo es el punto de entrada del pedido para Clientes Full.
+  Sus salidas principales son:
+    * SHIP        → continúa en flujo_2_ship_completo.txt
+    * PICKUP      → continúa en flujo_3_pickup_completo.txt
+- Si cualquier cancelación ocurre con payment_status = PAID, se dispara
+  el reembolso → continúa en flujo_4_refund_completo.txt
+- Las entradas externas a este flujo provienen de:
+    * Pedidos corporativos → flujo_6_pedidos_corporativos.txt
+    * Recurrencia programada → flujo_5_recurrencia.txt
+
+===============================================================================
+  APLICABILIDAD POR TIPO DE CLIENTE
+===============================================================================
+
+Cliente API (Tipo A): NO APLICA
+
+  Los Clientes API ya tienen su propia plataforma de e-commerce
+  (catálogo, login del Comprador, carrito, checkout y pago). Cuando un
+  Comprador confirma un pedido en la plataforma del Cliente, este llama
+  a la API de RUTA y el pedido entra al sistema directamente en uno de
+  los siguientes estados:
+
+    - PREPARING                     (si el Cliente quiere que RUTA
+                                     refleje también la preparación)
+    - AWAITING_COURIER_ASSIGNMENT   (si delivery_carrier_type = OWN_FLEET
+                                     y ya está listo para asignar)
+    - READY_TO_SHIP                 (si delivery_carrier_type =
+                                     EXTERNAL_COURIER y está listo)
+    - READY_FOR_PICKUP              (si delivery_type = PICKUP y está
+                                     listo para recogida)
+
+  Toda la cadena DRAFT → PENDING_CONFIRM → ORDER_SUBMITTED →
+  ORDER_VALIDATING → VALIDATION_APPROVED → SELLER_CONFIRMED → PREPARING
+  y el manejo de payment_method = ONLINE_AT_ORDER se ejecutan en la
+  plataforma del Cliente, no en RUTA.
+
+Cliente Full (Tipo B): APLICA EN SU TOTALIDAD
+
+  Todos los pedidos de Clientes Full transitan por este flujo, ya sea
+  iniciados por:
+    - Comprador en la UI nativa de RUTA o landing custom desarrollada
+      por equipo RUTA (origen BUYER_UI).
+    - Admin/Operator del Cliente vía gestión manual (origen
+      CORPORATE_MANUAL, ver flujo 6).
+    - Sistema de recurrencia programada (origen RECURRENCE, ver
+      flujo 5; estos pedidos entran directamente en ORDER_SUBMITTED).
+
+CONTENIDO DEL FLUJO:
+
+===============================================================================
+  BLOQUE 1 — FLUJO COMÚN: CREACIÓN DEL PEDIDO
+===============================================================================
+
+  El pedido puede nacer desde 3 orígenes:
+
+    a) Comprador individual desde la página
+       → buyer_type = INDIVIDUAL
+       → entra directo en DRAFT
+
+    b) Comprador corporativo gestionado por el cliente
+       → buyer_type = CORPORATE
+       → entra desde BLOQUE 18
+
+    c) Pedido generado automáticamente por recurrencia programada
+       → buyer_type heredado de la plantilla
+       → entra desde BLOQUE 17-A, directamente en ORDER_SUBMITTED
+
+  1. Cliente/Comprador inicia el pedido
+     → order_status = DRAFT
+
+  Desde DRAFT puede:
+
+     a) Confirmar el pedido
+        → order_status = PENDING_CONFIRM
+
+     b) No hacer nada hasta vencer el tiempo máximo
+        → order_status = EXPIRED
+        → order_status = CLOSED
+        → closure_reason = EXPIRED
+
+     c) Cancelar
+        → order_status = CANCELLED_BY_CUSTOMER
+        → order_status = CLOSED
+        → closure_reason = CANCELLED_BY_CUSTOMER
+
+
+===============================================================================
+  BLOQUE 2 — FLUJO COMÚN: SELECCIÓN DE ENTREGA Y PAGO
+===============================================================================
+
+  2. Pedido pendiente de confirmación
+     → order_status = PENDING_CONFIRM
+
+  En este punto se define:
+
+     delivery_type:
+       - SHIP
+       - PICKUP
+
+     payment_method:
+       - ONLINE_AT_ORDER
+       - ELECTRONIC_ON_DELIVERY
+       - CASH_ON_DELIVERY
+
+     (opcional) marcar como recurrente
+       → continúa en BLOQUE 17-A para configurar periodicidad
+
+  Desde PENDING_CONFIRM puede:
+
+     a) Confirmar selección de entrega y pago
+        → order_status = ORDER_SUBMITTED
+
+     b) Cancelar antes de enviar el pedido
+        → order_status = CANCELLED_BY_CUSTOMER
+        → order_status = CLOSED
+        → closure_reason = CANCELLED_BY_CUSTOMER
+
+
+===============================================================================
+  BLOQUE 3 — RUTA DE PAGO ONLINE AL MOMENTO DEL PEDIDO
+  Aplica cuando payment_method = ONLINE_AT_ORDER
+===============================================================================
+
+  NOTA SOBRE EL ROL FINANCIERO DE RUTA:
+  RUTA no recauda dinero. Cuando el Comprador paga en línea, es
+  redirigido a la pasarela configurada por el Cliente
+  (client_payment_providers). El dinero va directo a la cuenta del
+  Cliente. RUTA solo recibe una confirmación técnica vía webhook y
+  actualiza payment_status. Ver sección 18 de la estrategia multi-tenant.
+
+  3-1. Pedido enviado con pago online inicial
+       → order_status = ORDER_SUBMITTED
+       → payment_status = PENDING_ONLINE_PAYMENT
+
+  Desde aquí puede:
+
+     a) Comprador inicia el pago
+        → payment_status = PAYMENT_PROCESSING
+
+     b) Comprador no paga dentro del tiempo permitido
+        → order_status = EXPIRED → CLOSED
+        → closure_reason = PAYMENT_TIMEOUT
+        → refund_status = REFUND_NOT_REQUIRED
+
+     c) Comprador cancela antes de pagar
+        → order_status = CANCELLED_BY_CUSTOMER → CLOSED
+        → closure_reason = CANCELLED_BY_CUSTOMER
+        → refund_status = REFUND_NOT_REQUIRED
+
+  3-2. Pasarela procesando pago
+       → payment_status = PAYMENT_PROCESSING
+
+  Desde aquí puede:
+
+     a) Pago aprobado
+        → payment_status = PAID
+        → continúa en BLOQUE 5
+
+     b) Pago fallido pero reintentable
+        → payment_status = PAYMENT_FAILED_RETRYABLE
+        → vuelve a PENDING_ONLINE_PAYMENT
+
+     c) Pago fallido y se agotan los intentos
+        → payment_status = PAYMENT_REJECTED_FINAL
+        → order_status = CLOSED
+        → closure_reason = PAYMENT_REJECTED
+        → refund_status = REFUND_NOT_REQUIRED
+
+     d) Pago rechazado definitivamente
+        → payment_status = PAYMENT_REJECTED_FINAL
+        → order_status = CLOSED
+        → closure_reason = PAYMENT_REJECTED
+        → refund_status = REFUND_NOT_REQUIRED
+
+
+===============================================================================
+  BLOQUE 4 — RUTA DE PAGO AL MOMENTO DE ENTREGA / RETIRO
+  Aplica cuando payment_method = ELECTRONIC_ON_DELIVERY o CASH_ON_DELIVERY
+===============================================================================
+
+  4-1. Pedido enviado con pago pendiente de cobro posterior
+       → order_status = ORDER_SUBMITTED
+       → payment_status = PENDING_COLLECTION
+
+  El pedido continúa directamente a validación operativa.
+       → continúa en BLOQUE 5
+
+  El cobro real se ejecuta más adelante:
+       - En SHIP: cuando el repartidor llega al comprador.
+       - En PICKUP: cuando el comprador llega al punto de recogida.
+
+
+===============================================================================
+  BLOQUE 5 — FLUJO COMÚN: VALIDACIÓN OPERATIVA
+===============================================================================
+
+  5-1. Sistema valida datos, stock, fraude operativo y reglas
+       → order_status = ORDER_VALIDATING
+
+  Desde ORDER_VALIDATING puede:
+
+     a) Validación automática aprobada
+        → order_status = VALIDATION_APPROVED
+
+     b) Requiere revisión humana
+        → order_status = MANUAL_REVIEW
+
+     c) Rechazo automático
+        → order_status = VALIDATION_REJECTED
+        → order_status = CANCELLED_BY_SYSTEM → CLOSED
+        → closure_reason = VALIDATION_REJECTED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING
+          → continúa en BLOQUE 12
+
+  5-2. Revisión humana
+       → order_status = MANUAL_REVIEW
+
+  Desde MANUAL_REVIEW puede:
+
+     a) Administrador aprueba
+        → order_status = VALIDATION_APPROVED
+
+     b) Administrador rechaza
+        → order_status = VALIDATION_REJECTED
+        → order_status = CANCELLED_BY_ADMIN → CLOSED
+        → closure_reason = VALIDATION_REJECTED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING
+          → continúa en BLOQUE 12
+
+
+===============================================================================
+  BLOQUE 6 — FLUJO COMÚN: ACEPTACIÓN DEL VENDEDOR Y PREPARACIÓN
+===============================================================================
+
+  6-1. Pedido validado operativamente
+       → order_status = VALIDATION_APPROVED
+
+  Desde VALIDATION_APPROVED puede:
+
+     a) Vendedor acepta el pedido
+        → order_status = SELLER_CONFIRMED
+
+     b) Vendedor rechaza
+        → order_status = CANCELLED_BY_SELLER → CLOSED
+        → closure_reason = CANCELLED_BY_SELLER
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING
+          → continúa en BLOQUE 12
+
+  6-2. Pedido aceptado por vendedor
+       → order_status = SELLER_CONFIRMED
+       → order_status = PREPARING
+
+  6-3. Pedido en preparación
+       → order_status = PREPARING
+
+  Desde PREPARING puede:
+
+     a) Pedido preparado para entrega a domicilio
+        Condición: delivery_type = SHIP
+        Si delivery_carrier_type = OWN_FLEET:
+          → continúa en BLOQUE 6B (asignación a repartidor)
+        Si delivery_carrier_type = EXTERNAL_COURIER:
+          → order_status = READY_TO_SHIP
+          → continúa en BLOQUE 7
+
+     b) Pedido preparado para retiro en punto físico
+        Condición: delivery_type = PICKUP
+        → order_status = READY_FOR_PICKUP
+        → continúa en BLOQUE 8
+
+     c) Comprador cancela antes de despacho/retiro
+        → order_status = CANCELLED_BY_CUSTOMER → CLOSED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING
+          → continúa en BLOQUE 12
+
+     d) Administrador cancela antes de despacho/retiro
+        → order_status = CANCELLED_BY_ADMIN → CLOSED
+        Si payment_status = PAID:
+          → refund_status = REFUND_PENDING
+          → continúa en BLOQUE 12
+
+
+===============================================================================
+  CONECTOR RECOMENDADO — DIAGRAMA 1 (FLUJO COMÚN + DECISIÓN DE PAGO)
+===============================================================================
+
+  Contenido principal:
+    DRAFT
+    → PENDING_CONFIRM
+    → ORDER_SUBMITTED
+    → bifurca por payment_method:
+        ONLINE_AT_ORDER → PENDING_ONLINE_PAYMENT → PAYMENT_PROCESSING
+                          → PAID → ORDER_VALIDATING
+        ON_DELIVERY     → PENDING_COLLECTION → ORDER_VALIDATING
+    → VALIDATION_APPROVED → SELLER_CONFIRMED → PREPARING
+    → bifurca por delivery_type y delivery_carrier_type:
+        SHIP + OWN_FLEET         → BLOQUE 6B → Diagrama 2
+        SHIP + EXTERNAL_COURIER  → READY_TO_SHIP → Diagrama 2
+        PICKUP                   → READY_FOR_PICKUP → Diagrama 3
+
+  Entradas externas:
+    - Desde Diagrama 6 (Pedidos Corporativos) → DRAFT
+    - Desde Diagrama 5 (Recurrencia programada) → ORDER_SUBMITTED
+
+  Disparadores a Diagrama 4 (Refund):
+    Cualquier cancelación con payment_status = PAID dispara reembolso.

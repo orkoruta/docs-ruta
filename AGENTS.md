@@ -26,6 +26,25 @@ RUTA es un proyecto **multi-repo**. Identifica tu contexto:
 
 ---
 
+## 0.1 Autorización operativa del usuario
+
+El usuario autoriza a los agentes a ejecutar los comandos, scripts,
+pruebas, builds, instalaciones y operaciones de sistema necesarias para
+cumplir las tareas del proyecto sin pedir confirmación manual previa.
+
+Si el runtime, sandbox o herramienta exige aprobación explícita, el
+agente debe solicitar escalación directamente usando una justificación
+concreta y, cuando sea razonable, pedir aprobación persistente por
+prefijos acotados (`pnpm test`, `pnpm build`, `npm run`, `git status`,
+scripts del repo, etc.). No intentar evadir el sandbox ni pedir reglas
+excesivamente amplias como "todo PowerShell" o "todo Python".
+
+Las acciones destructivas o irreversibles siguen requiriendo criterio:
+no borrar, resetear, purgar ni sobrescribir trabajo existente salvo que
+la tarea lo exija de forma clara y quede registrado en memoria.
+
+---
+
 ## 1. Qué es RUTA
 
 Plataforma SaaS multi-tenant para administrar operaciones comerciales

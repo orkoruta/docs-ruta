@@ -9,7 +9,7 @@
   FASE 2  — Creación del Usuario del Sistema Operativo
   FASE 3  — Instalación de PostgreSQL
   FASE 4  — Inicialización y Arranque del Servicio
-              (PGDATA configurado en /pgdata)
+              (PGDATA configurado en /pgdata/18/data)
   FASE 5  — Configuración de Seguridad: postgresql.conf
   FASE 6  — Configuración de Autenticación: pg_hba.conf
   FASE 7  — Configurar SSL para conexiones cifradas
@@ -33,7 +33,7 @@
 
 1.2 Configurar el hostname
 --------------------------
-    sudo hostnamectl set-hostname pgserver01.dominio.local
+    sudo hostnamectl set-hostname instance-ruta-bd-qa
 
     # Verificar
     hostnamectl
@@ -43,7 +43,7 @@
 --------------------------
     sudo vim /etc/hosts
     # Agregar la siguiente línea (ajustar IP):
-    192.168.1.100   pgserver01.dominio.local   pgserver01
+    10.77.0.3      instance-ruta-bd-qa
 
 
 1.4 Configurar la zona horaria
@@ -86,8 +86,8 @@
     # Pegar el siguiente contenido:
 
     # Shared Memory
-    kernel.shmmax = 68719476736        # 64GB — ajustar al 50% de RAM
-    kernel.shmall = 4294967296
+    kernel.shmmax = 6442450944         # 6GB — 50% de 12GB RAM
+    kernel.shmall = 1572864
 
     # Virtual Memory
     vm.swappiness = 10
@@ -141,12 +141,12 @@ manualmente antes, o verificar y ajustar su configuración después.
 
 2.3 Crear directorio PGDATA personalizado
 ------------------------------------------
-    sudo mkdir -p /pgdata
-    sudo chown postgres:postgres /pgdata
-    sudo chmod 700 /pgdata
+    sudo mkdir -p /pgdata/18/data
+    sudo chown postgres:postgres /pgdata/18/data
+    sudo chmod 700 /pgdata/18/data
 
     # Si SELinux está en modo enforcing (no permissive), aplicar contexto correcto:
-    # sudo semanage fcontext -a -t postgresql_db_t "/pgdata(/.*)?"
+    # sudo semanage fcontext -a -t postgresql_db_t "/pgdata/18/data(/.*)?"
     # sudo restorecon -Rv /pgdata
 
 
@@ -156,9 +156,9 @@ manualmente antes, o verificar y ajustar su configuración después.
     sudo chown postgres:postgres /backup/postgresql
     sudo chmod 750 /backup/postgresql
 
-    sudo mkdir -p /var/log/postgresql
-    sudo chown postgres:postgres /var/log/postgresql
-    sudo chmod 700 /var/log/postgresql
+    sudo mkdir -p /pgdata/18/log
+    sudo chown postgres:postgres /pgdata/18/log
+    sudo chmod 700 /pgdata/18/log
 
 
 ================================================================================
@@ -167,7 +167,7 @@ manualmente antes, o verificar y ajustar su configuración después.
 
 3.1 Agregar el repositorio oficial PGDG para Oracle Linux 10
 -------------------------------------------------------------
-    sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-10-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-10-aarch64/pgdg-redhat-repo-latest.noarch.rpm
 
 
 3.2 Deshabilitar el módulo PostgreSQL del sistema base
@@ -195,13 +195,13 @@ manualmente antes, o verificar y ajustar su configuración después.
   Por eso el método correcto es crear un override de systemd antes del initdb.
 
 
-4.1 Crear el override de systemd para PGDATA=/pgdata
+4.1 Crear el override de systemd para PGDATA=/pgdata/18/data
 -----------------------------------------------------
     sudo mkdir -p /etc/systemd/system/postgresql-18.service.d/
 
     sudo tee /etc/systemd/system/postgresql-18.service.d/override.conf <<EOF
 [Service]
-Environment=PGDATA=/pgdata
+Environment=PGDATA=/pgdata/18/data
 EOF
 
     # Recargar systemd para que lea el override:
@@ -209,16 +209,16 @@ EOF
 
     # Verificar que PGDATA quedó correctamente configurado:
     sudo systemctl show postgresql-18 | grep 'Environment='
-    # Debe mostrar: Environment=PGDATA=/pgdata PG_OOM_ADJUST_FILE=...
+    # Debe mostrar: Environment=PGDATA=/pgdata/18/data PG_OOM_ADJUST_FILE=...
 
 
-4.2 Inicializar el cluster de base de datos en /pgdata
+4.2 Inicializar el cluster de base de datos en /pgdata/18/data
 -------------------------------------------------------
     sudo /usr/pgsql-18/bin/postgresql-18-setup initdb
     # Salida esperada: Initializing database ... OK
 
-    # Verificar que los archivos del cluster quedaron en /pgdata:
-    ls -la /pgdata
+    # Verificar que los archivos del cluster quedaron en /pgdata/18/data:
+    ls -la /pgdata/18/data
     # Debe mostrar: PG_VERSION, postgresql.conf, pg_hba.conf, base/, pg_wal/, etc.
 
 
@@ -228,23 +228,23 @@ EOF
     sudo systemctl start postgresql-18
     sudo systemctl status postgresql-18
 
-    # Confirmar que el proceso usa /pgdata:
-    sudo -u postgres psql -c "SHOW data_directory;"
-    # Debe mostrar: /pgdata
+    # Confirmar que el proceso usa /pgdata/18/data:
+    sudo -u postgres psql -p 26432 -c "SHOW data_directory;"
+    # Debe mostrar: /pgdata/18/data
 
 
 ================================================================================
   FASE 5 — CONFIGURACIÓN DE SEGURIDAD: postgresql.conf
 ================================================================================
 
-    sudo vim /pgdata/postgresql.conf
+    sudo vim /pgdata/18/data/postgresql.conf
 
     Ajustar o agregar los siguientes parámetros:
 
     # ─── CONEXIONES ────────────────────────────────────────────────────────────
-    listen_addresses = 'localhost'      # Solo local por defecto.
+    listen_addresses = '10.77.0.3'    # IP privada del servidor PostgreSQL
                                         # Cambiar a IP específica si hay clientes remotos.
-    port = 5432
+    port = 26432
     max_connections = 100               # Ajustar según carga esperada
 
     # ─── AUTENTICACIÓN ─────────────────────────────────────────────────────────
@@ -253,31 +253,30 @@ EOF
 
     # ─── SSL ───────────────────────────────────────────────────────────────────
     ssl = on
-    ssl_cert_file = 'server.crt'
-    ssl_key_file = 'server.key'
+    ssl_cert_file = 'serverRUTA.crt'
+    ssl_key_file = 'serverRUTA.key'
     ssl_min_protocol_version = 'TLSv1.2'
     ssl_ciphers = 'HIGH:MEDIUM:!aNULL:!MD5:!RC4'
 
     # ─── LOGGING Y AUDITORÍA ───────────────────────────────────────────────────
     log_destination = 'csvlog'
     logging_collector = on
-    log_directory = '/var/log/postgresql'
+    log_directory = '/pgdata/18/log'
     log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
     log_rotation_age = 1d
     log_rotation_size = 100MB
     log_min_duration_statement = 1000   # Log queries que tarden > 1 segundo
     log_connections = on
     log_disconnections = on
-    log_failed_authentications = on
     log_lock_waits = on
     log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '
     log_statement = 'ddl'               # Registrar CREATE, ALTER, DROP
 
     # ─── MEMORIA (ajustar según RAM disponible) ────────────────────────────────
-    shared_buffers = 256MB              # ~25% de RAM total
-    effective_cache_size = 768MB        # ~75% de RAM total
-    work_mem = 4MB
-    maintenance_work_mem = 64MB
+    shared_buffers = 3GB                # ~25% de 12GB RAM
+    effective_cache_size = 9GB          # ~75% de 12GB RAM
+    work_mem = 16MB
+    maintenance_work_mem = 512MB
 
     # ─── WAL Y CHECKPOINTS ─────────────────────────────────────────────────────
     wal_level = replica
@@ -292,7 +291,7 @@ EOF
   FASE 6 — CONFIGURACIÓN DE AUTENTICACIÓN: pg_hba.conf
 ================================================================================
 
-    sudo vim /pgdata/pg_hba.conf
+    sudo vim /pgdata/18/data/pg_hba.conf
 
     Reemplazar el contenido con la siguiente política estricta:
 
@@ -303,7 +302,7 @@ local   all       postgres                      peer
 local   all       all                           scram-sha-256
 # Conexiones IPv4 locales
 host    all       all        127.0.0.1/32       scram-sha-256
-hostssl rutadb    rutauser   10.77.0.0/24       scram-sha-256
+hostssl rutadb    rutauser   10.77.0.3/32       scram-sha-256
 # Conexiones IPv6 locales
 host    all       all        ::1/128            scram-sha-256
 # Conexiones remotas (solo desde red interna LB, con SSL obligatorio)
@@ -322,11 +321,11 @@ hostssl all       rutauser   10.88.255.240/28   scram-sha-256
 
     # Cambiar al usuario postgres
     sudo -i -u postgres
-    cd /pgdata
+    cd /pgdata/18/data
 
     # Generar certificado autofirmado
     # NOTA: Para producción usar certificado firmado por CA corporativa o pública
-    openssl req -new -x509 -days 365 -nodes -out serverRUTA.crt -keyout serverRUTA.key -subj "/C=CO/ST=Bogota/L=Bogota/O=MiEmpresa/CN=pgserver01"
+    openssl req -new -x509 -days 365 -nodes -out serverRUTA.crt -keyout serverRUTA.key -subj "/C=CO/ST=Bogota/L=Bogota/O=Ruta/CN=instance-ruta-bd-qa"
 
     # Establecer permisos correctos (OBLIGATORIO)
     chmod 600 serverRUTA.key
@@ -342,13 +341,13 @@ hostssl all       rutauser   10.88.255.240/28   scram-sha-256
 ================================================================================
 
     # Opción 1 — Abrir puerto para toda la red (menos seguro):
-    sudo firewall-cmd --permanent --add-service=postgresql
+    sudo firewall-cmd --permanent --add-port=26432/tcp
     sudo firewall-cmd --reload
     sudo firewall-cmd --list-all
 
     # Opción 2 — Restringir solo a IPs específicas (RECOMENDADO):
-    sudo firewall-cmd --permanent --remove-service=postgresql
-    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" service name="postgresql" accept'
+    sudo firewall-cmd --permanent --remove-port=26432/tcp
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.77.1.0/24" port port="26432" protocol="tcp" accept'
     sudo firewall-cmd --reload
 
 # Red del load balancer
@@ -369,7 +368,7 @@ sudo firewall-cmd --list-rich-rules
 
 9.1 Conectarse como superusuario
 ---------------------------------
-    sudo -u postgres psql
+    sudo -u postgres psql -p 26432
 
 
 9.2 Cambiar contraseña del superusuario postgres
@@ -484,7 +483,7 @@ GRANT rol_escritura TO rutauser;
     $PGDUMPALL --globals-only > "$BDIR/globals_$FECHA.sql"
 
     # Backup individual por base de datos
-    for DB in $(psql -t -c "SELECT datname FROM pg_database WHERE datistemplate = false;"); do
+    for DB in $(psql -p 26432 -t -c "SELECT datname FROM pg_database WHERE datistemplate = false;"); do
         $PG_DUMP -Fc "$DB" > "$BDIR/${DB}_$FECHA.dump"
         echo "Backup de $DB completado: ${DB}_$FECHA.dump"
     done
@@ -507,7 +506,7 @@ GRANT rol_escritura TO rutauser;
     sudo -u postgres crontab -e
 
     # Agregar la siguiente línea (ejecuta backup a las 2:00 AM todos los días):
-    0 2 * * * /backup/postgresql/backup.sh >> /var/log/postgresql/backup.log 2>&1
+    0 2 * * * /backup/postgresql/backup.sh >> /pgdata/18/log/backup.log 2>&1
 
 
 ================================================================================
@@ -524,7 +523,7 @@ GRANT rol_escritura TO rutauser;
     psql -U rutauser -h 10.77.0.3 -p 26432 -d rutadb -W
 
     # 4. Verificar que SSL está activo en la sesión
-    psql -U appuser -h 10.77.0.3 -p 26432 -d rutadb -W  -c "SELECT ssl, version, cipher FROM pg_stat_ssl WHERE pid = pg_backend_pid();"
+    psql -U rutauser -h 10.77.0.3 -p 26432 -d rutadb -W  -c "SELECT ssl, version, cipher FROM pg_stat_ssl WHERE pid = pg_backend_pid();"
 
     # 5. Ver todos los roles y usuarios
     sudo -u postgres psql -p 26432 -c "\du"
@@ -550,7 +549,7 @@ GRANT rol_escritura TO rutauser;
 
   Usuarios del SO       Usuario 'postgres' del OS separado del sistema.
                         Usuario DBA (pgadmin) con sudo limitado a binarios pg.
-                        Usuario de app (appuser) sin privilegios de superuser.
+                        Usuario de app (rutauser) sin privilegios de superuser.
 
   Autenticación         scram-sha-256 en pg_hba.conf.
                         Prohibido: trust, md5, y acceso desde 0.0.0.0/0.
@@ -590,6 +589,6 @@ GRANT rol_escritura TO rutauser;
 
 ================================================================================
   Guía generada para Oracle Linux 10 + PostgreSQL 18
-  PGDATA configurado en: /pgdata
+  PGDATA configurado en: /pgdata/18/data
   Última revisión: Mayo 2026
 ================================================================================

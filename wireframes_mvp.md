@@ -69,11 +69,9 @@ del Cliente.
 
 **Acciones:**
 - Click en producto → `/c/{slug}/product/{id}`.
-- Click en "Agregar al carrito" → `POST /buyer/orders` o
-  actualización de carrito local (decidir: el carrito vive en BD o
-  en localStorage hasta el confirm).
-  - **Recomendación:** carrito local (Zustand persist) hasta que el
-    Comprador inicie checkout. Allí se crea el pedido en DRAFT.
+- Click en "Agregar al carrito" → persiste el carrito en BD mediante
+  un pedido `DRAFT` del Comprador.
+  - **Decisión:** el carrito vive en BD, no en `localStorage`.
 
 **Endpoints:**
 - `GET /public/clients/:slug` — info del Cliente para el header.

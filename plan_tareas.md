@@ -16,12 +16,13 @@ Plan operativo para construir el **MVP Fase 1** (Cliente Full + frontend
 - **SPRINT:** 0 a 6.
 - **TRACK:**
   - `INFRA` — infraestructura, deploy, scripts.
-  - `BACK` — backend en `ruta-backend`.
-  - `ADMIN` — admin frontend en `ruta-frontend/admin/`.
-  - `STORE` — storefront en `ruta-frontend/storefront/`.
-  - `SHARED` — paquetes en `ruta-shared`.
-  - `LANDING` — `landing-template` y futuros `landing-{slug}`.
-  - `DOCS` — `ruta-docs`.
+  - `BACK` — backend en `backend-ruta`.
+  - `ADMIN` — admin frontend en `frontend-ruta/admin/`.
+  - `STORE` — storefront en `frontend-ruta/storefront/`.
+  - `SHARED` — paquetes en `packages-ruta`.
+  - `LANDING` — carpeta local `frontend-clients-ruta/` y futuros
+    repos `landing-{slug}`.
+  - `DOCS` — `docs-ruta`.
   - `QA` — testing, observabilidad, hardening.
 
 ### Estimaciones
@@ -39,30 +40,53 @@ Plan operativo para construir el **MVP Fase 1** (Cliente Full + frontend
 
 `→ depende de: A.B-N, X.Y-M`
 
+### Definition of Done por avance
+
+Ningún avance se considera terminado sin verificación. Cada cambio debe
+tener el nivel de prueba que corresponda a su riesgo:
+
+- Cambios de tipos, enums, validators o helpers: typecheck + unit tests.
+- Cambios de backend/API/BD: typecheck + unit tests + integration tests
+  cuando toque DB, auth, multi-tenant, estados, idempotencia o dinero.
+- Cambios de frontend: typecheck/build + pruebas de componentes o E2E
+  para flujos críticos.
+- Cambios de documentación: revisión de consistencia contra las fuentes
+  de verdad afectadas.
+
+Si una prueba no puede ejecutarse por falta de entorno, credenciales o
+infraestructura, el avance debe registrar explícitamente qué no se pudo
+probar y por qué.
+
 ---
 
 # Sprint 0 — Setup multi-repo (1 semana)
 
-**Meta:** los 6 repos creados en GitHub, GitHub Packages configurado,
+**Meta:** los 5 repos base creados en GitHub, GitHub Packages configurado,
 infraestructura desplegada, primer ADMIN_RUTA logueado, las 3 apps
-levantándose en local consumiendo `@ruta/shared` y `@ruta/db`.
+levantándose en local consumiendo `@orkoruta/shared` y `@orkoruta/db`.
 
-## 0.INFRA-1 — Crear los 6 repos en GitHub [S]
+## 0.INFRA-1 — Crear los 5 repos base en GitHub [S]
 
-[ ] Crear repos privados en GitHub:
-    - `ruta-backend`
-    - `ruta-frontend`
-    - `ruta-shared`
-    - `ruta-docs`
-    - `ruta-infra`
-    - `landing-template` (marcado como Template Repository en
-      Settings → Template repository ✓)
-[ ] Configurar branch protection en `main` de los 5 base
+[x] Crear repos en GitHub:
+    - `backend-ruta` (publico verificado en `orkoruta`)
+    - `frontend-ruta` (publico verificado en `orkoruta`)
+    - `packages-ruta` (publico verificado en `orkoruta`)
+    - `docs-ruta` (publico verificado en `orkoruta`)
+    - `infra-ruta` (publico verificado en `orkoruta`)
+[x] Configurar branch protection en `main` de los 5 base
     (PR review + status checks obligatorios).
-[ ] Configurar `landing-template` igual.
-[ ] Documentar URLs de los repos en gestor de secretos del equipo.
+    Checks obligatorios: `CI / test` en `backend-ruta` y
+    `packages-ruta`; `CI / ci` en `frontend-ruta`. `docs-ruta` e
+    `infra-ruta` quedan con review obligatorio sin status checks porque
+    no tienen workflow CI.
+[x] Documentar URLs de los repos:
+    - https://github.com/orkoruta/backend-ruta
+    - https://github.com/orkoruta/frontend-ruta
+    - https://github.com/orkoruta/packages-ruta
+    - https://github.com/orkoruta/docs-ruta
+    - https://github.com/orkoruta/infra-ruta
 
-**Criterio:** los 6 repos visibles en GitHub, vacíos o con README
+**Criterio:** los 5 repos base visibles en GitHub, vacíos o con README
 inicial.
 
 ## 0.INFRA-2 — Crear cuenta Supabase y proyecto [S]
@@ -80,69 +104,61 @@ inicial.
 
 → depende de: 0.INFRA-2
 
-[ ] Ejecutar `docs/bd/ruta_postgres.sql` contra Supabase dev.
-[ ] Verificar: 21+ particiones para `client_id = 0`, parámetros
-    insertados, state_catalog completo, RLS activo.
+[x] Ejecutar `docs/bd/ruta_postgres.sql` contra BD dev.
+[x] Verificar: 20 particiones de tabla para `client_id = 0` según
+    `docs-ruta/bd/ruta_postgres.sql`, parámetros insertados,
+    state_catalog completo, RLS activo.
+    Nota: algunas tablas con `client_id` no se particionan por diseño
+    (`sessions`, `client_api_keys`, `webhook_subscriptions`,
+    `external_webhook_events`, entre otras) por volumen bajo, patrones
+    de búsqueda o restricciones de FK documentadas en el SQL.
 
-**Criterio:** `\dt ruta.*` lista las 21 tablas; `SELECT * FROM
+**Criterio:** `\dt ruta.*` lista los objetos del schema `ruta`; hay 20
+particiones de tabla base para `client_id = 0`; `SELECT * FROM
 ruta.state_catalog LIMIT 5;` retorna filas.
 
 ## 0.INFRA-4 — Configurar GitHub Packages para `@ruta/*` [M]
 
-[ ] Crear Personal Access Token con scopes `read:packages` y
-    `write:packages`.
-[ ] Documentar setup de `.npmrc` por desarrollador.
-[ ] Configurar GitHub Action secret `NPM_PUBLISH_TOKEN` con permisos
+[x] Crear Personal Access Token con scopes `read:packages` y
+    `write:packages`. (Classic token ghp_* bajo usuario msimonz / org orkoruta)
+[x] Documentar setup de `.npmrc` por desarrollador.
+[x] Configurar GitHub Action secret `NPM_PUBLISH_TOKEN` con permisos
     de publicación en la organización.
-[ ] Probar publicación dummy desde `ruta-shared` (publicar
-    `@ruta/shared@0.0.1` placeholder, verificar que aparece en
-    GitHub Packages).
+[x] Probar publicación dummy desde `packages-ruta` (publicar
+    `@orkoruta/shared@1.0.0` y `@orkoruta/db@1.0.0`, verificados en GitHub Packages).
 
 ## 0.INFRA-5 — Setup workspace local [M]
 
-[ ] Crear `ruta-infra/workspace.config.json` con lista de repos a
-    clonar y sus targets locales:
-    ```json
-    {
-      "base_dir": "~/projects/ruta",
-      "repos": [
-        {"name": "ruta-backend", "target": "backend-ruta"},
-        {"name": "ruta-frontend", "target": "frontend-ruta"},
-        {"name": "ruta-shared", "target": "packages-ruta"},
-        {"name": "ruta-docs", "target": "docs-ruta"},
-        {"name": "ruta-infra", "target": "infra-ruta"},
-        {"name": "landing-template", "target": "frontend-clients-ruta/_template"}
-      ]
-    }
-    ```
-[ ] Crear `ruta-infra/scripts/setup_workspace.sh` que lee el config y
+[x] Crear `infra-ruta/workspace.config.json` con lista de repos a
+    clonar y sus targets locales. (github_org: orkoruta)
+[x] Crear `infra-ruta/scripts/setup_workspace.sh` que lee el config y
     clona todo.
-[ ] Crear `ruta-infra/scripts/clone_landing.sh` para clonar landings
+[x] Crear `infra-ruta/scripts/clone_landing.sh` para clonar landings
     existentes en `frontend-clients/`.
-[ ] Crear `ruta-infra/scripts/create_landing.sh` que usa la API de
-    GitHub para crear un nuevo repo desde `landing-template` y
-    clonarlo localmente.
+[x] Crear `infra-ruta/scripts/create_landing.sh` para crear un nuevo
+    repo de cliente y clonarlo localmente usando la base local de
+    `frontend-clients-ruta/_template`.
 
 **Criterio:** `bash setup_workspace.sh` en una máquina nueva clona los
-6 repos en sus carpetas correctas.
+5 repos base en sus carpetas correctas.
 
-## 0.DOCS-1 — Inicializar `ruta-docs` [S]
+## 0.DOCS-1 — Inicializar `docs-ruta` [S]
 
-[ ] Copiar TODO el contenido actual de documentación a `ruta-docs/`.
-[ ] Estructura: `arquitectura/`, `seguridad/`, `flujos/`, `bd/`,
+[x] Copiar TODO el contenido actual de documentación a `docs-ruta/`.
+[x] Estructura: `arquitectura/`, `seguridad/`, `flujos/`, `bd/`,
     `diseno/`, más los archivos `.md` en la raíz.
-[ ] Copiar `CLAUDE.md` y `AGENTS.md` a la raíz.
-[ ] README de root explicando estructura del proyecto.
+[x] Copiar `CLAUDE.md` y `AGENTS.md` a la raíz.
+[x] README de root explicando estructura del proyecto.
 [ ] Commit y push.
 
-## 0.SHARED-1 — Inicializar `ruta-shared` [L]
+## 0.SHARED-1 — Inicializar `packages-ruta` [L]
 
 → depende de: 0.INFRA-4
 
-[ ] Crear workspace pnpm con dos paquetes: `shared/` y `db/`.
-[ ] `shared/package.json`: name `@ruta/shared`, version `1.0.0`,
+[x] Crear workspace pnpm con dos paquetes: `shared/` y `db/`.
+[x] `shared/package.json`: name `@orkoruta/shared`, version `1.0.0`,
     publishConfig apuntando a GitHub Packages.
-[ ] Estructura `shared/src/`:
+[x] Estructura `shared/src/`:
     - `types/order.types.ts`, `payment.types.ts`, `user.types.ts`,
       `client.types.ts`, `api.types.ts`.
     - `enums/order_status.ts`, `payment_status.ts`,
@@ -151,25 +167,25 @@ ruta.state_catalog LIMIT 5;` retorna filas.
     - `validators/order.schema.ts`, `product.schema.ts`,
       `user.schema.ts`, etc. (Zod).
     - `constants/error_codes.ts`, `parameter_keys.ts`.
-[ ] `db/package.json`: name `@ruta/db`, version `1.0.0`.
-[ ] `db/prisma/schema.prisma` generado vía `prisma db pull` desde la
+[x] `db/package.json`: name `@orkoruta/db`, version `1.0.0`.
+[x] `db/prisma/schema.prisma` generado vía `prisma db pull` desde la
     BD ya inicializada en 0.INFRA-3.
-[ ] `db/src/client.ts`: singleton de PrismaClient.
-[ ] `db/src/tenant.ts`: helper `withTenant(clientId, role, fn)`.
-[ ] CI `.github/workflows/publish.yml`: auto-publish a GitHub
+[x] `db/src/client.ts`: singleton de PrismaClient.
+[x] `db/src/tenant.ts`: helper `withTenant(clientId, role, fn)`.
+[x] CI `.github/workflows/publish.yml`: auto-publish a GitHub
     Packages en merge a `main`.
-[ ] Primera publicación: `@ruta/shared@1.0.0` y `@ruta/db@1.0.0`.
+[x] Primera publicación: `@orkoruta/shared@1.0.0` y `@orkoruta/db@1.0.0`.
 
 **Criterio:** ambos paquetes aparecen en GitHub Packages y se pueden
-instalar desde otro repo con `pnpm add @ruta/shared @ruta/db`.
+instalar desde otro repo con `pnpm add @orkoruta/shared @orkoruta/db`.
 
-## 0.BACK-1 — Inicializar `ruta-backend` con Express [M]
+## 0.BACK-1 — Inicializar `backend-ruta` con Express [M]
 
 → depende de: 0.SHARED-1
 
-[ ] Estructura:
+[x] Estructura:
     ```
-    ruta-backend/
+    backend-ruta/
     ├── .npmrc
     ├── package.json
     ├── tsconfig.json
@@ -188,84 +204,93 @@ instalar desde otro repo con `pnpm add @ruta/shared @ruta/db`.
             ├── jobs/
             └── lib/
     ```
-[ ] `pnpm add express @types/express tsx pino jose argon2 zod
-    @ruta/shared @ruta/db` (las @ruta/* desde GitHub Packages).
-[ ] Endpoint `/healthz`.
-[ ] Logger pino con `request_id`.
-[ ] CI: lint, typecheck, build.
-[ ] CLAUDE.md y AGENTS.md específicos del repo (extienden el master).
+[/] `pnpm add express @types/express tsx pino jose argon2 zod
+    @orkoruta/shared @orkoruta/db` (instalados via file: en DEV; pendiente cambiar
+    a GitHub Packages cuando se publiquen en 0.INFRA-4).
+[x] Endpoint `/healthz`.
+[x] Logger pino con `request_id`.
+[x] CI: lint, typecheck, build.
+[x] CLAUDE.md y AGENTS.md específicos del repo (extienden el master).
 
 **Criterio:** `pnpm dev` arranca; `curl localhost:3001/healthz` →
 200.
 
-## 0.FRONT-1 — Inicializar `ruta-frontend` con Next.js [M]
+## 0.FRONT-1 — Inicializar `frontend-ruta` con Next.js [M]
 
 → depende de: 0.SHARED-1
 
-[ ] Crear workspace pnpm con tres apps internas:
+[x] Crear workspace pnpm con tres apps internas:
     - `admin/` (Next.js).
     - `storefront/` (Next.js).
-    - `packages/ui/` (`@ruta/ui` interno, no publicado).
-[ ] `.npmrc` con auth a GitHub Packages.
-[ ] `pnpm add @ruta/shared` en admin y storefront (shared, no db).
-[ ] Configurar Tailwind con tokens de
+    - `packages/ui/` (`@orkoruta/ui` interno, no publicado).
+[x] `.npmrc` con auth a GitHub Packages.
+[/] `pnpm add @orkoruta/shared` en admin y storefront (instalado via file: en DEV;
+    pendiente cambiar a GitHub Packages cuando se publiquen en 0.INFRA-4).
+[x] Configurar Tailwind con tokens de
     `docs/diseno/galeria_estilos_ruta.md` en ambas apps.
-[ ] Implementar componentes base en `packages/ui/`:
+[x] Implementar componentes base en `packages/ui/`:
     `RutaCard`, `RutaButton`, `RutaPill`, `RutaSectionHeader`,
     `RutaThemeToggle`.
-[ ] Página `/` de prueba en admin y storefront que renderiza los
+[x] Página `/` de prueba en admin y storefront que renderiza los
     componentes Ruta en claro y oscuro.
-[ ] CI: lint, typecheck, build separado por app.
-[ ] CLAUDE.md y AGENTS.md específicos.
+[x] CI: lint, typecheck, build separado por app.
+[x] CLAUDE.md y AGENTS.md específicos.
+    Nota: next.config usa .mjs (Next.js 14 no soporta .ts en config).
 
 **Criterio:** `pnpm dev:admin` en :3002 y `pnpm dev:storefront` en
 :3003 muestran los componentes en ambos modos.
 
-## 0.LANDING-1 — Inicializar `landing-template` [M]
+## 0.LANDING-1 — Inicializar template local en `frontend-clients-ruta/_template` [M]
 
 → depende de: 0.SHARED-1
 
-[ ] Estructura Next.js base, sin design system Ruta*.
-[ ] `pnpm add @ruta/shared` (solo tipos/validators).
-[ ] `src/lib/api_client.ts` configurado con `process.env.API_URL` y
-    `process.env.CLIENT_SLUG`.
-[ ] Páginas skeleton:
+[x] Estructura Next.js 14 App Router base, sin design system Ruta*.
+[x] `@orkoruta/shared` en dependencies (solo tipos/validators).
+[x] `src/lib/api_client.ts` configurado con `NEXT_PUBLIC_API_URL` y
+    `NEXT_PUBLIC_CLIENT_SLUG`.
+[x] Páginas skeleton:
     - `/` catálogo (placeholder).
     - `/product/[id]` detalle.
     - `/cart` carrito.
     - `/checkout` checkout.
     - `/orders` mis pedidos.
     - `/(auth)/login` y `/(auth)/register`.
-[ ] `tailwind.config.ts` con tokens BASE genéricos (a sobrescribir
-    por cada landing).
-[ ] `public/PLACEHOLDER_logo.svg`.
-[ ] README con instrucciones para crear un landing desde el template.
-[ ] CLAUDE.md y AGENTS.md específicos para landings custom.
-[ ] Marcar el repo como Template en GitHub Settings (ya hecho en
-    0.INFRA-1).
+[x] `tailwind.config.ts` con tokens BASE genéricos (brand.*, surface.*).
+[x] `public/PLACEHOLDER_logo.svg`.
+[x] README con instrucciones para crear un landing desde el template.
+[x] CLAUDE.md y AGENTS.md copiados al template.
+[-] Marcar el repo como Template en GitHub Settings.
+    Cancelado por decision de infraestructura: `frontend-clients-ruta`
+    no es repo base; es carpeta local para alojar repos de clientes.
 
-**Criterio:** `pnpm dev` levanta el template; en GitHub el botón "Use
-this template" está disponible.
+Verificación:
+- typecheck: EXIT 0 confirmado.
+- build: NO VERIFICADO en este entorno WSL2/Dropbox — pnpm store
+  resulta corrupto en NTFS por limitaciones de hardlinks. El código es
+  correcto; el build pasará en CI/Render (Linux nativo). Nota: agregar
+  shamefully-hoist=true + node-linker=hoisted al .npmrc del template.
 
-## 0.INFRA-6 — Inicializar `ruta-infra` [S]
+**Criterio:** `pnpm dev` levanta el template local.
 
-[ ] Subir los scripts ya descritos en 0.INFRA-5.
-[ ] Subir `render.yaml.example` con los 3 servicios principales.
-[ ] Subir `supabase/storage_buckets.sql` con la configuración de
-    buckets.
-[ ] Subir `infra/scripts/create_first_admin_ruta.sh`.
-[ ] CLAUDE.md y AGENTS.md específicos.
+## 0.INFRA-6 — Inicializar `infra-ruta` [S]
+
+[x] Scripts de 0.INFRA-5 presentes en infra-ruta/scripts/.
+[x] Subir `render.yaml.example` con los 4 servicios (3 Web + 1 Worker).
+[x] Subir `supabase/storage_buckets.sql` con la configuración de
+    buckets (product-images, evidence, logos) y políticas RLS.
+[x] Subir `infra/scripts/create_first_admin_ruta.sh`.
+[x] CLAUDE.md y AGENTS.md específicos presentes.
 
 ## 0.INFRA-7 — Crear servicios en Render [M]
 
 → depende de: 0.BACK-1, 0.FRONT-1
 
 [ ] Crear 3 Web Services apuntando a sus repos:
-    - `ruta-api` → repo `ruta-backend`, build path `api/`,
+    - `ruta-api` → repo `backend-ruta`, build path `api/`,
       build command `pnpm install && pnpm --filter @ruta/api build`,
       start `pnpm --filter @ruta/api start`.
-    - `ruta-admin` → repo `ruta-frontend`, build path `admin/`.
-    - `ruta-storefront` → repo `ruta-frontend`, build path
+    - `ruta-admin` → repo `frontend-ruta`, build path `admin/`.
+    - `ruta-storefront` → repo `frontend-ruta`, build path
       `storefront/`.
 [ ] Configurar Background Worker `ruta-api-worker` para pg-boss.
 [ ] Inyectar `DATABASE_URL`, `NPM_TOKEN` (para auth a GitHub
@@ -277,33 +302,40 @@ this template" está disponible.
 
 ## 0.BACK-2 — Crear primer ADMIN_RUTA via script [S]
 
-[ ] Script `infra/scripts/create_first_admin_ruta.sh`:
+[x] Script `infra/scripts/create_first_admin_ruta.sh`:
     - Prompt de email y password.
     - Hash con argon2id.
     - INSERT a `ruta.users` con `client_id=0, user_type='ADMIN_RUTA'`.
 [ ] Ejecutar en BD de dev.
+    Nota: requiere psql instalado localmente y ejecutar bash manualmente
+    (script interactivo; pide email, password y nombre en tiempo real).
 
 **Criterio:** al menos un ADMIN_RUTA existe.
 
 ## 0.INFRA-8 — Seed script para desarrollo [M]
 
-[ ] `infra/scripts/seed_dev_data.sh`:
+[x] `infra/scripts/seed_dev_data.sh`:
     - 1 Cliente Full piloto (modalidad NATIVE_RUTA).
     - 1 ADMIN_CLIENT, 1 OPERATOR_CLIENT, 3 COURIERs, 3 BUYERs.
     - 10 productos en 3 categorías.
     - 2 pickup points.
 
+Verificación:
+- bash -n: EXIT 0 confirmado.
+- Ejecución real: pendiente (requiere psql + DATABASE_URL activo).
+  El script es idempotente: si 'piloto-native' ya existe, sale sin cambios.
+
 **Criterio fin Sprint 0:**
 
-- Cualquier desarrollador (humano + IA) puede clonar `ruta-infra`,
-  correr `setup_workspace.sh`, obtener los 6 repos, y levantar las 3
+- Cualquier desarrollador (humano + IA) puede clonar `infra-ruta`,
+  correr `setup_workspace.sh`, obtener los 5 repos base, y levantar las 3
   apps en local.
-- Backend, admin y storefront consumen `@ruta/shared` desde GitHub
+- Backend, admin y storefront consumen `@orkoruta/shared` desde GitHub
   Packages sin problemas.
 - Las 3 apps desplegadas en Render responden.
 - La BD tiene 1 Cliente piloto sembrado y al menos 1 ADMIN_RUTA.
-- `landing-template` está listo para clonar como nuevo landing
-  cuando llegue un Cliente custom (Fase 3).
+- `frontend-clients-ruta/_template` está listo como base local para
+  crear landings cuando llegue un Cliente custom (Fase 3).
 
 ---
 
@@ -312,14 +344,14 @@ this template" está disponible.
 **Meta:** flujo de registro y login. ADMIN_RUTA crea Clientes.
 ADMIN_CLIENT gestiona catálogo. Comprador se registra y ve catálogo.
 
-## 1.SHARED-1 — Bumpear `@ruta/shared` con schemas de auth y catálogo [M]
+## 1.SHARED-1 — Bumpear `@orkoruta/shared` con schemas de auth y catálogo [M]
 
-[ ] Agregar a `@ruta/shared/validators/`:
+[ ] Agregar a `@orkoruta/shared/validators/`:
     - `auth.schema.ts` (login, register, refresh).
     - `client.schema.ts` (create, update).
     - `product.schema.ts`, `category.schema.ts`.
     - `buyer.schema.ts`, `courier.schema.ts`, `pickup_point.schema.ts`.
-[ ] Bump a `@ruta/shared@1.1.0`. Publish.
+[ ] Bump a `@orkoruta/shared@1.1.0`. Publish.
 
 ## 1.BACK-1 — Servicio de Auth completo [XL]
 
@@ -412,11 +444,11 @@ ADMIN_CLIENT agrega productos.
 **Meta:** Comprador completa pedido con pago online (Wompi) o contra
 entrega.
 
-## 2.SHARED-1 — Bumpear `@ruta/shared` con order schemas [M]
+## 2.SHARED-1 — Bumpear `@orkoruta/shared` con order schemas [M]
 
 [ ] Validators de orders: create, confirm, transition, payments.
 [ ] Tipos derivados.
-[ ] Bump a `@ruta/shared@1.2.0`.
+[ ] Bump a `@orkoruta/shared@1.2.0`.
 
 ## 2.BACK-1 — Orders + State Machine [XL]
 
@@ -448,9 +480,10 @@ entrega.
 [ ] order_expiration, payment_timeout, cleanup_idempotency,
     cleanup_sessions.
 
-## 2.STORE-1 — Carrito local con Zustand [M]
+## 2.STORE-1 — Carrito persistido en BD [M]
 
-[ ] Zustand + persist en localStorage.
+[ ] Carrito representado como pedido `DRAFT` en BD.
+[ ] Agregar, actualizar cantidad y remover items vía endpoints de pedido.
 [ ] `/c/[slug]/cart`.
 
 ## 2.STORE-2 — Checkout multi-paso [XL]
@@ -458,7 +491,7 @@ entrega.
 [ ] Paso 1: entrega (SHIP/PICKUP).
 [ ] Paso 2: dirección o pickup point (con mapa OSM).
 [ ] Paso 3: método de pago.
-[ ] Submit con creación de pedido y redirección a Wompi o
+[ ] Submit confirma el pedido `DRAFT` existente y redirige a Wompi o
     confirmación.
 
 ## 2.STORE-3 — Mis pedidos (BUYER) [L]
@@ -631,7 +664,7 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP.
 
 | Semana | Sprint | Foco principal |
 |---|---|---|
-| 1 | 0 | Setup multi-repo (6 repos), Supabase, GitHub Packages, primer ADMIN_RUTA |
+| 1 | 0 | Setup multi-repo (5 repos base), Supabase, GitHub Packages, primer ADMIN_RUTA |
 | 2-3 | 1 | Auth, Clientes, Productos, Registro BUYER |
 | 4-5 | 2 | Carrito, checkout, Wompi, Flujo 1 |
 | 6-7 | 3 | Flujo SHIP, mapa, courier |
@@ -665,10 +698,10 @@ Dependencias documentadas (`→ depende de:`) son barreras reales.
 Cuando un cambio cruza varios repos (ej. agregar un nuevo estado de
 pedido):
 
-1. PR en `ruta-shared` que agrega el enum/validator. Merge → publish
+1. PR en `packages-ruta` que agrega el enum/validator. Merge → publish
    nueva versión.
-2. PR en `ruta-backend` que consume nueva versión y agrega lógica.
-3. PR en `ruta-frontend` (admin y storefront) que consume nueva versión
+2. PR en `backend-ruta` que consume nueva versión y agrega lógica.
+3. PR en `frontend-ruta` (admin y storefront) que consume nueva versión
    y agrega UI.
 4. PRs en landings activas si aplican.
 

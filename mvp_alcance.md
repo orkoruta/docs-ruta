@@ -247,11 +247,11 @@ Total: 10 semanas para Fase 1 completa.
 
 ---
 
-## Decisiones a confirmar
+## Decisiones confirmadas y pendientes
 
 - ¿Tamaño del equipo (humano + IA)? Esto afecta el cronograma.
-- ¿Cliente piloto ya identificado para Fase 1?
-- ¿Wompi sandbox ya disponible o hay que solicitar credenciales?
-- ¿Dominio principal definido? (`ruta.com`, `useruta.com`, otro?)
+- Cliente piloto para Fase 1: confirmado.
+- Dominio principal: `ruta.com`.
+- Credenciales Wompi sandbox / producción: pendientes; se integran cuando estén disponibles.
 - ¿Hay landing pública de marketing antes del MVP, o entramos directo
   a la app?

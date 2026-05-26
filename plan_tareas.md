@@ -149,7 +149,9 @@ ruta.state_catalog LIMIT 5;` retorna filas.
     `diseno/`, más los archivos `.md` en la raíz.
 [x] Copiar `CLAUDE.md` y `AGENTS.md` a la raíz.
 [x] README de root explicando estructura del proyecto.
-[ ] Commit y push.
+[x] Commit y push.
+    Nota: rama `docs/close-0-docs-1` publicada y PR abierto:
+    https://github.com/orkoruta/docs-ruta/pull/1
 
 ## 0.SHARED-1 — Inicializar `packages-ruta` [L]
 

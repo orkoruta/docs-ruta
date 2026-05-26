@@ -182,35 +182,9 @@ tienen al menos un test de happy-path y uno de error.
 **Qué se testea:** los flujos críticos de extremo a extremo, en
 navegador real, con backend real y DB real.
 
-**Flujos E2E mínimos (MVP Fase 1 — Cliente API):**
+**Flujos E2E mínimos (MVP Fase 1 — Cliente Full):**
 
-1. **Onboarding de Cliente API.**
-   - ADMIN_RUTA crea Cliente API.
-   - ADMIN_CLIENT activa cuenta.
-   - ADMIN_CLIENT genera API key.
-   - Plataforma del Cliente (mock) envía primer pedido vía API.
-   - Pedido aparece en panel del ADMIN_CLIENT.
-
-2. **Flujo SHIP completo con flota propia.**
-   - Pedido entra vía API en READY_TO_SHIP.
-   - ADMIN_CLIENT asigna repartidor en mapa.
-   - COURIER ve el pedido en su app móvil.
-   - COURIER marca SHIPPED → IN_TRANSIT → OUT_FOR_DELIVERY → ARRIVED_AT_CUSTOMER → DELIVERED.
-   - COURIER registra cobro en efectivo con evidencia.
-   - Webhook saliente notifica a la plataforma del Cliente.
-   - Pedido cierra como COMPLETED_SUCCESSFULLY.
-
-3. **Flujo PICKUP completo.**
-   - Pedido entra vía API en READY_FOR_PICKUP.
-   - Pedido aparece en el panel del Cliente.
-   - Comprador llega al punto físico (simulado).
-   - OPERATOR_CLIENT valida identidad.
-   - OPERATOR_CLIENT registra cobro electrónico.
-   - Pedido cierra.
-
-**Flujos E2E adicionales (MVP Fase 2 — Cliente Full):**
-
-4. **Compra completa con pago online.**
+1. **Compra completa con pago online.**
    - BUYER se registra.
    - BUYER navega catálogo, agrega al carrito.
    - BUYER confirma pedido y elige pagar online.
@@ -219,7 +193,39 @@ navegador real, con backend real y DB real.
    - Pedido pasa a SELLER_CONFIRMED, PREPARING, etc.
    - Flujo continúa hasta DELIVERED.
 
-5. **Cancelación con reembolso.**
+2. **Flujo SHIP completo con flota propia.**
+   - BUYER crea pedido desde storefront y queda READY_TO_SHIP.
+   - ADMIN_CLIENT asigna repartidor en mapa.
+   - COURIER ve el pedido en su app móvil.
+   - COURIER marca SHIPPED → IN_TRANSIT → OUT_FOR_DELIVERY → ARRIVED_AT_CUSTOMER → DELIVERED.
+   - COURIER registra cobro contra entrega con evidencia cuando aplica.
+   - Pedido cierra como COMPLETED_SUCCESSFULLY.
+
+3. **Flujo PICKUP completo.**
+   - BUYER crea pedido desde storefront y queda READY_FOR_PICKUP.
+   - Pedido aparece en el panel del Cliente.
+   - Comprador llega al punto físico (simulado).
+   - OPERATOR_CLIENT valida identidad.
+   - OPERATOR_CLIENT registra cobro electrónico si aplica.
+   - Pedido cierra.
+
+**Flujos E2E adicionales (MVP Fase 2 — Cliente API):**
+
+4. **Onboarding de Cliente API.**
+   - ADMIN_RUTA crea Cliente API.
+   - ADMIN_CLIENT activa cuenta.
+   - ADMIN_CLIENT genera API key.
+   - Plataforma del Cliente (mock) envía primer pedido vía API.
+   - Pedido aparece en panel del ADMIN_CLIENT.
+
+5. **Pedido logístico vía API.**
+   - Pedido entra vía API en READY_TO_SHIP o READY_FOR_PICKUP.
+   - El flujo logístico reutiliza SHIP o PICKUP de Fase 1.
+   - Webhook saliente notifica a la plataforma del Cliente.
+
+**Flujos E2E fuera de Fase 1 (referencia Fase 3):**
+
+6. **Cancelación con reembolso.**
    - BUYER hace pedido con pago online y queda PAID.
    - ADMIN_CLIENT cancela el pedido.
    - Se dispara REFUND_PENDING.

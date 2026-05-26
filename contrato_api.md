@@ -196,8 +196,10 @@ Direcciones guardadas.
 
 ### `POST /buyer/orders`
 
-Crear pedido (DRAFT). El backend valida que el `client_id` del
-producto coincida con el `client_id` del Comprador.
+Crear o reutilizar el pedido `DRAFT` activo del Comprador. En Fase 1,
+el carrito vive en BD: un carrito es un pedido `DRAFT` con items. El
+backend valida que el `client_id` del producto coincida con el
+`client_id` del Comprador.
 
 **Request:**
 ```json
@@ -219,6 +221,29 @@ producto coincida con el `client_id` del Comprador.
   "items": [ ... ]
 }
 ```
+
+### `PATCH /buyer/orders/:id/items/:item_id`
+
+Actualizar cantidad de un item del carrito. Solo permitido si el
+pedido está en `DRAFT`.
+
+**Request:**
+```json
+{
+  "quantity": 3
+}
+```
+
+### `DELETE /buyer/orders/:id/items/:item_id`
+
+Remover un item del carrito. Solo permitido si el pedido está en
+`DRAFT`.
+
+### `DELETE /buyer/orders/:id`
+
+Vaciar / descartar el carrito. Solo permitido si el pedido está en
+`DRAFT`; cambia el pedido a `CANCELLED_BY_CUSTOMER` o lo elimina
+lógicamente según la implementación de estados.
 
 ### `PATCH /buyer/orders/:id/confirm`
 

@@ -1,21 +1,21 @@
-# RUTA — Parámetros de Negocio
+﻿# RUTA â€” ParÃ¡metros de Negocio
 
 ## Concepto
 
-RUTA tiene plazos y políticas configurables que la aplicación lee al
-operar. **No deben hardcodearse en el código.** Viven en la tabla
+RUTA tiene plazos y polÃ­ticas configurables que la aplicaciÃ³n lee al
+operar. **No deben hardcodearse en el cÃ³digo.** Viven en la tabla
 `client_parameters` de la BD.
 
-Cada parámetro tiene:
+Cada parÃ¡metro tiene:
 
 - Un valor **global por defecto** (asignado al `client_id = 0`,
   cliente plataforma).
 - Un valor opcional **por Cliente** que sobrescribe el global.
 
-Cuando la app necesita el valor de un parámetro para un Cliente
-específico, busca:
+Cuando la app necesita el valor de un parÃ¡metro para un Cliente
+especÃ­fico, busca:
 
-1. ¿Tiene el Cliente un valor propio? → usar ese.
+1. Â¿Tiene el Cliente un valor propio? â†’ usar ese.
 2. Si no, usar el valor global (del `client_id = 0`).
 
 ---
@@ -43,175 +43,175 @@ CREATE TABLE ruta.client_parameters (
 ) PARTITION BY LIST (client_id);
 ```
 
-`is_overrideable_by_client = FALSE` significa que el parámetro es
+`is_overrideable_by_client = FALSE` significa que el parÃ¡metro es
 solo configurable a nivel plataforma (ADMIN_RUTA), nunca por el
-ADMIN_CLIENT. Ejemplo: límite máximo de reintentos de webhook.
+ADMIN_CLIENT. Ejemplo: lÃ­mite mÃ¡ximo de reintentos de webhook.
 
 ---
 
-## Valores propuestos
+## Valores confirmados
 
-Todos los valores son **propuestas iniciales**. Ajústalos y devuelve
-la versión confirmada.
+Estos valores quedan confirmados para el MVP y ya estÃ¡n materializados
+como `INSERT` defaults en `docs-ruta/bd/ruta_postgres.sql`.
 
 ### Plazos de pedido (Flujo 1, Cliente Full)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
 | `order.draft_expiration_minutes` | `1440` | minutos (24h) | Tiempo que un pedido puede estar en DRAFT antes de auto-cancelarse |
-| `order.pending_confirm_timeout_minutes` | `60` | minutos | Tiempo máximo en PENDING_CONFIRM antes de EXPIRED |
-| `order.pending_online_payment_timeout_minutes` | `15` | minutos | Tiempo máximo para completar pago online en pasarela |
-| `order.validation_max_duration_minutes` | `5` | minutos | Tiempo máximo en ORDER_VALIDATING (si excede → MANUAL_REVIEW) |
+| `order.pending_confirm_timeout_minutes` | `60` | minutos | Tiempo mÃ¡ximo en PENDING_CONFIRM antes de EXPIRED |
+| `order.pending_online_payment_timeout_minutes` | `15` | minutos | Tiempo mÃ¡ximo para completar pago online en pasarela |
+| `order.validation_max_duration_minutes` | `5` | minutos | Tiempo mÃ¡ximo en ORDER_VALIDATING (si excede â†’ MANUAL_REVIEW) |
 | `order.manual_review_sla_hours` | `24` | horas | Tiempo objetivo para resolver MANUAL_REVIEW |
-| `order.seller_confirmation_timeout_hours` | `4` | horas | Tiempo para que el Cliente acepte (VALIDATION_APPROVED → SELLER_CONFIRMED) |
+| `order.seller_confirmation_timeout_hours` | `4` | horas | Tiempo para que el Cliente acepte (VALIDATION_APPROVED â†’ SELLER_CONFIRMED) |
 
 ### Plazos de despacho (Flujo 2)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `ship.courier_assignment_timeout_minutes` | `30` | minutos | Tiempo máximo en AWAITING_COURIER_ASSIGNMENT antes de SHIPMENT_HOLD |
-| `ship.preparation_max_hours` | `24` | horas | Tiempo máximo en PREPARING antes de alerta operativa |
+| `ship.courier_assignment_timeout_minutes` | `30` | minutos | Tiempo mÃ¡ximo en AWAITING_COURIER_ASSIGNMENT antes de SHIPMENT_HOLD |
+| `ship.preparation_max_hours` | `24` | horas | Tiempo mÃ¡ximo en PREPARING antes de alerta operativa |
 | `ship.delivery_attempt_max_retries` | `3` | entero | Intentos de entrega antes de RETURN_TO_ORIGIN |
-| `ship.delivery_attempt_retry_hours` | `24` | horas | Tiempo mínimo entre intentos de entrega |
-| `ship.in_transit_max_hours` | `72` | horas | Tiempo máximo en IN_TRANSIT antes de alerta |
+| `ship.delivery_attempt_retry_hours` | `24` | horas | Tiempo mÃ­nimo entre intentos de entrega |
+| `ship.in_transit_max_hours` | `72` | horas | Tiempo mÃ¡ximo en IN_TRANSIT antes de alerta |
 | `ship.cancel_request_review_hours` | `2` | horas | Tiempo para aprobar / rechazar CUSTOMER_CANCEL_REQUEST |
 
 ### Plazos de pickup (Flujo 3)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `pickup.expiration_hours` | `48` | horas | Tiempo máximo en AT_PICKUP_POINT antes de PICKUP_EXPIRED |
-| `pickup.notification_reminder_hours` | `24` | horas | Recordatorio al Comprador antes de expiración |
+| `pickup.expiration_hours` | `48` | horas | Tiempo mÃ¡ximo en AT_PICKUP_POINT antes de PICKUP_EXPIRED |
+| `pickup.notification_reminder_hours` | `24` | horas | Recordatorio al Comprador antes de expiraciÃ³n |
 
-### Confirmación final (Bloque 13)
+### ConfirmaciÃ³n final (Bloque 13)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `closure.auto_confirm_delivered_hours` | `72` | horas | Tiempo en DELIVERED antes de CONFIRMED_BY_SYSTEM automáticamente |
-| `closure.dispute_window_hours` | `72` | horas | Ventana para que el Comprador abra disputa después de DELIVERED |
+| `closure.auto_confirm_delivered_hours` | `72` | horas | Tiempo en DELIVERED antes de CONFIRMED_BY_SYSTEM automÃ¡ticamente |
+| `closure.dispute_window_hours` | `72` | horas | Ventana para que el Comprador abra disputa despuÃ©s de DELIVERED |
 
 ### Reembolsos (Flujo 4, solo Cliente Full)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `refund.processing_sla_business_days` | `5` | días hábiles | SLA del Cliente para ejecutar el reembolso |
+| `refund.processing_sla_business_days` | `5` | dÃ­as hÃ¡biles | SLA del Cliente para ejecutar el reembolso |
 | `refund.provider_response_timeout_hours` | `72` | horas | Tiempo esperado de respuesta del proveedor de pago |
 
 ### Devoluciones (Flujo 7, solo Cliente Full)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `return.review_sla_hours` | `72` | horas | Tiempo para que el Cliente apruebe / rechace devolución |
-| `return.review_auto_action` | `APPROVE` | string | Acción automática si no hay respuesta (`APPROVE` o `REJECT`) |
-| `return.buyer_ships_deadline_days` | `15` | días | Plazo máximo para que el Comprador despache el producto |
+| `return.review_sla_hours` | `72` | horas | Tiempo para que el Cliente apruebe / rechace devoluciÃ³n |
+| `return.review_auto_action` | `APPROVE` | string | AcciÃ³n automÃ¡tica si no hay respuesta (`APPROVE` o `REJECT`) |
+| `return.buyer_ships_deadline_days` | `15` | dÃ­as | Plazo mÃ¡ximo para que el Comprador despache el producto |
 | `return.pickup_schedule_max_attempts` | `2` | entero | Intentos de recogida CLIENT_PICKS_UP antes de cancelar |
 
 ### Recurrencia (Flujo 5, solo Cliente Full)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `recurrence.generation_lookahead_hours` | `24` | horas | Cuánto antes del vencimiento se genera el pedido recurrente |
+| `recurrence.generation_lookahead_hours` | `24` | horas | CuÃ¡nto antes del vencimiento se genera el pedido recurrente |
 | `recurrence.max_skipped_cycles` | `3` | entero | Ciclos consecutivos fallidos antes de pausar la plantilla |
 
-### Sesiones y autenticación
+### Sesiones y autenticaciÃ³n
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `auth.jwt_lifetime_admin_ruta_minutes` | `15` | minutos | Duración del JWT para ADMIN_RUTA |
-| `auth.jwt_lifetime_admin_client_minutes` | `15` | minutos | Duración del JWT para ADMIN_CLIENT |
-| `auth.jwt_lifetime_operator_client_minutes` | `15` | minutos | Duración del JWT para OPERATOR_CLIENT |
-| `auth.jwt_lifetime_buyer_minutes` | `15` | minutos | Duración del JWT para BUYER |
-| `auth.jwt_lifetime_courier_minutes` | `30` | minutos | Duración del JWT para COURIER (más largo por uso móvil) |
-| `auth.refresh_token_lifetime_admin_days` | `30` | días | Duración del refresh para roles admin |
-| `auth.refresh_token_lifetime_buyer_days` | `90` | días | Duración del refresh para Compradores |
-| `auth.refresh_token_lifetime_courier_days` | `30` | días | Duración del refresh para Repartidores |
+| `auth.jwt_lifetime_admin_ruta_minutes` | `15` | minutos | DuraciÃ³n del JWT para ADMIN_RUTA |
+| `auth.jwt_lifetime_admin_client_minutes` | `15` | minutos | DuraciÃ³n del JWT para ADMIN_CLIENT |
+| `auth.jwt_lifetime_operator_client_minutes` | `15` | minutos | DuraciÃ³n del JWT para OPERATOR_CLIENT |
+| `auth.jwt_lifetime_buyer_minutes` | `15` | minutos | DuraciÃ³n del JWT para BUYER |
+| `auth.jwt_lifetime_courier_minutes` | `30` | minutos | DuraciÃ³n del JWT para COURIER (mÃ¡s largo por uso mÃ³vil) |
+| `auth.refresh_token_lifetime_admin_days` | `30` | dÃ­as | DuraciÃ³n del refresh para roles admin |
+| `auth.refresh_token_lifetime_buyer_days` | `90` | dÃ­as | DuraciÃ³n del refresh para Compradores |
+| `auth.refresh_token_lifetime_courier_days` | `30` | dÃ­as | DuraciÃ³n del refresh para Repartidores |
 | `auth.max_failed_login_attempts` | `5` | entero | Intentos fallidos antes de suspender la cuenta |
 | `auth.lockout_duration_minutes` | `30` | minutos | Tiempo de bloqueo tras superar intentos |
-| `auth.password_min_length` | `10` | entero | Longitud mínima de contraseña |
-| `auth.password_require_complexity` | `true` | bool | Requerir mayús, minus, dígito, símbolo |
+| `auth.password_min_length` | `10` | entero | Longitud mÃ­nima de contraseÃ±a |
+| `auth.password_require_complexity` | `true` | bool | Requerir mayÃºs, minus, dÃ­gito, sÃ­mbolo |
 
 ### Vista de Control
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `control_view.master_password_rotation_days` | `90` | días | Periodicidad de rotación recomendada (no forzada en v1) |
-| `control_view.notify_admin_client` | `false` | bool | Si el ADMIN_CLIENT recibe notificación cuando entran a Vista de Control (decidiste FALSE) |
+| `control_view.master_password_rotation_days` | `90` | dÃ­as | Periodicidad de rotaciÃ³n recomendada (no forzada en v1) |
+| `control_view.notify_admin_client` | `false` | bool | Si el ADMIN_CLIENT recibe notificaciÃ³n cuando entran a Vista de Control (decidiste FALSE) |
 
 ### Webhooks (no overrideable por Cliente)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `webhook.max_retries` | `6` | entero | Reintentos máximos antes de marcar como permanently failed |
+| `webhook.max_retries` | `6` | entero | Reintentos mÃ¡ximos antes de marcar como permanently failed |
 | `webhook.retry_intervals_minutes` | `[1,5,15,60,360,1440]` | JSON array | Intervalos de reintento (1m, 5m, 15m, 1h, 6h, 24h) |
 | `webhook.delivery_timeout_seconds` | `10` | segundos | Timeout HTTP de cada intento |
 | `webhook.signing_algorithm` | `HMAC-SHA256` | string | Algoritmo de firma |
 
 ### Idempotencia y sesiones (no overrideable)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
 | `idempotency.key_ttl_hours` | `24` | horas | TTL de idempotency keys |
-| `session.cleanup_after_revoked_days` | `30` | días | Días tras revocación antes de purgar sesión |
-| `session.cleanup_after_expired_days` | `30` | días | Días tras expiración antes de purgar sesión |
+| `session.cleanup_after_revoked_days` | `30` | dÃ­as | DÃ­as tras revocaciÃ³n antes de purgar sesiÃ³n |
+| `session.cleanup_after_expired_days` | `30` | dÃ­as | DÃ­as tras expiraciÃ³n antes de purgar sesiÃ³n |
 
 ### Cobranza contra entrega
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `collection.electronic_retry_max_attempts` | `3` | entero | Intentos máximos de cobro electrónico antes de PAYMENT_NOT_COLLECTED |
-| `collection.cash_change_max_amount` | `100000` | decimal (COP) | Monto máximo de devuelta en efectivo (alerta operativa) |
+| `collection.electronic_retry_max_attempts` | `3` | entero | Intentos mÃ¡ximos de cobro electrÃ³nico antes de PAYMENT_NOT_COLLECTED |
+| `collection.cash_change_max_amount` | `100000` | decimal (COP) | Monto mÃ¡ximo de devuelta en efectivo (alerta operativa) |
 | `collection.evidence_required` | `true` | bool | Si requiere subir foto / firma del cobro |
 
 ### Storage de archivos
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `storage.max_file_size_mb` | `10` | MB | Tamaño máximo de archivo subido |
-| `storage.allowed_image_formats` | `["jpg","jpeg","png","webp"]` | JSON array | Formatos permitidos para imágenes |
-| `storage.evidence_retention_days` | `730` | días (2 años) | Retención de evidencias (entrega, cobro, devolución) |
-| `storage.product_image_max_count` | `5` | entero | Imágenes máximas por producto |
+| `storage.max_file_size_mb` | `10` | MB | TamaÃ±o mÃ¡ximo de archivo subido |
+| `storage.allowed_image_formats` | `["jpg","jpeg","png","webp"]` | JSON array | Formatos permitidos para imÃ¡genes |
+| `storage.evidence_retention_days` | `730` | dÃ­as (2 aÃ±os) | RetenciÃ³n de evidencias (entrega, cobro, devoluciÃ³n) |
+| `storage.product_image_max_count` | `5` | entero | ImÃ¡genes mÃ¡ximas por producto |
 
-### Catálogo de productos (Cliente Full)
+### CatÃ¡logo de productos (Cliente Full)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
-| `catalog.bulk_import_max_rows` | `5000` | entero | Filas máximas por carga Excel |
-| `catalog.bulk_import_concurrent_max` | `1` | entero | Importaciones masivas simultáneas por Cliente |
+| `catalog.bulk_import_max_rows` | `5000` | entero | Filas mÃ¡ximas por carga Excel |
+| `catalog.bulk_import_concurrent_max` | `1` | entero | Importaciones masivas simultÃ¡neas por Cliente |
 | `catalog.default_currency` | `COP` | string | Moneda por defecto |
 
-### Mapa y geolocalización
+### Mapa y geolocalizaciÃ³n
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
 | `map.provider` | `OSM` | string | Proveedor de mapa (OSM por ahora) |
 | `map.tile_cache_hours` | `24` | horas | Cache de tiles del mapa en el frontend |
-| `map.default_center_lat` | `4.7110` | decimal | Centro por defecto del mapa (Bogotá) |
-| `map.default_center_lng` | `-74.0721` | decimal | Centro por defecto del mapa (Bogotá) |
+| `map.default_center_lat` | `4.7110` | decimal | Centro por defecto del mapa (BogotÃ¡) |
+| `map.default_center_lng` | `-74.0721` | decimal | Centro por defecto del mapa (BogotÃ¡) |
 
 ### Notificaciones
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
 | `notifications.email_enabled` | `true` | bool | Email habilitado |
 | `notifications.sms_enabled` | `false` | bool | SMS habilitado (deshabilitado por costo en v1) |
 | `notifications.push_enabled` | `false` | bool | Push notifications (deshabilitado en v1) |
 
-### Límites operativos
+### LÃ­mites operativos
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
 | `limits.max_active_recurrences_per_buyer` | `10` | entero | Plantillas recurrentes activas por Comprador |
 | `limits.max_buyer_addresses` | `10` | entero | Direcciones guardadas por Comprador |
 | `limits.max_api_keys_per_client` | `5` | entero | API keys activas por Cliente API |
-| `limits.max_pickup_points_per_client` | `50` | entero | Puntos físicos por Cliente |
+| `limits.max_pickup_points_per_client` | `50` | entero | Puntos fÃ­sicos por Cliente |
 | `limits.max_couriers_per_client` | `200` | entero | Repartidores activos por Cliente |
 
 ### Rate limiting (API)
 
-| Parameter key | Valor propuesto | Unidad | Descripción |
+| Parameter key | Valor confirmado | Unidad | DescripciÃ³n |
 |---|---|---|---|
 | `ratelimit.api_requests_per_minute_per_apikey` | `300` | entero | Rate limit por API key (Cliente API) |
-| `ratelimit.public_requests_per_minute_per_ip` | `60` | entero | Rate limit en endpoints públicos |
+| `ratelimit.public_requests_per_minute_per_ip` | `60` | entero | Rate limit en endpoints pÃºblicos |
 | `ratelimit.auth_attempts_per_minute_per_ip` | `5` | entero | Rate limit en intentos de login |
 
 ---
@@ -219,13 +219,13 @@ la versión confirmada.
 ## INSERTs propuestos (a incluir en `ruta_postgres.sql`)
 
 ```sql
--- Parámetros globales por defecto (client_id = 0)
+-- ParÃ¡metros globales por defecto (client_id = 0)
 INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, value_type, description, is_overrideable_by_client) VALUES
 -- Pedido
-(0, 'order.draft_expiration_minutes', '1440', 'INTEGER', 'Tiempo máximo en DRAFT', TRUE),
-(0, 'order.pending_confirm_timeout_minutes', '60', 'INTEGER', 'Tiempo máximo en PENDING_CONFIRM', TRUE),
-(0, 'order.pending_online_payment_timeout_minutes', '15', 'INTEGER', 'Tiempo máximo para pagar online', TRUE),
--- ... (todos los demás)
+(0, 'order.draft_expiration_minutes', '1440', 'INTEGER', 'Tiempo mÃ¡ximo en DRAFT', TRUE),
+(0, 'order.pending_confirm_timeout_minutes', '60', 'INTEGER', 'Tiempo mÃ¡ximo en PENDING_CONFIRM', TRUE),
+(0, 'order.pending_online_payment_timeout_minutes', '15', 'INTEGER', 'Tiempo mÃ¡ximo para pagar online', TRUE),
+-- ... (todos los demÃ¡s)
 ;
 ```
 
@@ -233,7 +233,7 @@ INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, v
 
 ---
 
-## Lógica de lectura (helper recomendado)
+## LÃ³gica de lectura (helper recomendado)
 
 ```ts
 // apps/api/src/lib/parameters.ts
@@ -242,7 +242,7 @@ export async function getParameter<T>(
   key: string,
   defaultValue?: T
 ): Promise<T> {
-  // 1. Buscar valor específico del Cliente
+  // 1. Buscar valor especÃ­fico del Cliente
   const clientValue = await db.client_parameters.findUnique({
     where: { client_id_parameter_key: { client_id: clientId, parameter_key: key } }
   });
@@ -254,20 +254,20 @@ export async function getParameter<T>(
   });
   if (globalValue) return parseValue(globalValue);
 
-  // 3. Fallback al default del código (último recurso)
+  // 3. Fallback al default del cÃ³digo (Ãºltimo recurso)
   if (defaultValue !== undefined) return defaultValue;
   throw new Error(`Parameter ${key} not configured and no default provided`);
 }
 ```
 
 Con caching en memoria (TTL 60s) para no golpear la BD en cada
-operación.
+operaciÃ³n.
 
 ---
 
-## Lo que pedías ajustar
+## Lo que pedÃ­as ajustar
 
-Devuélveme estos valores ajustados y procedo a:
+DevuÃ©lveme estos valores ajustados y procedo a:
 
 1. Agregar la tabla `client_parameters` a `ruta_postgres.sql`.
 2. Agregar los INSERTs de valores por defecto.

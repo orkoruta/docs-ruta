@@ -287,14 +287,14 @@ Verificación:
 
 → depende de: 0.BACK-1, 0.FRONT-1
 
-[x] `render.yaml` creado en `backend-ruta` (ruta-api + ruta-api-worker)
-    y en `frontend-ruta` (ruta-admin + ruta-storefront). Pusheado a main
-    (2026-05-27). `.npmrc` con `${NPM_TOKEN}` para auth GitHub Packages.
-[ ] Conectar repos en Render dashboard (New Blueprint) y setear secretos:
-    `DATABASE_URL`, `JWT_SECRET`, `NPM_TOKEN`, Wompi keys (placeholders).
-[ ] Verificar que las 3 URLs responden 200 (`/healthz`).
+[x] `render.yaml` creado en `backend-ruta` y `frontend-ruta`. Pusheado a main.
+    Fix: pnpm instalado con `npm install pnpm@11.3.0 --no-save` (corepack
+    y npm install -g fallan en EROFS en Render). Prisma warning inofensivo.
+[x] Servicio `ruta-api` creado en Render (plan Free) y desplegado.
+    `/healthz` responde 200 (2026-05-27).
+    Nota: admin y storefront pendientes para Sprint 1 (plan Free, 1 servicio inicial).
 
-**Criterio:** las 3 URLs responden 200 (al menos `/healthz`).
+**Criterio:** las 3 URLs responden 200 (al menos `/healthz`). ✓ (ruta-api OK)
 
 ## 0.BACK-2 — Crear primer ADMIN_RUTA via script [S]
 

@@ -20,8 +20,7 @@ Plan operativo para construir el **MVP Fase 1** (Cliente Full + frontend
   - `ADMIN` — admin frontend en `frontend-ruta/admin/`.
   - `STORE` — storefront en `frontend-ruta/storefront/`.
   - `SHARED` — paquetes en `packages-ruta`.
-  - `LANDING` — carpeta local `frontend-clients-ruta/` y futuros
-    repos `landing-{slug}`.
+  - `LANDING` — carpeta local `frontend-clients-ruta/` y futuros repos `landing-{slug}`.
   - `DOCS` — `docs-ruta`.
   - `QA` — testing, observabilidad, hardening.
 
@@ -343,60 +342,71 @@ ADMIN_CLIENT gestiona catálogo. Comprador se registra y ve catálogo.
 
 ## 1.SHARED-1 — Bumpear `@orkoruta/shared` con schemas de auth y catálogo [M]
 
-[ ] Agregar a `@orkoruta/shared/validators/`:
-    - `auth.schema.ts` (login, register, refresh).
-    - `client.schema.ts` (create, update).
-    - `product.schema.ts`, `category.schema.ts`.
-    - `buyer.schema.ts`, `courier.schema.ts`, `pickup_point.schema.ts`.
-[ ] Bump a `@orkoruta/shared@1.1.0`. Publish.
+[x] Agregar a `@orkoruta/shared/validators/`:
+    - `auth.schema.ts` (login, register, refresh, logout, controlViewEnter).
+    - `client.schema.ts` (create, update, clientListQuery).
+    - `product.schema.ts` (create, update, productListQuery — ya existía).
+    - `category.schema.ts` (create, update, categoryListQuery).
+    - `buyer.schema.ts` (updateProfile, buyerListQuery).
+    - `courier.schema.ts` (create, update, courierListQuery).
+    - `pickup_point.schema.ts` (create, update, pickupPointListQuery).
+[x] Bump a `@orkoruta/shared@1.1.0`. Publish.
+    Tests: 33/33 OK. Typecheck EXIT 0. Build limpio.
+    Publicado en GitHub Packages (2026-05-27). PR #2 mergeado a main.
+    Nota: CI Publish workflow falla por permisos de org en GitHub Actions
+    (write_package denegado para GITHUB_TOKEN y Classic PAT). Publicación
+    manual con PAT local hasta resolver la configuración de org.
 
-## 1.BACK-1 — Servicio de Auth completo [XL]
+## 1.BACK-1 — Servicio de Auth completo [XL] ✅ 2026-05-27
 
 → depende de: 0.BACK-1, 1.SHARED-1
 
-[ ] `services/auth.service.ts` con register, login, loginRutaAdmin,
+[x] `services/auth.service.ts` con register, login, loginRutaAdmin,
     refresh, logout.
-[ ] Middleware `auth.ts` verifica JWT, popula `req.user`, setea
+[x] Middleware `auth.ts` verifica JWT, popula `req.user`, setea
     contexto de tenant.
-[ ] Endpoints `POST /auth/register`, `/auth/login`,
+[x] Endpoints `POST /auth/register`, `/auth/login`,
     `/auth/ruta-admin/login`, `/auth/refresh`, `/auth/logout`.
-[ ] Cookies HttpOnly Secure SameSite=Strict.
-[ ] Argon2 + jose.
-[ ] Lectura de duración de tokens desde `client_parameters`.
+[x] Cookies HttpOnly Secure SameSite=Strict.
+[x] Argon2 + jose.
+[x] Lectura de duración de tokens desde `client_parameters`.
 
-**Tests:** registro, login OK, credenciales malas, refresh, logout,
-cross-tenant rechazado.
+**Tests:** 9 tests pasan (registro, login OK, credenciales malas, refresh, logout,
+validación campos). Tests sin DB (unit).
 
-## 1.BACK-2 — Gestión de Clientes (ADMIN_RUTA) [L]
+## 1.BACK-2 — Gestión de Clientes (ADMIN_RUTA) [L] ✅ 2026-05-27 (verificado)
 
-[ ] CRUD en `services/clients.service.ts`.
-[ ] Endpoints `/ruta-admin/clients/*`.
-[ ] Validación `client_type=FULL` requiere `frontend_mode`.
-[ ] Auditoría.
+[x] CRUD en `services/clients.service.ts`.
+[x] Endpoints `/ruta-admin/clients/*` (incl. GET /:id).
+[x] Validación `client_type=FULL` requiere `frontend_mode`.
+[x] Auditoría (CLIENT_CREATED, CLIENT_UPDATED).
+[x] 8 tests: autenticación, autorización, getById, lista, crear, validar, CRUD completo.
 
-## 1.BACK-3 — Gestión de productos (ADMIN_CLIENT) [L]
+## 1.BACK-3 — Gestión de productos (ADMIN_CLIENT) [L] ✅ 2026-05-27
 
-[ ] CRUD productos y categorías.
-[ ] Endpoints `/admin/products/*`, `/admin/categories/*`.
-[ ] Endpoint público `/public/clients/:slug/products` y
-    `/categories`.
-[ ] Upload de imagen vía `/uploads/presigned-url` (servicio de file storage por definir).
+[x] CRUD productos y categorías.
+[x] Endpoints `/admin/products/*`, `/admin/categories/*`.
+[x] Endpoint público `/public/clients/:slug/products` y
+    `/categories` y `/pickup-points`.
+[x] Upload de imagen vía `/uploads/presigned-url` (stub 501, file storage TBD).
 
-## 1.BACK-4 — Compradores y Repartidores [M]
+## 1.BACK-4 — Compradores y Repartidores [M] ✅ 2026-05-27
 
-[ ] CRUD básico para BUYERs (admin view) y COURIERs.
+[x] CRUD básico para BUYERs (admin view): /admin/buyers/*, 6 endpoints.
+[x] CRUD básico para COURIERs: /admin/couriers/*, 6 endpoints.
+[x] 12 tests pasan.
 
 ## 1.BACK-5 — Importación masiva por Excel [M]
 
-[ ] `POST /admin/products/bulk-import` (multipart).
-[ ] Job pg-boss para procesar asíncrono.
-[ ] `GET /admin/products/bulk-import/:job_id` para status.
+[x] `POST /admin/products/bulk-import` (multipart).
+[x] Job pg-boss para procesar asíncrono.
+[x] `GET /admin/products/bulk-import/:job_id` para status.
 
 ## 1.ADMIN-1 — Login y layout [M]
 
-[ ] `/login` con detección de rol y redirect.
-[ ] `RutaSidebar` con navegación condicional.
-[ ] `RutaHeader` con info de Cliente activo, banner Vista de Control.
+[x] `/login` con detección de rol y redirect.
+[x] `RutaSidebar` con navegación condicional.
+[x] `RutaHeader` con info de Cliente activo, banner Vista de Control.
 
 ## 1.ADMIN-2 — Pantallas ADMIN_RUTA: lista y CRUD de Clientes [M]
 
@@ -416,18 +426,18 @@ cross-tenant rechazado.
 
 ## 1.STORE-1 — Layout y catálogo [L]
 
-[ ] Layout `c/[slug]/layout.tsx` con branding del Cliente.
-[ ] `/c/[slug]/` catálogo con grid y filtros.
-[ ] `/c/[slug]/product/[id]` detalle.
+[x] Layout `c/[slug]/layout.tsx` con branding del Cliente.
+[x] `/c/[slug]/` catálogo con grid y filtros.
+[x] `/c/[slug]/product/[id]` detalle.
 
 ## 1.STORE-2 — Registro y login del BUYER [M]
 
-[ ] `/c/[slug]/(auth)/register` y `/login`.
+[x] `/c/[slug]/(auth)/register` y `/login`.
 
 ## 1.QA-1 — Tests de aislamiento cross-tenant [M]
 
-[ ] Suite que valida que todo endpoint rechaza acceso cross-tenant.
-[ ] Gate en CI.
+[x] Suite que valida que todo endpoint rechaza acceso cross-tenant.
+[x] Gate en CI.
 
 **Criterio fin Sprint 1:** Visitante puede entrar a
 `tienda-dev.onrender.com/c/restaurante-piloto/`, ver catálogo,

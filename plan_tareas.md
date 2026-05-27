@@ -117,7 +117,7 @@ inicial.
 particiones de tabla base para `client_id = 0`; `SELECT * FROM
 ruta.state_catalog LIMIT 5;` retorna filas.
 
-## 0.INFRA-4 — Configurar GitHub Packages para `@ruta/*` [M]
+## 0.INFRA-4 — Configurar GitHub Packages para `@orkoruta/*` [M]
 
 [x] Crear Personal Access Token con scopes `read:packages` y
     `write:packages`. (Classic token ghp_* bajo usuario msimonz / org orkoruta)
@@ -126,6 +126,9 @@ ruta.state_catalog LIMIT 5;` retorna filas.
     de publicación en la organización.
 [x] Probar publicación dummy desde `packages-ruta` (publicar
     `@orkoruta/shared@1.0.0` y `@orkoruta/db@1.0.0`, verificados en GitHub Packages).
+[/] Subir configuración de workspace/CI/publicación a `packages-ruta`.
+    PR abierto: https://github.com/orkoruta/packages-ruta/pull/1
+    CI en progreso; merge pendiente por branch protection.
 
 ## 0.INFRA-5 — Setup workspace local [M]
 

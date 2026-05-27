@@ -287,14 +287,16 @@ Verificación:
 
 → depende de: 0.BACK-1, 0.FRONT-1
 
-[x] `render.yaml` creado en `backend-ruta` y `frontend-ruta`. Pusheado a main.
-    Fix: pnpm instalado con `npm install pnpm@11.3.0 --no-save` (corepack
-    y npm install -g fallan en EROFS en Render). Prisma warning inofensivo.
-[x] Servicio `ruta-api` creado en Render (plan Free) y desplegado.
-    `/healthz` responde 200 (2026-05-27).
-    Nota: admin y storefront pendientes para Sprint 1 (plan Free, 1 servicio inicial).
+[x] `render.yaml` creado en `backend-ruta` (Web Service) y `frontend-ruta`
+    (Static Sites). Fix build Render: pnpm instalado con
+    `npm install pnpm@11.3.0 --prefix=/tmp/pnpm-bin --no-save` para evitar
+    que `pnpm install` recree node_modules y borre el binario.
+    Static sites: `output: 'export'` + `images.unoptimized` en Next.js.
+[x] `ruta-api` (Web Service): `/healthz` responde 200 (2026-05-27).
+[x] `ruta-admin` (Static Site): desplegado en Render (2026-05-27).
+[x] `ruta-storefront` (Static Site): desplegado en Render (2026-05-27).
 
-**Criterio:** las 3 URLs responden 200 (al menos `/healthz`). ✓ (ruta-api OK)
+**Criterio:** las 3 URLs responden 200 (al menos `/healthz`). ✓
 
 ## 0.BACK-2 — Crear primer ADMIN_RUTA via script [S]
 

@@ -87,8 +87,8 @@ levantándose en local consumiendo `@orkoruta/shared` y `@orkoruta/db`.
     - https://github.com/orkoruta/infra-ruta
 [x] Código inicial mergeado a main en los 5 repos.
     Branch protection eliminada (push directo a main habilitado).
-    Nota: CI workflows (.github/workflows/ci.yml) en backend-ruta y
-    frontend-ruta pendientes de push (PAT requiere scope `workflow`).
+[x] CI workflows (.github/workflows/ci.yml) pusheados a main en
+    backend-ruta y frontend-ruta (2026-05-27).
 
 **Criterio:** los 5 repos base visibles en GitHub, vacíos o con README
 inicial.
@@ -126,9 +126,8 @@ ruta.state_catalog LIMIT 5;` retorna filas.
     de publicación en la organización.
 [x] Probar publicación dummy desde `packages-ruta` (publicar
     `@orkoruta/shared@1.0.0` y `@orkoruta/db@1.0.0`, verificados en GitHub Packages).
-[/] Subir configuración de workspace/CI/publicación a `packages-ruta`.
-    PR abierto: https://github.com/orkoruta/packages-ruta/pull/1
-    CI remoto `test`: SUCCESS. Merge pendiente por branch protection.
+[x] Subir configuración de workspace/CI/publicación a `packages-ruta`.
+    PR #1 mergeado a main (2026-05-27). CI `test`: SUCCESS.
 
 ## 0.INFRA-5 — Setup workspace local [M]
 
@@ -152,8 +151,7 @@ ruta.state_catalog LIMIT 5;` retorna filas.
     `diseno/`, más los archivos `.md` en la raíz.
 [x] Copiar `CLAUDE.md` y `AGENTS.md` a la raíz.
 [x] README de root explicando estructura del proyecto.
-[x] Commit y push.
-    Nota: rama `docs/close-0-docs-1` publicada y PR abierto:
+[x] Commit y push. PR #1 mergeado a main.
     https://github.com/orkoruta/docs-ruta/pull/1
 
 ## 0.SHARED-1 — Inicializar `packages-ruta` [L]
@@ -209,9 +207,9 @@ instalar desde otro repo con `pnpm add @orkoruta/shared @orkoruta/db`.
             ├── jobs/
             └── lib/
     ```
-[/] `pnpm add express @types/express tsx pino jose argon2 zod
-    @orkoruta/shared @orkoruta/db` (instalados via file: en DEV; pendiente cambiar
-    a GitHub Packages cuando se publiquen en 0.INFRA-4).
+[x] `pnpm add express @types/express tsx pino jose argon2 zod
+    @orkoruta/shared @orkoruta/db` (resueltos desde GitHub Packages).
+    typecheck + tests (3/3) + build: OK (2026-05-27).
 [x] Endpoint `/healthz`.
 [x] Logger pino con `request_id`.
 [x] CI: lint, typecheck, build.
@@ -229,8 +227,8 @@ instalar desde otro repo con `pnpm add @orkoruta/shared @orkoruta/db`.
     - `storefront/` (Next.js).
     - `packages/ui/` (`@orkoruta/ui` interno, no publicado).
 [x] `.npmrc` con auth a GitHub Packages.
-[/] `pnpm add @orkoruta/shared` en admin y storefront (instalado via file: en DEV;
-    pendiente cambiar a GitHub Packages cuando se publiquen en 0.INFRA-4).
+[x] `pnpm add @orkoruta/shared` en admin y storefront (resuelto desde
+    GitHub Packages). typecheck + build admin + build storefront: OK (2026-05-27).
 [x] Configurar Tailwind con tokens de
     `docs/diseno/galeria_estilos_ruta.md` en ambas apps.
 [x] Implementar componentes base en `packages/ui/`:
@@ -289,18 +287,12 @@ Verificación:
 
 → depende de: 0.BACK-1, 0.FRONT-1
 
-[ ] Crear 3 Web Services apuntando a sus repos:
-    - `ruta-api` → repo `backend-ruta`, build path `api/`,
-      build command `pnpm install && pnpm --filter @ruta/api build`,
-      start `pnpm --filter @ruta/api start`.
-    - `ruta-admin` → repo `frontend-ruta`, build path `admin/`.
-    - `ruta-storefront` → repo `frontend-ruta`, build path
-      `storefront/`.
-[ ] Configurar Background Worker `ruta-api-worker` para pg-boss.
-[ ] Inyectar `DATABASE_URL`, `NPM_TOKEN` (para auth a GitHub
-    Packages), Wompi keys (placeholders).
-[ ] Dominios provisionales: `api-dev.onrender.com`,
-    `app-dev.onrender.com`, `tienda-dev.onrender.com`.
+[x] `render.yaml` creado en `backend-ruta` (ruta-api + ruta-api-worker)
+    y en `frontend-ruta` (ruta-admin + ruta-storefront). Pusheado a main
+    (2026-05-27). `.npmrc` con `${NPM_TOKEN}` para auth GitHub Packages.
+[ ] Conectar repos en Render dashboard (New Blueprint) y setear secretos:
+    `DATABASE_URL`, `JWT_SECRET`, `NPM_TOKEN`, Wompi keys (placeholders).
+[ ] Verificar que las 3 URLs responden 200 (`/healthz`).
 
 **Criterio:** las 3 URLs responden 200 (al menos `/healthz`).
 
@@ -310,11 +302,11 @@ Verificación:
     - Prompt de email y password.
     - Hash con argon2id.
     - INSERT a `ruta.users` con `client_id=0, user_type='ADMIN_RUTA'`.
-[ ] Ejecutar en BD de dev.
-    Nota: requiere psql instalado localmente y ejecutar bash manualmente
-    (script interactivo; pide email, password y nombre en tiempo real).
+[x] Ejecutar en BD de dev.
+    ADMIN_RUTA creado: alexander.marquez@orko.com.co / Alexander Marquez
+    ACTIVE (id=9, client_id=0). Verificado en BD DEV OCI (2026-05-27).
 
-**Criterio:** al menos un ADMIN_RUTA existe.
+**Criterio:** al menos un ADMIN_RUTA existe. ✓
 
 ## 0.INFRA-8 — Seed script para desarrollo [M]
 
@@ -323,11 +315,10 @@ Verificación:
     - 1 ADMIN_CLIENT, 1 OPERATOR_CLIENT, 3 COURIERs, 3 BUYERs.
     - 10 productos en 3 categorías.
     - 2 pickup points.
-
-Verificación:
-- bash -n: EXIT 0 confirmado.
-- Ejecución real: pendiente (requiere psql + DATABASE_URL activo).
-  El script es idempotente: si 'piloto-native' ya existe, sale sin cambios.
+[x] Ejecutado contra BD DEV OCI (2026-05-27). COMMIT exitoso: cliente
+    `piloto-native`, 8 usuarios, 3 categorías, 10 productos, 2 pickup
+    points. Password dev: `Dev.Ruta.2026!` (solo desarrollo).
+    Bugfix aplicado: argon2 usa argon2.cjs (no argon2.js).
 
 **Criterio fin Sprint 0:**
 

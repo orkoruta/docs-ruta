@@ -39,10 +39,10 @@ Colombia. Moneda: COP. UI en espaÃ±ol, cÃ³digo en inglÃ©s.
 | ORM | Prisma (con SQL crudo para particiones/RLS) |
 | Auth | `jose` (JWT) + `argon2` |
 | Jobs | `pg-boss` (Postgres) |
-| File storage | Supabase Storage |
+| File storage | Por definir |
 | Pasarela de pagos | Wompi |
 | Mapas | OpenStreetMap + Leaflet |
-| Hosting | Render + Supabase |
+| Hosting | Render |
 | Migraciones BD | `node-pg-migrate` + estado autoritativo en SQL |
 | Testing | Vitest + Supertest + Playwright + MSW |
 | Logger | `pino` |
@@ -104,7 +104,7 @@ ruta/                                    â† carpeta local (NO es un repo)
    `external_webhook_events`, `webhook_deliveries`.
 6. **Idempotencia obligatoria** en POST/PUT/PATCH/DELETE con header
    `X-Idempotency-Key`.
-7. **Auth propia con `jose` + `argon2`.** No usar Supabase Auth.
+7. **Auth propia con `jose` + `argon2`.** No delegar autenticación a servicios externos.
 8. **Tokens en cookies HttpOnly Secure SameSite=Strict.** Nunca
    localStorage.
 9. **Design system `@ruta/ui` vive solo en `ruta-frontend`.** Las
@@ -170,7 +170,7 @@ o equivalente). MÃ¡s 1 archivo de memoria (este).
 
 | # | Archivo | TamaÃ±o | Uso |
 |---|---|---|---|
-| 21 | `ruta_postgres.sql` | 84 KB | Schema completo ejecutable en PostgreSQL/Supabase |
+| 21 | `ruta_postgres.sql` | 84 KB | Schema completo ejecutable en PostgreSQL (OCI) |
 | 22 | `ruta_oracle.sql` | 80 KB | Schema equivalente para Oracle Data Modeler (DER) |
 
 ## 2.5 Manifiestos de agentes (.md)
@@ -527,9 +527,9 @@ git branch -M main && git push -u origin main
 
 ## 4.4 Continuar con Sprint 0
 
-Seguir el `plan_tareas.md` desde la tarea `0.INFRA-2` (crear cuenta
-Supabase) en adelante. Las tareas `0.INFRA-1` y `0.DOCS-1` se
-consideran completadas con este setup inicial.
+Seguir el `plan_tareas.md` desde la tarea `0.INFRA-3` en adelante.
+Las tareas `0.INFRA-1`, `0.INFRA-2` (cancelada) y `0.DOCS-1` se
+consideran resueltas.
 
 ---
 
@@ -637,7 +637,7 @@ consideran completadas con este setup inicial.
 | 2026-05-26 | Actualizacion plan | Actualizado `plan_tareas.md` para reflejar el estado real verificado: `0.INFRA-3` marcado [x], `0.INFRA-4` sub-items actualizados, `0.DOCS-1` marcado [x] en items completados, `0.SHARED-1` con todos los items [x] menos publicacion, `0.BACK-1` con estructura/deps/healthz/CI como [x]. | `docs-ruta/plan_tareas.md` | Sprint 0 |
 | 2026-05-26 | Desarrollo | Completada `0.FRONT-1`: inicializado `ruta-frontend` como workspace pnpm con `@ruta/admin` (Next.js 14, :3002), `@ruta/storefront` (Next.js 14, :3003) y `@ruta/ui` (paquete interno). Componentes base: `RutaCard`, `RutaButton` (6 variantes+3 tamanhos), `RutaPill`, `RutaSectionHeader`, `RutaThemeToggle`. Tailwind con tokens de `galeria_estilos_ruta.md`. Paginas de prueba muestran todos los componentes en claro/oscuro. CI workflow agregado. Verificacion: `pnpm typecheck` EXIT 0; `pnpm build` OK (4 paginas estaticas por app). Nota: `next.config` usa `.mjs` (Next.js 14 no soporta `.ts`). `@ruta/shared` via `file:`. | `frontend-ruta/`, `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-26 | Decisión infraestructura | GitHub Packages requiere que el scope npm coincida con el usuario/org de GitHub. El usuario es `msimonz`. Se creó organización GitHub `orkoruta`. Todos los paquetes renombrados: `@ruta/shared` → `@orkoruta/shared`, `@ruta/db` → `@orkoruta/db`, `@ruta/ui` → `@orkoruta/ui`. Actualizados: package.json (nombres y deps), .npmrc (scope mapping), tsconfig paths, next.config.mjs transpilePackages, plan_tareas.md, workflows. ~/.npmrc actualizado con scope @orkoruta. Verificado: pnpm ci en packages-ruta OK; backend typecheck+test OK; frontend typecheck EXIT 0. | `packages-ruta/`, `backend-ruta/`, `frontend-ruta/`, `docs-ruta/plan_tareas.md`, `~/.npmrc` | Sprint 0 |
-| 2026-05-26 | Desarrollo | Completada `0.INFRA-6`: creados `render.yaml.example` (4 servicios Render: ruta-api, ruta-admin, ruta-storefront + worker), `supabase/storage_buckets.sql` (3 buckets con politicas RLS), `scripts/create_first_admin_ruta.sh` (argon2id, password via env var, SQL con escape). Sintaxis OK. | `infra-ruta/`, `docs-ruta/plan_tareas.md` | Sprint 0 |
+| 2026-05-26 | Desarrollo | Completada `0.INFRA-6`: creados `render.yaml.example` (4 servicios Render: ruta-api, ruta-admin, ruta-storefront + worker), `scripts/create_first_admin_ruta.sh` (argon2id, password via env var, SQL con escape). Sintaxis OK. Nota: storage_buckets.sql eliminado (Supabase cancelado). | `infra-ruta/`, `docs-ruta/plan_tareas.md` | Sprint 0 |
 | 2026-05-26 | Desarrollo | Completada `0.BACK-2` (script): `create_first_admin_ruta.sh` con argon2id y INSERT en `ruta.users`. Ejecucion pendiente — requiere psql (no disponible en WSL2 actual). | `infra-ruta/scripts/`, `docs-ruta/plan_tareas.md` | Sprint 0 |
 | 2026-05-26 | Desarrollo | Completada `0.LANDING-1`: `landing-template` en `frontend-clients-ruta/_template/` — Next.js 14 App Router, 7 paginas skeleton, `api_client.ts`, tailwind tokens genericos, SVG placeholder, .npmrc con hoisting, README+manifiestos. Typecheck EXIT 0. Build no verificado en WSL2/Dropbox (corrupcion pnpm store en NTFS). | `frontend-clients-ruta/_template/`, `docs-ruta/plan_tareas.md` | Sprint 0 |
 | 2026-05-26 | Nota tecnica | pnpm v11 + WSL2/NTFS/Dropbox: usar `node-linker=hoisted` + `shamefully-hoist=true` en .npmrc para evitar problemas de virtual store. `unrs-resolver` requiere `onlyBuiltDependencies` en `pnpm-workspace.yaml` (pnpm 11 ya no lee campo `pnpm` de `package.json`). | todos los repos frontend | Sprint 0 |
@@ -679,7 +679,7 @@ consideran completadas con este setup inicial.
 | `0.BACK-1` | [/] DEV local OK | Backend conectado a paquetes compartidos: `@ruta/shared` y `@ruta/db` via dependencias locales `file:` para desarrollo; agregado helper de errores compartidos, `/healthz/ready` con query Prisma, dependencias `jose` y `argon2`, y workflow CI. Verificado `pnpm typecheck`, `pnpm build`, `pnpm test` (3 tests) y arranque con `pnpm start`; `curl http://127.0.0.1:3001/healthz` responde 200. Falta consumir versiones publicadas desde GitHub Packages cuando `0.INFRA-4` publique. | `backend-ruta/api`, `backend-ruta/.github/workflows/ci.yml`, `backend-ruta/pnpm-lock.yaml` |
 | `packages-ruta` | Bugfix | Build scripts corregidos con `|| true` para tolerar bloqueos de Dropbox/WSL2 en `rm -rf dist`. | `packages-ruta/shared/package.json`, `packages-ruta/db/package.json` |
 | `0.FRONT-1` | [x] DEV local OK | Workspace pnpm con @ruta/admin (Next.js 14 :3002), @ruta/storefront (Next.js 14 :3003) y @ruta/ui interno. Componentes RutaCard, RutaButton, RutaPill, RutaSectionHeader, RutaThemeToggle implementados. Tailwind con tokens del design system. Typecheck EXIT 0, build OK (4 paginas estaticas por app). @ruta/shared via file:. | `frontend-ruta/` |
-| `0.INFRA-6` | [x] Local OK | render.yaml.example (4 servicios Render), supabase/storage_buckets.sql (3 buckets + RLS), scripts/create_first_admin_ruta.sh (argon2id seguro). | `infra-ruta/` |
+| `0.INFRA-6` | [x] Local OK | render.yaml.example (4 servicios Render), scripts/create_first_admin_ruta.sh (argon2id seguro). storage_buckets.sql eliminado (Supabase cancelado). | `infra-ruta/` |
 | `0.BACK-2` | [/] Script OK / ejecucion pendiente | create_first_admin_ruta.sh creado y sintaticamente correcto. Falta ejecutar en BD DEV (requiere psql). | `infra-ruta/scripts/` |
 | `0.LANDING-1` | [x] Codigo OK / build WSL2 limitado | Next.js 14 template con 7 paginas, api_client.ts, tailwind generico, manifiestos. Typecheck EXIT 0. Build no verificable en WSL2/NTFS/Dropbox. | `frontend-clients-ruta/_template/` |
 | `0.INFRA-8` | [/] Script OK / ejecucion pendiente | seed_dev_data.sh: idempotente, 1 cliente FULL/NATIVE_RUTA 'piloto-native', 8 usuarios (admin, operator, 3 couriers, 3 buyers + perfiles), 3 categorias, 10 productos, 2 pickup points. Transaccion unica, argon2id en runtime. bash -n EXIT 0. Ejecucion requiere psql. | `infra-ruta/scripts/seed_dev_data.sh` |

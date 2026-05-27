@@ -330,9 +330,6 @@ ruta-infra/
 ├── CLAUDE.md
 ├── AGENTS.md
 ├── render.yaml.example
-├── supabase/
-│   ├── config.toml
-│   └── storage_buckets.sql
 ├── workspace.config.json        # Lista de repos a clonar
 └── scripts/
     ├── setup_workspace.sh
@@ -356,7 +353,7 @@ ruta-infra/
 | `landing-restaurante-el-prado` | `landing-restaurante-el-prado` | (raíz) | `elprado.com.co` |
 | `landing-{slug}` | `landing-{slug}` | (raíz) | dominio propio del Cliente |
 
-Supabase es externo y compartido.
+BD principal: PostgreSQL OCI (149.130.168.24:26432). File storage: por definir.
 
 ---
 

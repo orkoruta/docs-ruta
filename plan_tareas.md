@@ -89,16 +89,12 @@ levantándose en local consumiendo `@orkoruta/shared` y `@orkoruta/db`.
 **Criterio:** los 5 repos base visibles en GitHub, vacíos o con README
 inicial.
 
-## 0.INFRA-2 — Crear cuenta Supabase y proyecto [S]
+## 0.INFRA-2 — File storage [-]
 
-[ ] Crear proyecto Supabase (región sa-east-1 si disponible, sino
-    us-east).
-[ ] Anotar `DATABASE_URL`, anon key, service role key.
-[ ] Crear buckets de storage:
-    - `product-images` (public read).
-    - `evidence` (private; URLs firmadas).
-    - `logos` (public read).
-[ ] Crear proyecto separado para producción (no usar el mismo de dev).
+[-] Cancelado. Supabase no se usa en este proyecto.
+    La BD es PostgreSQL en OCI (149.130.168.24:26432).
+    El servicio de file storage quedará por definir cuando se necesite
+    (Sprint 1, tarea 1.BACK-3 — upload de imágenes).
 
 ## 0.INFRA-3 — Aplicar `ruta_postgres.sql` a la BD de dev [S]
 
@@ -281,8 +277,7 @@ Verificación:
 
 [x] Scripts de 0.INFRA-5 presentes en infra-ruta/scripts/.
 [x] Subir `render.yaml.example` con los 4 servicios (3 Web + 1 Worker).
-[x] Subir `supabase/storage_buckets.sql` con la configuración de
-    buckets (product-images, evidence, logos) y políticas RLS.
+[-] ~~Subir `supabase/storage_buckets.sql`~~ — cancelado, Supabase no se usa.
 [x] Subir `infra/scripts/create_first_admin_ruta.sh`.
 [x] CLAUDE.md y AGENTS.md específicos presentes.
 
@@ -388,7 +383,7 @@ cross-tenant rechazado.
 [ ] Endpoints `/admin/products/*`, `/admin/categories/*`.
 [ ] Endpoint público `/public/clients/:slug/products` y
     `/categories`.
-[ ] Upload de imagen vía `/uploads/presigned-url` (Supabase Storage).
+[ ] Upload de imagen vía `/uploads/presigned-url` (servicio de file storage por definir).
 
 ## 1.BACK-4 — Compradores y Repartidores [M]
 
@@ -647,8 +642,7 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP.
 
 ## 6.INFRA-4 — Deploy a producción [M]
 
-[ ] Supabase prod.
-[ ] Aplicar SQL en prod.
+[ ] Aplicar SQL en prod (BD OCI).
 [ ] DNS reales (api.ruta.com, app.ruta.com, tienda.ruta.com).
 [ ] Wompi prod.
 [ ] Deploy las 3 apps en Render prod.
@@ -669,7 +663,7 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP.
 
 | Semana | Sprint | Foco principal |
 |---|---|---|
-| 1 | 0 | Setup multi-repo (5 repos base), Supabase, GitHub Packages, primer ADMIN_RUTA |
+| 1 | 0 | Setup multi-repo (5 repos base), GitHub Packages, primer ADMIN_RUTA |
 | 2-3 | 1 | Auth, Clientes, Productos, Registro BUYER |
 | 4-5 | 2 | Carrito, checkout, Wompi, Flujo 1 |
 | 6-7 | 3 | Flujo SHIP, mapa, courier |

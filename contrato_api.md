@@ -543,7 +543,7 @@ deduplicación usa `provider_event_id` contra `external_webhook_events`.
 
 ### `POST /uploads/presigned-url`
 
-Genera URL pre-firmada para subir directo a Supabase Storage.
+Genera URL pre-firmada para subir archivos al servicio de file storage (por definir).
 
 **Request:**
 ```json
@@ -559,13 +559,13 @@ Genera URL pre-firmada para subir directo a Supabase Storage.
 **Response 200:**
 ```json
 {
-  "upload_url": "https://...supabase.co/storage/v1/upload/...?token=...",
-  "public_url": "https://...supabase.co/storage/v1/object/public/...",
+  "upload_url": "https://<file-storage-provider>/upload/...?token=...",
+  "public_url": "https://<file-storage-provider>/public/...",
   "expires_at": "2025-01-01T12:00:00Z"
 }
 ```
 
-El frontend sube directo a Supabase Storage con `PUT` a `upload_url`.
+El frontend sube directo al servicio de file storage con `PUT` a `upload_url`.
 Una vez subido, llama a:
 
 ### `POST /uploads/confirm`

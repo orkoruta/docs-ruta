@@ -70,8 +70,7 @@ integrada en una semana.
 - Webhooks entrantes de Wompi para confirmar pagos.
 - Webhooks salientes (suscripciones configurables) para eventos de
   pedidos.
-- File storage en Supabase Storage para logos, imágenes de productos,
-  evidencias.
+- File storage para logos, imágenes de productos, evidencias (servicio por definir).
 - Jobs con pg-boss: expiración de pedidos, auto-confirmación
   DELIVERED → CONFIRMED_BY_SYSTEM, expiración de pickup, reintentos de
   webhooks, limpieza de sesiones e idempotency keys.
@@ -235,7 +234,7 @@ fase:
 
 | Sprint | Duración | Entregable |
 |---|---|---|
-| **0** | 1 semana | Setup de repos, BD inicial, CI/CD, infraestructura Render + Supabase, primer ADMIN_RUTA, primer Cliente piloto creado |
+| **0** | 1 semana | Setup de repos, BD inicial (OCI PostgreSQL), CI/CD, infraestructura Render, primer ADMIN_RUTA, primer Cliente piloto creado |
 | **1** | 2 semanas | Auth completa, gestión de Clientes (ADMIN_RUTA), gestión de catálogo, registro de BUYER, Flujo 1 hasta `PENDING_CONFIRM` |
 | **2** | 2 semanas | Checkout: carrito, integración Wompi sandbox, Flujo 1 hasta `PREPARING`, webhooks entrantes de Wompi |
 | **3** | 2 semanas | Flujo 2 (SHIP): mapa de asignación, vista del Repartidor, registro de cobro contra entrega, cierre exitoso |

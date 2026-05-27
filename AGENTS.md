@@ -71,10 +71,10 @@ entre Clientes (negocios) y Compradores.
 | ORM | Prisma | `ruta-shared/db/` |
 | Auth | `jose` + `argon2` | `ruta-backend` |
 | Jobs | `pg-boss` | `ruta-backend` |
-| File storage | Supabase Storage | externo |
+| File storage | Por definir | — |
 | Pasarela | Wompi | externo |
 | Mapas | OSM + Leaflet | frontends |
-| Hosting | Render + Supabase | externo |
+| Hosting | Render | externo |
 | Migraciones | `node-pg-migrate` + SQL | `ruta-docs/bd/` |
 | Tests | Vitest + Supertest + Playwright + MSW | en cada repo |
 | Logger | `pino` | `ruta-backend` |
@@ -214,7 +214,7 @@ Todos viven en `ruta-docs/`:
 - No UPDATE/DELETE en append-only.
 - No hardcodear plazos (usar `client_parameters` + `getParameter()`).
 - No saltarse el state machine.
-- No usar Supabase Auth.
+- Auth propia con `jose` + `argon2`. No delegar autenticación a servicios externos.
 - No tokens en localStorage.
 - No opacidades Tailwind sin corchetes.
 - No importar `@ruta/ui` desde una landing custom.

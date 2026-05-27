@@ -79,10 +79,10 @@ solo ve su propia información.
 | ORM | Prisma (con SQL crudo para particiones/RLS) | `ruta-shared/db/` |
 | Auth | `jose` (JWT) + `argon2` | `ruta-backend` |
 | Job manager | `pg-boss` | `ruta-backend` |
-| File storage | Supabase Storage | externo |
+| File storage | Por definir | — |
 | Pasarela de pagos | Wompi | externo |
 | Mapas | OpenStreetMap + Leaflet | en ambos frontends |
-| Hosting | Render + Supabase | externo |
+| Hosting | Render | externo |
 | Migraciones BD | `node-pg-migrate` + estado autoritativo SQL | `ruta-docs/bd/` |
 | Testing | Vitest + Supertest + Playwright + MSW | en cada repo |
 | Logger | `pino` | `ruta-backend` |
@@ -273,7 +273,7 @@ Si trabajas en un repo distinto a `ruta-docs`, abre el doc desde
 - **No hardcodear plazos.** Lee de `client_parameters` con
   `getParameter()`.
 - **No saltarte el state machine** de pedidos.
-- **No usar Supabase Auth.** Auth propia con `jose` + `argon2`.
+- **Auth propia con `jose` + `argon2`.** No delegar autenticación a servicios externos.
 - **No tokens en localStorage.** Cookies HttpOnly Secure SameSite=Strict.
 - **No usar opacidades Tailwind sin corchetes.** `bg-sky-500/[0.12]`
   ✅, `bg-sky-500/12` ❌.

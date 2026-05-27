@@ -85,6 +85,12 @@ levantándose en local consumiendo `@orkoruta/shared` y `@orkoruta/db`.
     - https://github.com/orkoruta/packages-ruta
     - https://github.com/orkoruta/docs-ruta
     - https://github.com/orkoruta/infra-ruta
+[/] PRs de código inicial abiertos — pendientes de merge (review requerido):
+    - backend-ruta PR#1: https://github.com/orkoruta/backend-ruta/pull/1
+    - frontend-ruta PR#1: https://github.com/orkoruta/frontend-ruta/pull/1
+    - infra-ruta PR#1: https://github.com/orkoruta/infra-ruta/pull/1
+    Nota: CI workflows (.github/workflows/) pendientes de push
+    por falta de scope `workflow` en el PAT actual.
 
 **Criterio:** los 5 repos base visibles en GitHub, vacíos o con README
 inicial.

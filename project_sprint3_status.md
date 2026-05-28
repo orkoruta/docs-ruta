@@ -767,9 +767,9 @@ Lee primero:
 | Tarea | Agente | Rama | Estado | PR | Mergeado |
 |---|---|---|---|---|---|
 | Pre-wave: verificar shared | — | — | ✅ 2026-05-28 | — | — |
-| `3.SHARED-1` recordCollectionSchema | — | `feat/shared-3` | `[ ]` | — | — |
+| `3.SHARED-1` recordCollectionSchema | — | `packages-ruta` | ✅ 2026-05-28 | — | publicado 1.3.0 |
 | `3.BACK-1` Asignación courier | BACK-A | `feat/back-3-1` | `[ ]` | — | — |
-| `3.BACK-2+3` Endpoints + cobro | BACK-B | `feat/back-3-2-3` | ⏳ espera SHARED-1 | — | — |
+| `3.BACK-2+3` Endpoints + cobro | BACK-B | `feat/back-3-2-3` | `[ ]` desbloqueado | — | — |
 | `3.BACK-4+5` Cancel + RETURN | BACK-C | `feat/back-3-4-5` | `[ ]` | — | — |
 | `3.BACK-6` Auto-confirmación | BACK-D | `feat/back-3-6` | `[ ]` | — | — |
 | `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | `[ ]` | — | — |

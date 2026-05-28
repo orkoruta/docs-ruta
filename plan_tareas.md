@@ -519,6 +519,9 @@ entrega.
     `storefront/src/app/c/[slug]/checkout/page.tsx`,
     `storefront/src/app/c/[slug]/checkout/_components/CheckoutStepper.tsx`,
     `DeliveryStep.tsx`, `AddressStep.tsx`, `PaymentStep.tsx`.
+    PR #12 mergeado a `main` (2026-05-28), commit `cc023d3`.
+    Typecheck storefront EXIT 0; build detenido por timeout local en
+    `Creating an optimized production build ...`.
 
 ## 2.STORE-3 — Mis pedidos (BUYER) [L]
 

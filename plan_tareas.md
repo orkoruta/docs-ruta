@@ -503,7 +503,8 @@ entrega.
 [x] Carrito representado como pedido `DRAFT` en BD.
 [x] Agregar, actualizar cantidad y remover items vía endpoints de pedido.
 [x] `/c/[slug]/cart`.
-    PR feat/store-2-1 → rama lista. Typecheck EXIT 0 | lint EXIT 0 | build OK.
+    PR #10 mergeado a `main` (2026-05-28), commit `56b32c2`.
+    Typecheck EXIT 0 | lint EXIT 0 | build OK.
     Archivos: `storefront/src/lib/cart.api.ts`, `storefront/src/app/c/[slug]/cart/page.tsx`,
     `storefront/src/app/c/[slug]/cart/_components/CartView.tsx`.
 
@@ -529,6 +530,8 @@ entrega.
 
 [x] `/admin/orders` con filtros.
 [x] `/admin/orders/:id` detalle 360.
+    PR #9 mergeado a `main` (2026-05-28), commit `fd0dda1`.
+    Typecheck EXIT 0 | lint EXIT 0 | build EXIT 0.
 
 ## 2.QA-1 — Tests del state machine y Wompi mocks [M]
 

@@ -510,17 +510,23 @@ entrega.
 
 ## 2.STORE-2 — Checkout multi-paso [XL]
 
-[ ] Paso 1: entrega (SHIP/PICKUP).
-[ ] Paso 2: dirección o pickup point (con mapa OSM).
-[ ] Paso 3: método de pago.
-[ ] Submit confirma el pedido `DRAFT` existente y redirige a Wompi o
+[x] Paso 1: entrega (SHIP/PICKUP).
+[x] Paso 2: dirección o pickup point (con mapa OSM).
+[x] Paso 3: método de pago.
+[x] Submit confirma el pedido `DRAFT` existente y redirige a Wompi o
     confirmación.
+    Rama `feat/store-2-2`. Archivos nuevos:
+    `storefront/src/app/c/[slug]/checkout/page.tsx`,
+    `storefront/src/app/c/[slug]/checkout/_components/CheckoutStepper.tsx`,
+    `DeliveryStep.tsx`, `AddressStep.tsx`, `PaymentStep.tsx`.
 
 ## 2.STORE-3 — Mis pedidos (BUYER) [L]
 
-[ ] `/c/[slug]/orders` lista.
-[ ] `/c/[slug]/orders/[id]` detalle con `RutaTimeline`.
-[ ] Acciones condicionales.
+[x] `/c/[slug]/orders` lista.
+[x] `/c/[slug]/orders/[id]` detalle con `RutaTimeline`.
+[x] Acciones condicionales.
+    Implementado en rama `feat/store-2-3`.
+    Typecheck storefront EXIT 0.
 
 ## 2.STORE-4 — Confirmación post-Wompi [M]
 

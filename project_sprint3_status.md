@@ -9,7 +9,7 @@
 | Sprint | Estado |
 |---|---|
 | 0, 1, 2 | ✅ Completos — todos los PRs mergeados a `main` |
-| **3** | 🔜 En planificación — 9 tareas, ninguna iniciada |
+| **3** | 🏗️ En ejecución — Pre-wave completo, Wave 1 desbloqueada parcialmente |
 | 4–6 | 🔜 Pendientes |
 
 **Meta Sprint 3:** Pedido con entrega a domicilio (SHIP) completado de extremo a extremo:
@@ -46,23 +46,42 @@ asignación de repartidor → entrega → cobro → confirmación. Flujo de canc
 
 ---
 
-## Wave 0 — Verificación pre-arranque (~30 min)
+## Wave 0 — Verificación pre-arranque ✅ COMPLETADO 2026-05-28
 
-**Responsable:** tú (verificación manual antes de lanzar agentes).
+Resultado del grep ejecutado:
 
-Verificar que `@orkoruta/shared@1.2.0` tiene:
-
-```bash
-grep -r "assignCourier\|recordCollection\|collection" \
-  /mnt/c/Dropbox/Alex/DEV/ruta/packages-ruta/shared/src/validators/
+```
+packages-ruta/shared/src/validators/order.schema.ts: assignCourierSchema ✅
+recordCollectionSchema ❌ no existe
 ```
 
-- Si `assignCourierSchema` y `recordCollectionSchema` **existen** → arrancar Wave 1 directamente.
-- Si **no existen** → hacer `3.SHARED-1` primero: agregar schemas en `packages-ruta`,
-  bump a `@orkoruta/shared@1.3.0`, publicar, actualizar `package.json` del backend.
-  Tiempo estimado: 1–2h. Luego arrancar Wave 1.
+**Conclusión:**
+- BACK-A, BACK-C, BACK-D, FRONT-A → pueden arrancar **ahora**.
+- BACK-B → bloqueado hasta que `3.SHARED-1` publique `@orkoruta/shared@1.3.0`.
 
-**Estado:** `[ ]` pendiente verificación
+### 3.SHARED-1 — Bump @orkoruta/shared con schema de cobro
+
+**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` publicado
+
+**Repo:** `packages-ruta` | **Rama:** `feat/shared-3`
+
+Agregar en `packages-ruta/shared/src/validators/order.schema.ts`:
+
+```typescript
+export const recordCollectionSchema = z.object({
+  amount: z.number().positive(),
+  payment_method: z.enum(['CASH', 'ELECTRONIC']),
+  notes: z.string().max(500).optional(),
+});
+
+export type RecordCollectionInput = z.infer<typeof recordCollectionSchema>;
+```
+
+Exportar desde el barrel `index.ts`. Bump `version` a `1.3.0` en `package.json`.
+Publicar con PAT local (CI workflow tiene limitaciones de permisos de org).
+Actualizar `@orkoruta/shared` en `backend-ruta/api/package.json` a `^1.3.0` y hacer `pnpm install`.
+
+**Verificación:** `pnpm --filter @orkoruta/shared typecheck && pnpm --filter @orkoruta/shared test`
 
 ---
 
@@ -747,15 +766,16 @@ Lee primero:
 
 | Tarea | Agente | Rama | Estado | PR | Mergeado |
 |---|---|---|---|---|---|
-| Pre-wave: verificar shared | — | — | `[ ]` | — | — |
+| Pre-wave: verificar shared | — | — | ✅ 2026-05-28 | — | — |
+| `3.SHARED-1` recordCollectionSchema | — | `feat/shared-3` | `[ ]` | — | — |
 | `3.BACK-1` Asignación courier | BACK-A | `feat/back-3-1` | `[ ]` | — | — |
-| `3.BACK-2+3` Endpoints + cobro | BACK-B | `feat/back-3-2-3` | `[ ]` | — | — |
+| `3.BACK-2+3` Endpoints + cobro | BACK-B | `feat/back-3-2-3` | ⏳ espera SHARED-1 | — | — |
 | `3.BACK-4+5` Cancel + RETURN | BACK-C | `feat/back-3-4-5` | `[ ]` | — | — |
 | `3.BACK-6` Auto-confirmación | BACK-D | `feat/back-3-6` | `[ ]` | — | — |
 | `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | `[ ]` | — | — |
 | Integration: mounts app.ts | — | — | `[ ]` | — | — |
-| `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | `[ ]` | — | — |
-| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | `[ ]` | — | — |
+| `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | ⏳ espera BACK-A | — | — |
+| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | ⏳ espera Wave 1+2 | — | — |
 
 ---
 

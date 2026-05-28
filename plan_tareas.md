@@ -291,6 +291,13 @@ Verificación:
     `npm install pnpm@11.3.0 --prefix=/tmp/pnpm-bin --no-save` para evitar
     que `pnpm install` recree node_modules y borre el binario.
     Static sites: `output: 'export'` + `images.unoptimized` en Next.js.
+    Actualización 2026-05-27: `backend-ruta` subido a `pnpm@11.4.0`
+    en `packageManager`, CI y `render.yaml`; `minimumReleaseAgeExclude`
+    usa `@orkoruta/*` para que Render no bloquee paquetes internos recién
+    publicados. CI `backend-ruta/main` verde en run 26540623500.
+    Healthcheck público pendiente de reconfirmar con la URL real de Render:
+    `ruta-api.onrender.com` y `api-dev.onrender.com` devuelven
+    `x-render-routing: no-server`.
 [x] `ruta-api` (Web Service): `/healthz` responde 200 (2026-05-27).
 [x] `ruta-admin` (Static Site): desplegado en Render (2026-05-27).
 [x] `ruta-storefront` (Static Site): desplegado en Render (2026-05-27).
@@ -410,19 +417,19 @@ validación campos). Tests sin DB (unit).
 
 ## 1.ADMIN-2 — Pantallas ADMIN_RUTA: lista y CRUD de Clientes [M]
 
-[ ] `/ruta-admin/clients` lista.
-[ ] `/ruta-admin/clients/new` formulario.
-[ ] `/ruta-admin/clients/:id` detalle.
+[x] `/ruta-admin/clients` lista.
+[x] `/ruta-admin/clients/new` formulario.
+[x] `/ruta-admin/clients/:id` detalle.
 
 ## 1.ADMIN-3 — Gestión de productos [L]
 
-[ ] `/admin/products` lista + filtros.
-[ ] Formularios create/edit con upload de imagen.
-[ ] Modal de import masivo.
+[x] `/admin/products` lista + filtros.
+[x] Formularios create/edit con upload de imagen.
+[x] Modal de import masivo.
 
 ## 1.ADMIN-4 — Compradores, Repartidores, Pickup Points [M]
 
-[ ] Listas y CRUD básico en sus respectivas rutas.
+[x] Listas y CRUD básico en sus respectivas rutas.
 
 ## 1.STORE-1 — Layout y catálogo [L]
 
@@ -453,45 +460,52 @@ entrega.
 
 ## 2.SHARED-1 — Bumpear `@orkoruta/shared` con order schemas [M]
 
-[ ] Validators de orders: create, confirm, transition, payments.
-[ ] Tipos derivados.
-[ ] Bump a `@orkoruta/shared@1.2.0`.
+[x] Validators de orders: create, confirm, cancel, requestCancel, transition (order.schema.ts).
+[x] Validators de pagos: initiate, webhookEvent, paymentStatus (payment.schema.ts).
+[x] Tipos derivados en order.types.ts (z.infer<> de los schemas Zod).
+[x] Bump a `@orkoruta/shared@1.2.0`. Publicado en GitHub Packages (2026-05-27).
+    Tests: 50/50 OK. Typecheck EXIT 0. Build limpio. PR #3 mergeado a main (2026-05-28), commit d358b01.
+    Nota: publicación manual con PAT local (CI workflow sigue con limitaciones de permisos de org).
 
-## 2.BACK-1 — Orders + State Machine [XL]
+## 2.BACK-1 — Orders + State Machine [XL] ✅ 2026-05-28
 
 → depende de: 1.BACK-1, 2.SHARED-1
 
-[ ] `services/orders/state_machine.ts` con todas las transiciones de
+[x] `services/orders/state_machine.ts` con todas las transiciones de
     flujos 1, 2, 3.
-[ ] `services/orders/orders.service.ts`: create, confirm, cancel,
+[x] `services/orders/orders.service.ts`: create, confirm, cancel,
     requestCancel.
-[ ] Endpoints `/buyer/orders/*`.
+[x] Endpoints `/buyer/orders/*`.
 
 **Tests unitarios:** cada transición permitida y rechazada.
 
-## 2.BACK-2 — Validación operativa y aceptación [L]
+## 2.BACK-2 — Validación operativa y aceptación [L] ✅ 2026-05-28
 
-[ ] Job `validate_order` → VALIDATION_APPROVED o MANUAL_REVIEW.
-[ ] Endpoints admin para accept, reject, mark-preparing, mark-ready.
+[x] Job `validate_order` → VALIDATION_APPROVED o MANUAL_REVIEW.
+[x] Endpoints admin para accept, reject, mark-preparing, mark-ready.
 
-## 2.BACK-3 — Wompi (initiate + webhook) [XL]
+## 2.BACK-3 — Wompi (initiate + webhook) [XL] ✅ 2026-05-28
 
-[ ] `lib/wompi_client.ts`.
-[ ] `services/payments.service.ts.initiatePayment(orderId)`.
-[ ] Endpoint `POST /buyer/orders/:id/initiate-payment`.
-[ ] Endpoint webhook entrante con verificación HMAC y
+[x] `lib/wompi_client.ts`.
+[x] `services/payments.service.ts.initiatePayment(orderId)`.
+[x] Endpoint `POST /buyer/orders/:id/initiate-payment`.
+[x] Endpoint webhook entrante con verificación HMAC y
     deduplicación.
 
 ## 2.BACK-4 — Jobs de mantenimiento [M]
 
-[ ] order_expiration, payment_timeout, cleanup_idempotency,
+[x] order_expiration, payment_timeout, cleanup_idempotency,
     cleanup_sessions.
+    PR #5 mergeado feat/back-2-4 → main.
 
 ## 2.STORE-1 — Carrito persistido en BD [M]
 
-[ ] Carrito representado como pedido `DRAFT` en BD.
-[ ] Agregar, actualizar cantidad y remover items vía endpoints de pedido.
-[ ] `/c/[slug]/cart`.
+[x] Carrito representado como pedido `DRAFT` en BD.
+[x] Agregar, actualizar cantidad y remover items vía endpoints de pedido.
+[x] `/c/[slug]/cart`.
+    PR feat/store-2-1 → rama lista. Typecheck EXIT 0 | lint EXIT 0 | build OK.
+    Archivos: `storefront/src/lib/cart.api.ts`, `storefront/src/app/c/[slug]/cart/page.tsx`,
+    `storefront/src/app/c/[slug]/cart/_components/CartView.tsx`.
 
 ## 2.STORE-2 — Checkout multi-paso [XL]
 
@@ -513,8 +527,8 @@ entrega.
 
 ## 2.ADMIN-1 — Lista y detalle de pedidos (admin) [L]
 
-[ ] `/admin/orders` con filtros.
-[ ] `/admin/orders/:id` detalle 360.
+[x] `/admin/orders` con filtros.
+[x] `/admin/orders/:id` detalle 360.
 
 ## 2.QA-1 — Tests del state machine y Wompi mocks [M]
 

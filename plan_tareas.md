@@ -347,7 +347,7 @@ Verificación:
 **Meta:** flujo de registro y login. ADMIN_RUTA crea Clientes.
 ADMIN_CLIENT gestiona catálogo. Comprador se registra y ve catálogo.
 
-## 1.SHARED-1 — Bumpear `@orkoruta/shared` con schemas de auth y catálogo [M]
+## 1.SHARED-1 — Bumpear `@orkoruta/shared` con schemas de auth y catálogo [M] ✅ 2026-05-27
 
 [x] Agregar a `@orkoruta/shared/validators/`:
     - `auth.schema.ts` (login, register, refresh, logout, controlViewEnter).
@@ -403,45 +403,45 @@ validación campos). Tests sin DB (unit).
 [x] CRUD básico para COURIERs: /admin/couriers/*, 6 endpoints.
 [x] 12 tests pasan.
 
-## 1.BACK-5 — Importación masiva por Excel [M]
+## 1.BACK-5 — Importación masiva por Excel [M] ✅ 2026-05-27
 
 [x] `POST /admin/products/bulk-import` (multipart).
 [x] Job pg-boss para procesar asíncrono.
 [x] `GET /admin/products/bulk-import/:job_id` para status.
 
-## 1.ADMIN-1 — Login y layout [M]
+## 1.ADMIN-1 — Login y layout [M] ✅ 2026-05-28
 
 [x] `/login` con detección de rol y redirect.
 [x] `RutaSidebar` con navegación condicional.
 [x] `RutaHeader` con info de Cliente activo, banner Vista de Control.
 
-## 1.ADMIN-2 — Pantallas ADMIN_RUTA: lista y CRUD de Clientes [M]
+## 1.ADMIN-2 — Pantallas ADMIN_RUTA: lista y CRUD de Clientes [M] ✅ 2026-05-28
 
 [x] `/ruta-admin/clients` lista.
 [x] `/ruta-admin/clients/new` formulario.
 [x] `/ruta-admin/clients/:id` detalle.
 
-## 1.ADMIN-3 — Gestión de productos [L]
+## 1.ADMIN-3 — Gestión de productos [L] ✅ 2026-05-28
 
 [x] `/admin/products` lista + filtros.
 [x] Formularios create/edit con upload de imagen.
 [x] Modal de import masivo.
 
-## 1.ADMIN-4 — Compradores, Repartidores, Pickup Points [M]
+## 1.ADMIN-4 — Compradores, Repartidores, Pickup Points [M] ✅ 2026-05-28
 
 [x] Listas y CRUD básico en sus respectivas rutas.
 
-## 1.STORE-1 — Layout y catálogo [L]
+## 1.STORE-1 — Layout y catálogo [L] ✅ 2026-05-27
 
 [x] Layout `c/[slug]/layout.tsx` con branding del Cliente.
 [x] `/c/[slug]/` catálogo con grid y filtros.
 [x] `/c/[slug]/product/[id]` detalle.
 
-## 1.STORE-2 — Registro y login del BUYER [M]
+## 1.STORE-2 — Registro y login del BUYER [M] ✅ 2026-05-27
 
 [x] `/c/[slug]/(auth)/register` y `/login`.
 
-## 1.QA-1 — Tests de aislamiento cross-tenant [M]
+## 1.QA-1 — Tests de aislamiento cross-tenant [M] ✅ 2026-05-27
 
 [x] Suite que valida que todo endpoint rechaza acceso cross-tenant.
 [x] Gate en CI.
@@ -458,7 +458,7 @@ ADMIN_CLIENT agrega productos.
 **Meta:** Comprador completa pedido con pago online (Wompi) o contra
 entrega.
 
-## 2.SHARED-1 — Bumpear `@orkoruta/shared` con order schemas [M]
+## 2.SHARED-1 — Bumpear `@orkoruta/shared` con order schemas [M] ✅ 2026-05-28
 
 [x] Validators de orders: create, confirm, cancel, requestCancel, transition (order.schema.ts).
 [x] Validators de pagos: initiate, webhookEvent, paymentStatus (payment.schema.ts).
@@ -492,13 +492,13 @@ entrega.
 [x] Endpoint webhook entrante con verificación HMAC y
     deduplicación.
 
-## 2.BACK-4 — Jobs de mantenimiento [M]
+## 2.BACK-4 — Jobs de mantenimiento [M] ✅ 2026-05-28
 
 [x] order_expiration, payment_timeout, cleanup_idempotency,
     cleanup_sessions.
     PR #5 mergeado feat/back-2-4 → main.
 
-## 2.STORE-1 — Carrito persistido en BD [M]
+## 2.STORE-1 — Carrito persistido en BD [M] ✅ 2026-05-28
 
 [x] Carrito representado como pedido `DRAFT` en BD.
 [x] Agregar, actualizar cantidad y remover items vía endpoints de pedido.
@@ -508,7 +508,7 @@ entrega.
     Archivos: `storefront/src/lib/cart.api.ts`, `storefront/src/app/c/[slug]/cart/page.tsx`,
     `storefront/src/app/c/[slug]/cart/_components/CartView.tsx`.
 
-## 2.STORE-2 — Checkout multi-paso [XL]
+## 2.STORE-2 — Checkout multi-paso [XL] ✅ 2026-05-28
 
 [x] Paso 1: entrega (SHIP/PICKUP).
 [x] Paso 2: dirección o pickup point (con mapa OSM).
@@ -523,32 +523,43 @@ entrega.
     Typecheck storefront EXIT 0; build detenido por timeout local en
     `Creating an optimized production build ...`.
 
-## 2.STORE-3 — Mis pedidos (BUYER) [L]
+## 2.STORE-3 — Mis pedidos (BUYER) [L] ✅ 2026-05-28
 
 [x] `/c/[slug]/orders` lista.
 [x] `/c/[slug]/orders/[id]` detalle con `RutaTimeline`.
 [x] Acciones condicionales.
-    Implementado en rama `feat/store-2-3`.
+    PR #11 mergeado a `main` (2026-05-28).
     Typecheck storefront EXIT 0.
 
-## 2.STORE-4 — Confirmación post-Wompi [M]
+## 2.STORE-4 — Confirmación post-Wompi [M] ✅ 2026-05-28
 
-[ ] `/c/[slug]/checkout/confirmation` con polling.
+[x] `/c/[slug]/checkout/confirmation` con polling.
+    PR #13 mergeado a `main` (2026-05-28). Shell server compatible con
+    `output: export` y `ConfirmationView.tsx` client-side. Lee
+    `transaction_id` y referencias de query string, resuelve `order_id`
+    cuando está disponible, consulta `GET /buyer/orders/:id` y muestra
+    estados procesando / confirmado / fallido. Typecheck storefront
+    EXIT 0.
 
-## 2.ADMIN-1 — Lista y detalle de pedidos (admin) [L]
+## 2.ADMIN-1 — Lista y detalle de pedidos (admin) [L] ✅ 2026-05-28
 
 [x] `/admin/orders` con filtros.
 [x] `/admin/orders/:id` detalle 360.
     PR #9 mergeado a `main` (2026-05-28), commit `fd0dda1`.
     Typecheck EXIT 0 | lint EXIT 0 | build EXIT 0.
 
-## 2.QA-1 — Tests del state machine y Wompi mocks [M]
+## 2.QA-1 — Tests del state machine y Wompi mocks [M] ✅ 2026-05-28
 
-[ ] MSW para Wompi sandbox.
-[ ] Test de webhook con firma válida e inválida.
+[x] MSW para Wompi sandbox.
+[x] Test de webhook con firma válida e inválida.
+[x] Test de deduplicación de eventos externos.
+[x] Tests del state machine: transiciones permitidas y rechazadas.
+    PR #8 mergeado a `main` (2026-05-28). Tests focalizados EXIT 0 (3393 tests);
+    suite completa EXIT 0 (3662 tests, 1 skipped); `pnpm typecheck`
+    EXIT 0.
 
-**Criterio fin Sprint 2:** Pedido real con Wompi sandbox completado de
-extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP.
+**Criterio fin Sprint 2: ✅ COMPLETO 2026-05-28.** Pedido real con Wompi sandbox completado de
+extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas mergeadas a `main`.
 
 ---
 

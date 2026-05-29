@@ -1,5 +1,16 @@
 ﻿# MEMORIA DEL PROYECTO RUTA
 
+## Actualización operativa — 2026-05-29
+
+- Sprint 0, 1 y 2 están completos.
+- Sprint 3 está en ejecución con Wave 1 backend y Wave 2 frontend completas.
+- Backend SHIP mergeado: asignación de repartidor, endpoints courier, cobro contra entrega, cancelación post-despacho, return-to-origin y auto-confirmación.
+- Frontend SHIP mergeado: vista courier móvil-first y mapa de asignación.
+- Integración backend en `api/src/app.ts` completada.
+- PR frontend-ruta #16 abierto: base Playwright, suite inicial SHIP y corrección de ruta canónica del mapa a `/admin/orders/map` con redirect desde `/admin/map`.
+- PR docs-ruta #6 abierto: actualización documental del estado Sprint 3.
+- `3.QA-1` está arrancado, pero la ejecución local de Chromium queda bloqueada por dependencia nativa faltante `libnspr4.so`; `pnpm exec playwright install-deps chromium` requiere `sudo`.
+
 > Documento de **memoria operativa** para Claude Cowork (y cualquier
 > agente IA o persona) que necesite tomar los archivos generados en la
 > sesiÃ³n de planning de RUTA y distribuirlos en su estructura local

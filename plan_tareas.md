@@ -601,12 +601,15 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas merge
 [x] Job cron horario que transiciona DELIVERED → CONFIRMED_BY_SYSTEM.
     PR #10 mergeado a `main` (2026-05-29).
 
-## 3.ADMIN-1 — Mapa de asignación [XL]
+## 3.ADMIN-1 — Mapa de asignación [XL] ✅ 2026-05-29
 
-[ ] Leaflet + OSM.
-[ ] Panel lateral con pedidos y couriers.
-[ ] Asignación con confirmación.
-[ ] Auto-refresh.
+[x] Leaflet + OSM.
+[x] Panel lateral con pedidos y couriers.
+[x] Asignación con confirmación.
+[x] Auto-refresh.
+    PR #15 mergeado a `main` (2026-05-29).
+    Ajuste posterior en PR frontend-ruta #16: ruta canónica `/admin/orders/map`
+    y redirect de compatibilidad `/admin/map`.
 
 ## 3.ADMIN-2 — Vista COURIER móvil-first [XL] ✅ 2026-05-29
 
@@ -615,9 +618,15 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas merge
 [x] Form de cobro con cámara para evidencia (capture="environment").
     PR #14 mergeado a `main` (2026-05-29).
 
-## 3.QA-1 — E2E flujo SHIP [L]
+## 3.QA-1 — E2E flujo SHIP [L] 🏗️ 2026-05-29
 
-[ ] Playwright spec end-to-end.
+[/] Base Playwright agregada en frontend-ruta.
+[/] Suite inicial para asignación de courier y entrega COD.
+[ ] Suite completa con happy path real + 2 alternos.
+    PR frontend-ruta #16 abierto.
+    `pnpm exec playwright test --list` EXIT 0 (4 tests detectados).
+    Ejecución Chromium bloqueada localmente por dependencia nativa faltante:
+    `libnspr4.so`; `pnpm exec playwright install-deps chromium` requiere `sudo`.
 
 ---
 

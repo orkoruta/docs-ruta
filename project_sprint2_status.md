@@ -24,13 +24,9 @@ Pedido real con Wompi sandbox completado de extremo a extremo hasta READY_TO_SHI
 
 ## Siguiente: Sprint 3 — Flujo SHIP completo
 
-Tareas pendientes:
-- `3.BACK-1` — Asignación de Repartidor (optimistic lock)
-- `3.BACK-2` — Endpoints COURIER (transiciones propias)
-- `3.BACK-3` — Cobro contra entrega (evidencia multipart)
-- `3.BACK-4` — Cancelación post-despacho
-- `3.BACK-5` — RETURN_TO_ORIGIN
-- `3.BACK-6` — Auto-confirmación de entregados
-- `3.ADMIN-1` — Mapa de asignación (Leaflet + OSM)
-- `3.ADMIN-2` — Vista COURIER móvil-first
-- `3.QA-1` — E2E flujo SHIP (Playwright)
+Estado al 2026-05-29:
+- Wave 1 backend completa y mergeada a `main`.
+- Vista courier móvil y mapa de asignación completos y mergeados a `main`.
+- Integración de mounts en `backend-ruta/api/src/app.ts` completa.
+- `3.QA-1` arrancado en PR frontend-ruta #16 con base Playwright y suite inicial.
+- Bloqueo actual: ejecución local de Chromium requiere dependencias nativas (`libnspr4.so`) instalables con `pnpm exec playwright install-deps chromium` y `sudo`.

@@ -1,6 +1,6 @@
 # Sprint 3 — Flujo SHIP completo
 
-Última actualización: 2026-05-28.
+Última actualización: 2026-05-29.
 
 ---
 
@@ -9,7 +9,7 @@
 | Sprint | Estado |
 |---|---|
 | 0, 1, 2 | ✅ Completos — todos los PRs mergeados a `main` |
-| **3** | 🏗️ En ejecución — Wave 1 + Wave 2 completas, QA E2E arrancado |
+| **3** | 🏗️ En ejecución — Wave 1 + Wave 2 completas; QA E2E en PR |
 | 4–6 | 🔜 Pendientes |
 
 **Meta Sprint 3:** Pedido con entrega a domicilio (SHIP) completado de extremo a extremo:
@@ -61,7 +61,7 @@ recordCollectionSchema ❌ no existe
 
 ### 3.SHARED-1 — Bump @orkoruta/shared con schema de cobro
 
-**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` publicado
+**Estado:** `[x]` publicado 2026-05-28 — `@orkoruta/shared@1.3.0`
 
 **Repo:** `packages-ruta` | **Rama:** `feat/shared-3`
 
@@ -94,7 +94,7 @@ Cada uno trabaja en su propia rama desde `main` actualizado.
 
 ### BACK-A: `3.BACK-1` — Asignación de Repartidor
 
-**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[x]` mergeado 2026-05-29 — PR #9
 
 **Rama:** `feat/back-3-1` (en `backend-ruta`)
 
@@ -182,7 +182,7 @@ Lee estos antes de implementar:
 
 ### BACK-B: `3.BACK-2` + `3.BACK-3` — Endpoints COURIER + Cobro contra entrega
 
-**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[x]` mergeado 2026-05-29 — PR #12
 
 **Rama:** `feat/back-3-2-3` (en `backend-ruta`)
 
@@ -288,7 +288,7 @@ Lee estos antes de implementar:
 
 ### BACK-C: `3.BACK-4` + `3.BACK-5` — Cancelación post-despacho + RETURN_TO_ORIGIN
 
-**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[x]` mergeado 2026-05-29 — PR #11
 
 **Rama:** `feat/back-3-4-5` (en `backend-ruta`)
 
@@ -383,7 +383,7 @@ Auth: requireAdminClient o requireOperatorClient. X-Idempotency-Key en todos.
 
 ### BACK-D: `3.BACK-6` — Auto-confirmación de entregados
 
-**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[x]` mergeado 2026-05-29 — PR #10
 
 **Rama:** `feat/back-3-6` (en `backend-ruta`)
 
@@ -469,7 +469,7 @@ Agregar casos para el nuevo job:
 
 ### FRONT-A: `3.ADMIN-2` — Vista COURIER móvil-first
 
-**Estado:** `[ ]` pendiente · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[x]` mergeado 2026-05-29 — PR #14
 
 **Rama:** `feat/admin-3-2` (en `frontend-ruta`)
 
@@ -615,7 +615,7 @@ Para minimizar conflictos en `app.ts`:
 
 ### FRONT-B: `3.ADMIN-1` — Mapa de asignación
 
-**Estado:** `[ ]` bloqueado esperando BACK-A · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[x]` mergeado 2026-05-29 — PR #15
 
 **Rama:** `feat/admin-3-1` (en `frontend-ruta`)
 
@@ -708,7 +708,7 @@ Agregar una sección "Asignación de Repartidor" al detalle del pedido:
 
 ### QA: `3.QA-1` — E2E flujo SHIP
 
-**Estado:** `[ ]` bloqueado esperando Wave 1+2 · `[ ]` en progreso · `[ ]` PR abierto · `[ ]` mergeado
+**Estado:** `[/]` PR abierto — frontend-ruta #16
 
 **Rama:** `feat/qa-3-1` (en `frontend-ruta`)
 
@@ -775,11 +775,12 @@ Lee primero:
 | `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | ✅ 2026-05-29 | #14 | ✅ main |
 | Integration: mounts app.ts | — | — | ✅ 2026-05-29 | — | ✅ main |
 | `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | ✅ 2026-05-29 | #15 | ✅ main |
-| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | 🏗️ arrancado | — | — |
+| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1-route-e2e` | 🏗️ PR abierto | frontend-ruta #16 | — |
 
 Notas QA 2026-05-29:
 - Se corrigió la ruta canónica del mapa a `/admin/orders/map`; `/admin/map` queda como redirect de compatibilidad.
 - Se agregó base Playwright en `frontend-ruta` con suite inicial para asignación de courier y entrega COD.
+- PR abierto: https://github.com/orkoruta/frontend-ruta/pull/16
 - La ejecución local de Chromium queda bloqueada por dependencia del sistema `libnspr4.so`; `pnpm exec playwright install-deps chromium` requiere `sudo` interactivo.
 
 ---

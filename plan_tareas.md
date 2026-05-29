@@ -565,32 +565,41 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas merge
 
 # Sprint 3 — Flujo SHIP completo (2 semanas)
 
-## 3.BACK-1 — Asignación de Repartidor [L]
+## 3.BACK-1 — Asignación de Repartidor [L] ✅ 2026-05-29
 
-[ ] Service con `assignCourier` (optimistic lock).
-[ ] Endpoints admin.
+[x] Service con `assignCourier` (optimistic lock).
+[x] Endpoints admin (assign, unassign, available-couriers, map).
+    PR #9 mergeado a `main` (2026-05-29).
 
-## 3.BACK-2 — Endpoints COURIER [L]
+## 3.BACK-2 — Endpoints COURIER [L] ✅ 2026-05-29
 
-[ ] Todas las transiciones del courier.
-[ ] Solo opera sus propios pedidos.
+[x] Todas las transiciones del courier (startShipping, markOutForDelivery,
+    arrive, markDelivered, recordFailedAttempt, returnToOrigin).
+[x] Solo opera sus propios pedidos (validación courier_user_id).
+    PR #12 mergeado a `main` (2026-05-29).
 
-## 3.BACK-3 — Cobro contra entrega [L]
+## 3.BACK-3 — Cobro contra entrega [L] ✅ 2026-05-29
 
-[ ] `recordCollection()` con upload de evidencia.
-[ ] Endpoint multipart.
+[x] `recordCollection()` con validación COD, stub evidencia, audit_event.
+[x] Endpoint multipart `POST /courier/orders/:id/record-collection`.
+    PR #12 mergeado a `main` (2026-05-29).
 
-## 3.BACK-4 — Cancelación post-despacho [M]
+## 3.BACK-4 — Cancelación post-despacho [M] ✅ 2026-05-29
 
-[ ] CUSTOMER_CANCEL_REQUEST y review por admin.
+[x] CUSTOMER_CANCEL_REQUEST ya existía; approveCancelRequest, rejectCancelRequest.
+[x] Endpoints admin approve/reject en admin_orders.ts.
+    PR #11 mergeado a `main` (2026-05-29).
 
-## 3.BACK-5 — RETURN_TO_ORIGIN [M]
+## 3.BACK-5 — RETURN_TO_ORIGIN [M] ✅ 2026-05-29
 
-[ ] Transición tras intentos agotados.
+[x] returnToOrigin y returnToOriginReceived en orders.service.ts.
+[x] Endpoints admin en admin_orders.ts.
+    PR #11 mergeado a `main` (2026-05-29).
 
-## 3.BACK-6 — Auto-confirmación de entregados [M]
+## 3.BACK-6 — Auto-confirmación de entregados [M] ✅ 2026-05-29
 
-[ ] Job que transiciona DELIVERED → CONFIRMED_BY_SYSTEM.
+[x] Job cron horario que transiciona DELIVERED → CONFIRMED_BY_SYSTEM.
+    PR #10 mergeado a `main` (2026-05-29).
 
 ## 3.ADMIN-1 — Mapa de asignación [XL]
 
@@ -599,11 +608,12 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas merge
 [ ] Asignación con confirmación.
 [ ] Auto-refresh.
 
-## 3.ADMIN-2 — Vista COURIER móvil-first [XL]
+## 3.ADMIN-2 — Vista COURIER móvil-first [XL] ✅ 2026-05-29
 
-[ ] `/courier` con tabs.
-[ ] Detalle con botones grandes.
-[ ] Form de cobro con cámara para evidencia.
+[x] `/courier` con tabs Asignados / En camino / Completados.
+[x] Detalle con botones grandes, dirección Google Maps, teléfono clickeable.
+[x] Form de cobro con cámara para evidencia (capture="environment").
+    PR #14 mergeado a `main` (2026-05-29).
 
 ## 3.QA-1 — E2E flujo SHIP [L]
 

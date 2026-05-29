@@ -768,14 +768,14 @@ Lee primero:
 |---|---|---|---|---|---|
 | Pre-wave: verificar shared | — | — | ✅ 2026-05-28 | — | — |
 | `3.SHARED-1` recordCollectionSchema | — | `packages-ruta` | ✅ 2026-05-28 | — | publicado 1.3.0 |
-| `3.BACK-1` Asignación courier | BACK-A | `feat/back-3-1` | `[ ]` | — | — |
-| `3.BACK-2+3` Endpoints + cobro | BACK-B | `feat/back-3-2-3` | `[ ]` desbloqueado | — | — |
-| `3.BACK-4+5` Cancel + RETURN | BACK-C | `feat/back-3-4-5` | `[ ]` | — | — |
-| `3.BACK-6` Auto-confirmación | BACK-D | `feat/back-3-6` | `[ ]` | — | — |
-| `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | `[ ]` | — | — |
-| Integration: mounts app.ts | — | — | `[ ]` | — | — |
-| `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | ⏳ espera BACK-A | — | — |
-| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | ⏳ espera Wave 1+2 | — | — |
+| `3.BACK-1` Asignación courier | BACK-A | `feat/back-3-1` | ✅ 2026-05-29 | #9 | ✅ main |
+| `3.BACK-2+3` Endpoints + cobro | BACK-B | `feat/back-3-2-3` | ✅ 2026-05-29 | #12 | ✅ main |
+| `3.BACK-4+5` Cancel + RETURN | BACK-C | `feat/back-3-4-5` | ✅ 2026-05-29 | #11 | ✅ main |
+| `3.BACK-6` Auto-confirmación | BACK-D | `feat/back-3-6` | ✅ 2026-05-29 | #10 | ✅ main |
+| `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | ✅ 2026-05-29 | #14 | ✅ main |
+| Integration: mounts app.ts | — | — | `[ ]` pendiente | — | — |
+| `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | `[ ]` desbloqueado | — | — |
+| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | ⏳ espera Wave 2 | — | — |
 
 ---
 

@@ -4,10 +4,10 @@
 
 ## Estado actual
 
-- Sprint 0, 1 y 2: completos.
-- Sprint 3: Wave 1 backend y Wave 2 frontend completas; QA E2E en curso.
-- PR abierto frontend-ruta #16: base Playwright, suite inicial SHIP y corrección de ruta canónica del mapa.
-- PR abierto docs-ruta #6: actualización documental de Sprint 3.
+- Sprint 0, 1, 2 y 3: completos.
+- Sprint 3 cerró el 2026-05-29 con backend, frontend, integración y QA E2E en `main`.
+- No quedan PRs abiertos asociados al Sprint 3.
+- Siguiente foco: Sprint 4 — flujo PICKUP.
 
 ## Sprint 3
 
@@ -15,19 +15,18 @@
 - Frontend mergeado a `main`: vista courier móvil-first y mapa de asignación.
 - Integración backend en `api/src/app.ts` completada.
 - Ruta operativa esperada del mapa: `/admin/orders/map`.
-- `/admin/map` queda como redirect de compatibilidad en PR frontend-ruta #16.
+- `/admin/map` queda como redirect de compatibilidad.
 
 ## QA E2E
 
 - Playwright agregado en `frontend-ruta`.
-- Suite inicial: `tests/e2e/ship_full_flow.spec.ts`.
-- `pnpm exec playwright test --list` detecta 4 tests.
-- Ejecución local de Chromium bloqueada por `libnspr4.so`.
-- Para desbloquear: instalar dependencias con `pnpm exec playwright install-deps chromium` en un entorno con `sudo`.
+- Suite: `tests/e2e/ship_full_flow.spec.ts`.
+- CI de frontend-ruta ejecuta `pnpm exec playwright test --project=chromium`.
+- PR frontend-ruta #16 mergeado: https://github.com/orkoruta/frontend-ruta/pull/16
+- Cobertura E2E Sprint 3 en CI: asignación de courier, entrega COD, intento fallido y pedido confirmado por sistema.
 
 ## Próximo paso
 
-1. Mergear frontend-ruta #16 y docs-ruta #6 cuando CI/review estén listos.
-2. Instalar dependencias nativas de Playwright en el runner/local.
-3. Ejecutar `pnpm exec playwright test --project=chromium`.
-4. Completar `3.QA-1` con happy path real y dos flujos alternos.
+1. Abrir Sprint 4 — flujo PICKUP.
+2. Mantener Playwright en CI para los flujos críticos nuevos.
+3. Si se corre E2E localmente, instalar dependencias nativas con `pnpm exec playwright install-deps chromium` en un entorno con `sudo`.

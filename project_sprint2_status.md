@@ -28,5 +28,5 @@ Estado al 2026-05-29:
 - Wave 1 backend completa y mergeada a `main`.
 - Vista courier móvil y mapa de asignación completos y mergeados a `main`.
 - Integración de mounts en `backend-ruta/api/src/app.ts` completa.
-- `3.QA-1` arrancado en PR frontend-ruta #16 con base Playwright y suite inicial.
-- Bloqueo actual: ejecución local de Chromium requiere dependencias nativas (`libnspr4.so`) instalables con `pnpm exec playwright install-deps chromium` y `sudo`.
+- `3.QA-1` completado y mergeado en frontend-ruta #16.
+- Sprint 3 completo; siguiente foco: Sprint 4 — flujo PICKUP.

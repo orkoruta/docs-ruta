@@ -618,15 +618,16 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas merge
 [x] Form de cobro con cámara para evidencia (capture="environment").
     PR #14 mergeado a `main` (2026-05-29).
 
-## 3.QA-1 — E2E flujo SHIP [L] 🏗️ 2026-05-29
+## 3.QA-1 — E2E flujo SHIP [L] ✅ 2026-05-29
 
-[/] Base Playwright agregada en frontend-ruta.
-[/] Suite inicial para asignación de courier y entrega COD.
-[ ] Suite completa con happy path real + 2 alternos.
-    PR frontend-ruta #16 abierto.
-    `pnpm exec playwright test --list` EXIT 0 (4 tests detectados).
-    Ejecución Chromium bloqueada localmente por dependencia nativa faltante:
-    `libnspr4.so`; `pnpm exec playwright install-deps chromium` requiere `sudo`.
+[x] Base Playwright agregada en frontend-ruta.
+[x] Suite para asignación de courier y entrega COD.
+[x] Flujos alternos: intento fallido y pedido confirmado por sistema.
+[x] CI ejecuta `pnpm exec playwright test --project=chromium`.
+    PR #16 mergeado a `main` (2026-05-29). CI EXIT 0.
+
+**Criterio fin Sprint 3: ✅ COMPLETO 2026-05-29.** Flujo SHIP cubierto por backend,
+frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del sprint.
 
 ---
 

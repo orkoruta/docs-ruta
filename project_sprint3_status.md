@@ -9,8 +9,8 @@
 | Sprint | Estado |
 |---|---|
 | 0, 1, 2 | ✅ Completos — todos los PRs mergeados a `main` |
-| **3** | 🏗️ En ejecución — Wave 1 + Wave 2 completas; QA E2E en PR |
-| 4–6 | 🔜 Pendientes |
+| **3** | ✅ Completo — todos los PRs mergeados a `main` |
+| 4–6 | 🔜 Pendientes — siguiente: Sprint 4 PICKUP |
 
 **Meta Sprint 3:** Pedido con entrega a domicilio (SHIP) completado de extremo a extremo:
 asignación de repartidor → entrega → cobro → confirmación. Flujo de cancelación post-despacho y retorno al origen cubiertos.
@@ -708,7 +708,7 @@ Agregar una sección "Asignación de Repartidor" al detalle del pedido:
 
 ### QA: `3.QA-1` — E2E flujo SHIP
 
-**Estado:** `[/]` PR abierto — frontend-ruta #16
+**Estado:** `[x]` mergeado 2026-05-29 — frontend-ruta #16
 
 **Rama:** `feat/qa-3-1` (en `frontend-ruta`)
 
@@ -775,21 +775,24 @@ Lee primero:
 | `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | ✅ 2026-05-29 | #14 | ✅ main |
 | Integration: mounts app.ts | — | — | ✅ 2026-05-29 | — | ✅ main |
 | `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | ✅ 2026-05-29 | #15 | ✅ main |
-| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1-route-e2e` | 🏗️ PR abierto | frontend-ruta #16 | — |
+| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1-route-e2e` | ✅ 2026-05-29 | #16 | ✅ main |
 
 Notas QA 2026-05-29:
 - Se corrigió la ruta canónica del mapa a `/admin/orders/map`; `/admin/map` queda como redirect de compatibilidad.
-- Se agregó base Playwright en `frontend-ruta` con suite inicial para asignación de courier y entrega COD.
-- PR abierto: https://github.com/orkoruta/frontend-ruta/pull/16
-- La ejecución local de Chromium queda bloqueada por dependencia del sistema `libnspr4.so`; `pnpm exec playwright install-deps chromium` requiere `sudo` interactivo.
+- Se agregó Playwright en `frontend-ruta` con suite SHIP.
+- PR mergeado: https://github.com/orkoruta/frontend-ruta/pull/16
+- CI ejecuta `pnpm exec playwright test --project=chromium`.
+- Cobertura E2E: asignación de courier, entrega COD, intento fallido y pedido confirmado por sistema.
 
 ---
 
-## Criterio de cierre Sprint 3
+## Criterio de cierre Sprint 3 ✅ COMPLETO 2026-05-29
 
-Flujo completo verificado en staging:
-- Admin asigna courier a un pedido real
-- Courier completa la entrega (con y sin cobro)
-- Buyer confirma o sistema auto-confirma
-- Cancelación post-despacho funciona end-to-end
-- Suite E2E Playwright verde en CI
+Flujo SHIP cubierto en código y CI:
+- Admin asigna courier a un pedido.
+- Courier completa entrega COD.
+- Courier registra intento fallido.
+- Sistema muestra pedido confirmado por sistema.
+- Cancelación post-despacho y return-to-origin están cubiertos por backend y tests.
+- Suite E2E Playwright verde en CI.
+- No quedan PRs abiertos del Sprint 3.

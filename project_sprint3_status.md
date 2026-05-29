@@ -9,7 +9,7 @@
 | Sprint | Estado |
 |---|---|
 | 0, 1, 2 | ✅ Completos — todos los PRs mergeados a `main` |
-| **3** | 🏗️ En ejecución — Pre-wave completo, Wave 1 desbloqueada parcialmente |
+| **3** | 🏗️ En ejecución — Wave 1 + Wave 2 completas, QA E2E arrancado |
 | 4–6 | 🔜 Pendientes |
 
 **Meta Sprint 3:** Pedido con entrega a domicilio (SHIP) completado de extremo a extremo:
@@ -595,7 +595,7 @@ app.use('/courier', courierOrdersRouter);         // 3.BACK-2+3
 
 Commit directo en main o como parte del último PR de la wave.
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado 2026-05-29
 
 ---
 
@@ -773,9 +773,14 @@ Lee primero:
 | `3.BACK-4+5` Cancel + RETURN | BACK-C | `feat/back-3-4-5` | ✅ 2026-05-29 | #11 | ✅ main |
 | `3.BACK-6` Auto-confirmación | BACK-D | `feat/back-3-6` | ✅ 2026-05-29 | #10 | ✅ main |
 | `3.ADMIN-2` Vista courier | FRONT-A | `feat/admin-3-2` | ✅ 2026-05-29 | #14 | ✅ main |
-| Integration: mounts app.ts | — | — | `[ ]` pendiente | — | — |
-| `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | `[ ]` desbloqueado | — | — |
-| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | ⏳ espera Wave 2 | — | — |
+| Integration: mounts app.ts | — | — | ✅ 2026-05-29 | — | ✅ main |
+| `3.ADMIN-1` Mapa asignación | FRONT-B | `feat/admin-3-1` | ✅ 2026-05-29 | #15 | ✅ main |
+| `3.QA-1` E2E SHIP | QA | `feat/qa-3-1` | 🏗️ arrancado | — | — |
+
+Notas QA 2026-05-29:
+- Se corrigió la ruta canónica del mapa a `/admin/orders/map`; `/admin/map` queda como redirect de compatibilidad.
+- Se agregó base Playwright en `frontend-ruta` con suite inicial para asignación de courier y entrega COD.
+- La ejecución local de Chromium queda bloqueada por dependencia del sistema `libnspr4.so`; `pnpm exec playwright install-deps chromium` requiere `sudo` interactivo.
 
 ---
 

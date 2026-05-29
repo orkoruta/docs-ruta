@@ -642,10 +642,10 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 4.BACK-1 — Endpoints PICKUP [L]
 
-[ ] Transiciones específicas.
-[ ] Validación de identidad.
-[ ] Cobro en punto.
-[ ] Job `pickup_expiration`.
+[x] Transiciones específicas.
+[x] Validación de identidad.
+[x] Cobro en punto.
+[x] Job `pickup_expiration`.
 
 ## 4.ADMIN-1 — UI operación en punto físico [M]
 

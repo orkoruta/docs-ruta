@@ -633,6 +633,13 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 # Sprint 4 — Flujo PICKUP (1 semana)
 
+## 4.FIX-1 — Admin pickup-points CRUD (gap Sprint 1) [S]
+
+[x] Servicio `pickup_points.service.ts` con list, getById, create, update, activate, deactivate.
+[x] Router `admin_pickup_points.ts` montado en `/admin/pickup-points`.
+[x] Tests unitarios con mock de servicio (40 tests, todos pasan).
+[x] Auditoría en `audit_events` por cada mutación.
+
 ## 4.BACK-1 — Endpoints PICKUP [L]
 
 [ ] Transiciones específicas.

@@ -649,9 +649,13 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 4.ADMIN-1 — UI operación en punto físico [M]
 
-[ ] Botones específicos de PICKUP.
+[x] Botones específicos de PICKUP.
 
-## 4.QA-1 — E2E flujo PICKUP [M]
+## 4.QA-1 — E2E flujo PICKUP [M] ✅ 2026-05-29
+
+[x] Suite Playwright en `tests/e2e/pickup_full_flow.spec.ts` (6 escenarios, 12 tests).
+[x] Patrón idéntico a ship_full_flow: sesión via sessionStorage, API via page.route().
+[x] Cubre: identidad+entregado (prepago), COD+entregado, aislamiento SHIP, aislamiento estado, OPERATOR_CLIENT, error inline.
 
 ---
 
@@ -665,15 +669,15 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 5.BACK-2 — Dashboards [L]
 
-[ ] Endpoints de métricas Cliente y globales.
+[x] Endpoints de métricas Cliente y globales.
 
 ## 5.BACK-3 — Parámetros [M]
 
-[ ] GET/PATCH de `client_parameters`.
+[x] GET/PATCH de `client_parameters`.
 
 ## 5.BACK-4 — Auditoría [M]
 
-[ ] Endpoint con filtros amplios.
+[x] Endpoint con filtros amplios.
 
 ## 5.ADMIN-1 — Pantalla Vista de Control [M]
 

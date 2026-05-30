@@ -863,11 +863,11 @@ docs-ruta/guias/
 |--------|------|--------|-------|-----------------|--------|
 | S4 | 4.0 | ZERO | 4.FIX-1 Admin pickup-points CRUD | backend-ruta | ✅ COMPLETADO 2026-05-29 |
 | S4 | 4.1 | A | 4.BACK-1 Flujo PICKUP backend | backend-ruta | ✅ COMPLETADO 2026-05-29 |
-| S4 | 4.1 | B | 4.ADMIN-1 UI punto físico | frontend-ruta/admin | ⬜ PENDIENTE |
-| S4 | 4.2 | C | 4.QA-1 E2E PICKUP | frontend-ruta/e2e | ⬜ PENDIENTE |
+| S4 | 4.1 | B | 4.ADMIN-1 UI punto físico | frontend-ruta/admin | ✅ COMPLETADO 2026-05-29 |
+| S4 | 4.2 | C | 4.QA-1 E2E PICKUP | frontend-ruta/e2e | ✅ COMPLETADO 2026-05-29 |
 | S5 | 5.1 | D | 5.BACK-1 Vista de Control | backend-ruta | ⬜ PENDIENTE |
-| S5 | 5.1 | E | 5.BACK-2 Métricas | backend-ruta | ⬜ PENDIENTE |
-| S5 | 5.1 | F | 5.BACK-3+4 Parámetros + Auditoría | backend-ruta | ⬜ PENDIENTE |
+| S5 | 5.1 | E | 5.BACK-2 Métricas | backend-ruta | ✅ COMPLETADO 2026-05-29 |
+| S5 | 5.1 | F | 5.BACK-3+4 Parámetros + Auditoría | backend-ruta | ✅ COMPLETADO 2026-05-29 |
 | S5 | 5.2 | G | 5.ADMIN-1 Vista de Control frontend | frontend-ruta/admin | ⬜ PENDIENTE |
 | S5 | 5.2 | H | 5.ADMIN-2 Dashboards | frontend-ruta/admin | ⬜ PENDIENTE |
 | S5 | 5.2 | I | 5.ADMIN-3+4 Config + Auditoría UI | frontend-ruta/admin | ⬜ PENDIENTE |

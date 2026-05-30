@@ -8,7 +8,20 @@ Accedes al panel en `app.ruta.com` con tu correo y contraseña. Al iniciar sesi�
 
 ---
 
-## 1. Lista de pedidos
+## 1. Dashboard
+
+Al iniciar sesión verás el dashboard con el resumen del día:
+
+- **Pedidos de hoy**: cuántos pedidos se han creado en el día.
+- **Pedidos en tránsito**: pedidos ya despachados y en camino al comprador.
+- **Entregados hoy**: pedidos completados en el día.
+- **Últimos pedidos**: tabla con los 10 pedidos más recientes.
+
+Desde el dashboard puedes acceder directamente a los pedidos pendientes de acción.
+
+---
+
+## 2. Lista de pedidos
 
 ### Qué pedidos puedes ver
 
@@ -26,7 +39,7 @@ Puedes ver todos los pedidos del negocio al que perteneces. No tienes acceso a p
 
 ---
 
-## 2. Operación de pedidos SHIP (entrega a domicilio)
+## 3. Operación de pedidos SHIP (entrega a domicilio)
 
 Los pedidos de entrega a domicilio siguen estos pasos. Como operador puedes intervenir en cada uno:
 
@@ -52,7 +65,7 @@ Cuando un pedido pasa la validación automática del sistema, aparece en estado 
 
 ---
 
-## 3. Operación en punto físico (PICKUP)
+## 4. Operación en punto físico (PICKUP)
 
 Cuando un comprador elige retirar su pedido en un punto físico, tú o el personal del punto deben gestionar la entrega presencialmente.
 
@@ -88,7 +101,7 @@ El proceso varía según el método de pago elegido por el comprador:
 
 ---
 
-## 4. Qué NO puedes hacer como OPERATOR_CLIENT
+## 5. Qué NO puedes hacer como OPERATOR_CLIENT
 
 Para evitar confusión, estas son acciones que están fuera de tu alcance:
 

@@ -29,7 +29,7 @@ Toca una de las tarjetas para ver el detalle de ese pedido.
 
 ## 2. Iniciar una entrega
 
-Cuando te asignan un pedido aparece en la pestaña **Activos** con el estado **Asignado**.
+Cuando te asignan un pedido aparece en la pestaña **Asignados** con el estado **Asignado**.
 
 ### Pasos para salir a entregar
 

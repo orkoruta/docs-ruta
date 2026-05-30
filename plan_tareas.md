@@ -690,9 +690,11 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 5.ADMIN-3 — Configuración [L]
 
-[ ] Tabs: info, pagos (Wompi), webhooks, parámetros.
+[x] Tabs: info, pagos (Wompi), webhooks, parámetros.
 
 ## 5.ADMIN-4 — Auditoría [M]
+
+[x] Tabla paginada con filtros (entity_type, user_id, from, to). Soporta ADMIN_CLIENT y ADMIN_RUTA.
 
 ---
 

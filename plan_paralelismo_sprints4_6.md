@@ -868,7 +868,7 @@ docs-ruta/guias/
 | S5 | 5.1 | D | 5.BACK-1 Vista de Control | backend-ruta | ✅ COMPLETADO 2026-05-29 |
 | S5 | 5.1 | E | 5.BACK-2 Métricas | backend-ruta | ✅ COMPLETADO 2026-05-29 |
 | S5 | 5.1 | F | 5.BACK-3+4 Parámetros + Auditoría | backend-ruta | ✅ COMPLETADO 2026-05-29 |
-| S5 | 5.2 | G | 5.ADMIN-1 Vista de Control frontend | frontend-ruta/admin | ⬜ PENDIENTE |
+| S5 | 5.2 | G | 5.ADMIN-1 Vista de Control frontend | frontend-ruta/admin | ✅ COMPLETADO 2026-05-30 |
 | S5 | 5.2 | H | 5.ADMIN-2 Dashboards | frontend-ruta/admin | ⬜ PENDIENTE |
 | S5 | 5.2 | I | 5.ADMIN-3+4 Config + Auditoría UI | frontend-ruta/admin | ⬜ PENDIENTE |
 | S6 | 6.1 | J | 6.INFRA-1 Observabilidad | backend-ruta, infra-ruta | ⬜ PENDIENTE |

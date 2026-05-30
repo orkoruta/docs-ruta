@@ -681,8 +681,8 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 5.ADMIN-1 — Pantalla Vista de Control [M]
 
-[ ] Form con master password.
-[ ] Banner ámbar.
+[x] Form con master password.
+[x] Banner ámbar.
 
 ## 5.ADMIN-2 — Dashboards [M]
 

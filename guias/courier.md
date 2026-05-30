@@ -15,12 +15,13 @@ La app está diseñada para usarse desde el móvil. Los botones son grandes y f�
 3. Toca **Iniciar sesión**.
 4. El sistema te lleva directamente a tu lista de pedidos.
 
-### Las 2 pestañas principales
+### Las 3 pestañas principales
 
-Al entrar verás dos pestañas en la parte superior:
+Al entrar verás tres pestañas en la parte superior:
 
-- **Activos**: los pedidos que te han asignado y están en curso (por entregar).
-- **Completados hoy**: los pedidos que ya terminaste en el día de hoy.
+- **Asignados**: los pedidos que te asignaron y aún no has empezado a entregar.
+- **En camino**: los pedidos que ya saliste a entregar y están en tránsito.
+- **Completados**: los pedidos que ya terminaste (entregados o devueltos al origen).
 
 Toca una de las tarjetas para ver el detalle de ese pedido.
 
@@ -125,7 +126,7 @@ Si necesitas registrar una entrega urgente sin señal, comunícate con el negoci
 
 ### ¿Cómo sé a qué pedidos fui asignado?
 
-Todos los pedidos que te han asignado aparecen en la pestaña **Activos** de tu app. El negocio es quien te asigna pedidos desde el mapa de asignación. Si esperas un pedido y no aparece en tu app, comunícate con el administrador del negocio.
+Todos los pedidos que te han asignado aparecen en la pestaña **Asignados** de tu app. El negocio es quien te asigna pedidos desde el mapa de asignación. Si esperas un pedido y no aparece en tu app, comunícate con el administrador del negocio.
 
 ### ¿Puedo ver pedidos de otros repartidores?
 

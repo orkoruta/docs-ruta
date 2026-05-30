@@ -686,7 +686,7 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 5.ADMIN-2 — Dashboards [M]
 
-[ ] Cliente y global.
+[x] Cliente y global.
 
 ## 5.ADMIN-3 — Configuración [L]
 

@@ -663,9 +663,9 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 
 ## 5.BACK-1 — Vista de Control [L]
 
-[ ] enterControlView, exitControlView.
-[ ] Verificación master password.
-[ ] Auditoría completa.
+[x] enterControlView, exitControlView.
+[x] Verificación master password.
+[x] Auditoría completa.
 
 ## 5.BACK-2 — Dashboards [L]
 

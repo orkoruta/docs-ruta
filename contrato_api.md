@@ -2,7 +2,7 @@
 
 ## Convenciones generales
 
-- **Base URL:** `https://api.ruta.com/v1` (prefijo `/v1` para versionado).
+- **Base URL:** `https://api.ruta.com` (sin prefijo de versión; el backend no usa `/v1`).
 - **Formato:** JSON UTF-8. `Content-Type: application/json`.
 - **Auth:** JWT en cookie HttpOnly `ruta_access_token` (modo navegador)
   o header `Authorization: Bearer <token>` (modo API).
@@ -635,8 +635,8 @@ Este documento describe el contrato a nivel funcional. La spec
 OpenAPI 3.1 completa se genera automáticamente desde los handlers
 de Express (usando `zod-to-openapi`) y se publica en:
 
-`https://api.ruta.com/v1/openapi.json` y
-`https://api.ruta.com/v1/docs` (Swagger UI).
+`https://api.ruta.com/openapi.json` y
+`https://api.ruta.com/docs` (Swagger UI).
 
 La generación automática garantiza que la documentación nunca esté
 desincronizada del código.

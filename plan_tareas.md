@@ -558,8 +558,7 @@ entrega.
     suite completa EXIT 0 (3662 tests, 1 skipped); `pnpm typecheck`
     EXIT 0.
 
-**Criterio fin Sprint 2: ✅ COMPLETO 2026-05-28.** Pedido real con Wompi sandbox completado de
-extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas mergeadas a `main`.
+**Criterio fin Sprint 2: ✅ COMPLETO 2026-05-28.** Pedido real con Wompi sandbox completado de extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas mergeadas a `main`.
 
 ---
 
@@ -626,8 +625,7 @@ extremo a extremo hasta READY_TO_SHIP o READY_FOR_PICKUP. Todas las tareas merge
 [x] CI ejecuta `pnpm exec playwright test --project=chromium`.
     PR #16 mergeado a `main` (2026-05-29). CI EXIT 0.
 
-**Criterio fin Sprint 3: ✅ COMPLETO 2026-05-29.** Flujo SHIP cubierto por backend,
-frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del sprint.
+**Criterio fin Sprint 3: ✅ COMPLETO 2026-05-29.** Flujo SHIP cubierto por backend, frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del sprint.
 
 ---
 
@@ -667,34 +665,43 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 [x] Verificación master password.
 [x] Auditoría completa.
 
-## 5.BACK-2 — Dashboards [L]
+## 5.BACK-2 — Dashboards [L] ✅ 2026-05-30
 
 [x] Endpoints de métricas Cliente y globales.
+    PR #20 mergeado a `main` (2026-05-30). metrics.service.ts + global_metrics.service.ts.
 
-## 5.BACK-3 — Parámetros [M]
+## 5.BACK-3 — Parámetros [M] ✅ 2026-05-30
 
 [x] GET/PATCH de `client_parameters`.
+    PR #20 mergeado a `main` (2026-05-30). admin_parameters.ts.
 
-## 5.BACK-4 — Auditoría [M]
+## 5.BACK-4 — Auditoría [M] ✅ 2026-05-30
 
 [x] Endpoint con filtros amplios.
+    PR #20 mergeado a `main` (2026-05-30). admin_audit.ts (tenant + cross-tenant ADMIN_RUTA).
 
-## 5.ADMIN-1 — Pantalla Vista de Control [M]
+## 5.ADMIN-1 — Pantalla Vista de Control [M] ✅ 2026-05-30
 
 [x] Form con master password.
 [x] Banner ámbar.
+    PR #19 mergeado a `main` (2026-05-30). ruta-admin/control-view/page.tsx + RutaHeader banner conectado.
 
-## 5.ADMIN-2 — Dashboards [M]
+## 5.ADMIN-2 — Dashboards [M] ✅ 2026-05-30
 
 [x] Cliente y global.
+    PR #21 mergeado a `main` (2026-05-30). admin/dashboard + ruta-admin/dashboard + metrics.api.ts.
 
-## 5.ADMIN-3 — Configuración [L]
+## 5.ADMIN-3 — Configuración [L] ✅ 2026-05-30
 
 [x] Tabs: info, pagos (Wompi), webhooks, parámetros.
+    PR #20 (frontend-ruta) mergeado a `main` (2026-05-30). 4 tabs con edición inline de parámetros.
 
-## 5.ADMIN-4 — Auditoría [M]
+## 5.ADMIN-4 — Auditoría [M] ✅ 2026-05-30
 
 [x] Tabla paginada con filtros (entity_type, user_id, from, to). Soporta ADMIN_CLIENT y ADMIN_RUTA.
+    PR #20 (frontend-ruta) mergeado a `main` (2026-05-30).
+
+**Criterio fin Sprint 5: ✅ COMPLETO 2026-05-30.** Wave 5.1 (backend) y Wave 5.2 (frontend) mergeadas. 4 PRs totales. CI verde en ambos repos. No quedan PRs abiertos.
 
 ---
 
@@ -730,9 +737,10 @@ frontend, integración y suite E2E Playwright en CI. No quedan PRs abiertos del 
 [ ] Soporte vivo configurando catálogo, Wompi, repartidores.
 [ ] Primer pedido real.
 
-## 6.QA-4 — Documentación de usuario [M]
+## 6.QA-4 — Documentación de usuario [M] ✅ 2026-05-30
 
-[ ] Guía ADMIN_CLIENT, OPERATOR_CLIENT, COURIER, BUYER.
+[x] Guía ADMIN_CLIENT, OPERATOR_CLIENT, COURIER, BUYER.
+    PR docs-ruta feat/docs-6-4 → main (2026-05-30). 4 guías completas.
 
 ---
 

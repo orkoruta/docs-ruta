@@ -866,16 +866,16 @@ docs-ruta/guias/
 | S4 | 4.1 | B | 4.ADMIN-1 UI punto físico | frontend-ruta/admin | ✅ COMPLETADO 2026-05-29 |
 | S4 | 4.2 | C | 4.QA-1 E2E PICKUP | frontend-ruta/e2e | ✅ COMPLETADO 2026-05-29 |
 | S5 | 5.1 | D | 5.BACK-1 Vista de Control | backend-ruta | ✅ COMPLETADO 2026-05-29 |
-| S5 | 5.1 | E | 5.BACK-2 Métricas | backend-ruta | ✅ COMPLETADO 2026-05-29 |
-| S5 | 5.1 | F | 5.BACK-3+4 Parámetros + Auditoría | backend-ruta | ✅ COMPLETADO 2026-05-29 |
-| S5 | 5.2 | G | 5.ADMIN-1 Vista de Control frontend | frontend-ruta/admin | ✅ COMPLETADO 2026-05-30 |
-| S5 | 5.2 | H | 5.ADMIN-2 Dashboards | frontend-ruta/admin | ✅ COMPLETADO 2026-05-30 |
-| S5 | 5.2 | I | 5.ADMIN-3+4 Config + Auditoría UI | frontend-ruta/admin | ✅ COMPLETADO 2026-05-30 |
+| S5 | 5.1 | E | 5.BACK-2 Métricas | backend-ruta | ✅ MERGEADO PR #20 2026-05-30 |
+| S5 | 5.1 | F | 5.BACK-3+4 Parámetros + Auditoría | backend-ruta | ✅ MERGEADO PR #20 2026-05-30 |
+| S5 | 5.2 | G | 5.ADMIN-1 Vista de Control frontend | frontend-ruta/admin | ✅ MERGEADO PR #19 2026-05-30 |
+| S5 | 5.2 | H | 5.ADMIN-2 Dashboards | frontend-ruta/admin | ✅ MERGEADO PR #21 2026-05-30 |
+| S5 | 5.2 | I | 5.ADMIN-3+4 Config + Auditoría UI | frontend-ruta/admin | ✅ MERGEADO PR #20 2026-05-30 |
 | S6 | 6.1 | J | 6.INFRA-1 Observabilidad | backend-ruta, infra-ruta | ⬜ PENDIENTE |
 | S6 | 6.1 | K | 6.INFRA-3 Webhooks salientes | backend-ruta, admin | ⬜ PENDIENTE |
 | S6 | 6.1 | L | 6.QA-1+2 Suite E2E + cobertura | frontend-ruta/e2e, backend-ruta | ⬜ PENDIENTE |
 | S6 | 6.2 | M | 6.INFRA-2 Backups BD | infra-ruta | ⬜ PENDIENTE |
-| S6 | 6.2 | N | 6.QA-4 Docs usuario | docs-ruta | ⬜ PENDIENTE |
+| S6 | 6.2 | N | 6.QA-4 Docs usuario | docs-ruta | ✅ COMPLETADO 2026-05-30 |
 | S6 | 6.3 | O | 6.INFRA-4 + 6.QA-3 Deploy + piloto | cross-repo + prod | ⬜ PENDIENTE |
 
 **Leyenda:** ⬜ PENDIENTE · 🔄 EN CURSO · ✅ COMPLETADO · ❌ BLOQUEADO
@@ -940,14 +940,13 @@ Sprint 5 cerrado
 
 | Fecha | Evento |
 |-------|--------|
-| — | Wave 5.1 arranca (3 agentes) |
-| — | 5.BACK-1 mergeado |
-| — | 5.BACK-2 mergeado |
-| — | 5.BACK-3+4 mergeado — Wave 5.2 desbloqueada |
-| — | Wave 5.2 arranca (3 agentes) |
-| — | 5.ADMIN-1 mergeado |
-| — | 5.ADMIN-2 mergeado |
-| — | 5.ADMIN-3+4 mergeado — **Sprint 5 CERRADO** |
+| 2026-05-29 | Wave 5.1 arranca (3 agentes) |
+| 2026-05-29 | 5.BACK-1 mergeado — PR #18 (backend-ruta) |
+| 2026-05-30 | 5.BACK-2+3+4 mergeado — PR #20 (backend-ruta) — Wave 5.2 desbloqueada |
+| 2026-05-30 | Wave 5.2 mergeada (3 PRs simultáneos) |
+| 2026-05-30 | 5.ADMIN-1 mergeado — PR #19 (frontend-ruta) |
+| 2026-05-30 | 5.ADMIN-3+4 mergeado — PR #20 (frontend-ruta) |
+| 2026-05-30 | 5.ADMIN-2 mergeado — PR #21 (frontend-ruta) — **Sprint 5 CERRADO** |
 
 ### Sprint 6
 
@@ -958,7 +957,7 @@ Sprint 5 cerrado
 | — | 6.INFRA-3 mergeado |
 | — | 6.QA-1+2 mergeado |
 | — | 6.INFRA-2 mergeado |
-| — | 6.QA-4 mergeado |
+| 2026-05-30 | 6.QA-4 mergeado — PR docs-ruta feat/docs-6-4 → main |
 | — | ✋ APROBACIÓN HUMANA para Wave 6.3 |
 | — | 6.INFRA-4 — Deploy prod completado |
 | — | 6.QA-3 — Primer pedido real ✓ — **Sprint 6 CERRADO** |

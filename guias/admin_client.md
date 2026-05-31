@@ -175,10 +175,21 @@ Edita el nombre, descripción, logo y datos de contacto de tu negocio. Estos dat
 
 ### Webhooks salientes
 
-Esta sección permite que RUTA notifique a sistemas externos cada vez que ocurre un evento importante (por ejemplo, cuando un pedido cambia de estado).
+Esta sección permite que RUTA notifique a sistemas externos cada vez que ocurre un evento importante (por ejemplo, cuando un pedido cambia de estado). Es útil para integrar RUTA con tu ERP, tu sistema de bodega o cualquier otra herramienta externa.
 
-- **Historial de entregas**: muestra cada notificación enviada con su resultado (exitosa o fallida).
-- **Reintentar fallidos**: si una notificación falló, haz clic en el botón de reintento para enviarla de nuevo.
+#### Cómo agregar una suscripción de webhook
+
+1. En la pestaña **Webhooks salientes** haz clic en **Agregar webhook**.
+2. Completa el formulario:
+   - **URL de destino**: la dirección del endpoint en tu sistema que recibirá las notificaciones.
+   - **Eventos**: selecciona los tipos de eventos que quieres recibir (por ejemplo: `order.status_changed`, `order.delivered`, `payment.confirmed`).
+   - **Secreto (opcional)**: si tu sistema necesita verificar que las notificaciones vienen de RUTA, ingresa un secreto. RUTA firmará cada notificación con ese secreto en el header `X-Ruta-Signature`.
+3. Haz clic en **Guardar**.
+
+#### Historial y reintentos
+
+- **Historial de entregas**: muestra cada notificación enviada con su resultado (exitosa o fallida) y el código de respuesta HTTP que devolvió tu sistema.
+- **Reintentar fallidos**: si una notificación falló (por ejemplo, tu sistema estuvo caído momentáneamente), haz clic en el botón **Reintentar** para reenviarla. RUTA también hace reintentos automáticos con espera progresiva (1 min, 5 min, 15 min, 60 min, 4 horas).
 
 ### Parámetros del sistema
 

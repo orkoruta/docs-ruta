@@ -707,31 +707,46 @@ entrega.
 
 # Sprint 6 — Hardening, observabilidad, deploy, piloto (1 semana)
 
-## 6.QA-1 — Suite E2E completa [L]
+## 6.QA-1 — Suite E2E completa [L] ✅ 2026-05-30
 
-## 6.QA-2 — Cobertura >85% [M]
+[x] 14 tests Playwright: ship_full_flow (4), pickup_full_flow (6), full_suite (4).
+    Cancelación buyer, auditoría, Vista de Control ADMIN_RUTA.
+    PR frontend-ruta #23 mergeado a main.
 
-## 6.INFRA-1 — Observabilidad [L]
+## 6.QA-2 — Cobertura >85% [M] ✅ 2026-05-30
 
-[ ] Logs JSON estructurados.
-[ ] Integración con Logtail / Better Stack / Axiom.
-[ ] Métricas y alerting básico.
+[x] 3947 tests Vitest passed. Coverage config + 4 suites adicionales.
+    PR backend-ruta #23 mergeado a main.
 
-## 6.INFRA-2 — Backups y restore probado [M]
+## 6.INFRA-1 — Observabilidad [L] ✅ 2026-05-30
 
-## 6.INFRA-3 — Webhooks salientes [L]
+[x] Logs JSON estructurados (pino, trace_id, client_id, user_id por request).
+[x] Integración con Logtail / Better Stack (@logtail/pino transport en prod).
+[x] lib/logger.ts singleton + middleware enriquecido.
+    PR backend-ruta #21 mergeado a main.
 
-[ ] Cola pg-boss con reintentos.
-[ ] UI para historial y reintentos.
+## 6.INFRA-2 — Backups y restore probado [M] ✅ 2026-05-30
 
-## 6.INFRA-4 — Deploy a producción [M]
+[x] scripts/backup_db.sh — pg_dump gzip, retención configurable, logging.
+[x] scripts/restore_db.sh — validación, flag --yes para CI, verify post-restore.
+[x] docs/backup_restore.md — guía completa con cron Render/SO.
+    PR infra-ruta #4 mergeado a main.
+
+## 6.INFRA-3 — Webhooks salientes [L] ✅ 2026-05-30
+
+[x] Cola pg-boss con reintentos automáticos (1m, 5m, 15m, 60m, 4h).
+[x] UI WebhooksTab: historial real de entregas + reintentos.
+    PR backend-ruta #22 + PR frontend-ruta #22 mergeados a main.
+
+## 6.INFRA-4 — Deploy a producción [M] ⬜ REQUIERE ACCIÓN HUMANA
 
 [ ] Aplicar SQL en prod (BD OCI).
 [ ] DNS reales (api.ruta.com, app.ruta.com, tienda.ruta.com).
-[ ] Wompi prod.
+[ ] Wompi prod (llaves de producción en Render env vars).
 [ ] Deploy las 3 apps en Render prod.
+    Nota: render.yaml ya configurado. Solo falta DNS + env vars Wompi prod.
 
-## 6.QA-3 — Onboarding Cliente piloto [M]
+## 6.QA-3 — Onboarding Cliente piloto [M] ⬜ REQUIERE ACCIÓN HUMANA
 
 [ ] ADMIN_RUTA crea Cliente piloto.
 [ ] Soporte vivo configurando catálogo, Wompi, repartidores.
@@ -740,7 +755,7 @@ entrega.
 ## 6.QA-4 — Documentación de usuario [M] ✅ 2026-05-30
 
 [x] Guía ADMIN_CLIENT, OPERATOR_CLIENT, COURIER, BUYER.
-    PR docs-ruta feat/docs-6-4 → main (2026-05-30). 4 guías completas.
+    PR docs-ruta #8 mergeado a main. 4 guías completas (640+ líneas).
 
 ---
 

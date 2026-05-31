@@ -1,15 +1,29 @@
 ﻿# MEMORIA DEL PROYECTO RUTA
 
-## Actualización operativa — 2026-05-29
+## Actualización operativa — 2026-05-30
 
-- Sprint 0, 1, 2 y 3 están completos.
-- Sprint 3 cerró el 2026-05-29 con Wave 1 backend, Wave 2 frontend, integración y QA E2E mergeados a `main`.
-- Backend SHIP mergeado: asignación de repartidor, endpoints courier, cobro contra entrega, cancelación post-despacho, return-to-origin y auto-confirmación.
-- Frontend SHIP mergeado: vista courier móvil-first y mapa de asignación.
-- Integración backend en `api/src/app.ts` completada.
-- PR frontend-ruta #16 mergeado: base Playwright, suite SHIP en CI y corrección de ruta canónica del mapa a `/admin/orders/map` con redirect desde `/admin/map`.
-- PR docs-ruta #6 mergeado: actualización documental del estado Sprint 3.
-- `3.QA-1` quedó cerrado con Playwright en CI (`pnpm exec playwright test --project=chromium`), cubriendo asignación de courier, entrega COD, intento fallido y pedido confirmado por sistema.
+**Sprint 0–6 (código) COMPLETOS. Pendiente solo deploy producción + piloto (acción humana).**
+
+### Sprints completados
+
+- **Sprint 0** ✅ — Setup multi-repo, GitHub Packages, BD dev, seed, deploy inicial Render.
+- **Sprint 1** ✅ — Auth JWT, CRUD clientes/productos/compradores/repartidores, importación Excel, admin UI, storefront catálogo/registro BUYER.
+- **Sprint 2** ✅ — Carrito, checkout (SHIP/PICKUP/OSM/Wompi/COD), Wompi webhook HMAC, jobs mantenimiento, mis pedidos BUYER. `@orkoruta/shared@1.2.0`.
+- **Sprint 3** ✅ — Flujo SHIP completo: asignación courier (mapa Leaflet), cobro COD, cancelación, return-to-origin, auto-confirmación. Vista courier móvil-first. `@orkoruta/shared@1.3.0`. 3686 tests.
+- **Sprint 4** ✅ — Flujo PICKUP: pickup_ops.service, admin_pickup_ops, pickup_expiration.job, PickupActions UI, E2E PICKUP.
+- **Sprint 5** ✅ — Vista de Control (impersonación auditada), dashboards ADMIN_CLIENT y ADMIN_RUTA, Configuración (4 tabs: info, Wompi, webhooks, parámetros), Auditoría.
+- **Sprint 6** ✅ (código) — Observabilidad pino+Logtail, webhooks salientes pg-boss, cobertura >85% (3947 tests), backup/restore BD, E2E 14 tests (3 specs), guías usuario 4 roles, packages-ruta binaryTargets cross-platform.
+
+### Pendiente (requiere acción humana)
+- **6.INFRA-4**: DNS reales (api/app/tienda.ruta.com), llaves Wompi producción en Render, aplicar SQL prod en OCI.
+- **6.QA-3**: Onboarding cliente piloto + primer pedido real.
+
+### Stack de producción (Render)
+- API: `ruta-api` + `ruta-api-worker` — auto-deploy desde `main` de backend-ruta.
+- Admin: `ruta-admin` (Next.js) — auto-deploy desde `main` de frontend-ruta.
+- Storefront: `ruta-storefront` (Next.js) — auto-deploy desde `main` de frontend-ruta.
+- BD: PostgreSQL OCI `149.130.168.24:26432`, schema `ruta`.
+- Packages: `@orkoruta/shared@1.3.0` + `@orkoruta/db@1.0.0` en GitHub Packages (org: orkoruta).
 
 > Documento de **memoria operativa** para Claude Cowork (y cualquier
 > agente IA o persona) que necesite tomar los archivos generados en la

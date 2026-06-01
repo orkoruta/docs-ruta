@@ -1,5 +1,17 @@
 ﻿# MEMORIA DEL PROYECTO RUTA
 
+> **ARCHIVO HISTÓRICO — NO USAR COMO FUENTE DE VERDAD**
+>
+> Este archivo es el sistema de memoria anterior (pre Claude Code).
+> La fuente de verdad del estado del proyecto son:
+> - Manifiestos `CLAUDE.md` / `AGENTS.md` en cada repo (secciones 0.2 y 0.3)
+> - Directorio de memoria de Claude Code para este proyecto
+> - `docs-ruta/plan_fase3.md` para el estado de Fase 3
+>
+> No actualizar este archivo. Conservado solo como referencia histórica.
+
+---
+
 ## Actualización operativa — 2026-05-30
 
 **Sprint 0–6 (código) COMPLETOS. Pendiente solo deploy producción + piloto (acción humana).**

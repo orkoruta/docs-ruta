@@ -348,87 +348,16 @@ contexto:
 |---|---|
 | `memoria_proyecto_ruta.md` | `ruta/docs-ruta/memoria_proyecto_ruta.md` |
 
-## 3.3 Crear README mÃ­nimo en cada repo (opcional pero recomendado)
+## 3.3 README por repo
 
-En cada uno de los siguientes destinos, crear un `README.md` con el
-contenido placeholder indicado:
+Esta seccion queda obsoleta como instruccion operativa. No debe recrearse
+ningun README borrado ni tratarse como obligatorio que cada repo tenga un
+README local.
 
-### `ruta/backend-ruta/README.md`
-
-```markdown
-# ruta-backend
-
-Backend Express + TypeScript de RUTA.
-
-- Manifiesto: ver `CLAUDE.md` y `AGENTS.md` en este repo.
-- DocumentaciÃ³n completa: ver repo `ruta-docs` (carpeta local `docs-ruta/`).
-- Plan de tareas: ver `docs-ruta/plan_tareas.md`.
-```
-
-### `ruta/frontend-ruta/README.md`
-
-```markdown
-# ruta-frontend
-
-Frontend Next.js de RUTA: panel admin + storefront nativo.
-
-- Manifiesto: ver `CLAUDE.md` y `AGENTS.md` en este repo.
-- DocumentaciÃ³n: ver repo `ruta-docs` (carpeta local `docs-ruta/`).
-- Design system: vive en `packages/ui/` (no se publica externamente).
-```
-
-### `ruta/packages-ruta/README.md`
-
-```markdown
-# ruta-shared
-
-Paquetes compartidos: `@ruta/shared` (tipos, validators, enums) y
-`@ruta/db` (Prisma client).
-
-- DistribuciÃ³n: GitHub Packages.
-- Manifiesto: ver `CLAUDE.md` y `AGENTS.md`.
-- DocumentaciÃ³n: ver repo `ruta-docs`.
-```
-
-### `ruta/docs-ruta/README.md`
-
-```markdown
-# ruta-docs
-
-DocumentaciÃ³n completa del proyecto RUTA.
-
-**Lee primero:** `all_ruta.md` (descripciÃ³n funcional general).
-
-**Para agentes IA:** carga `memoria_proyecto_ruta.md` como contexto
-o lee `CLAUDE.md` / `AGENTS.md`.
-
-**Para arrancar desarrollo:** ver `plan_tareas.md` (sprints).
-```
-
-### `ruta/infra-ruta/README.md`
-
-```markdown
-# ruta-infra
-
-Scripts de despliegue y setup de RUTA.
-
-- `scripts/setup_workspace.sh` â€” clona los 5 repos base.
-- `scripts/create_landing.sh` â€” crea un landing custom usando como
-  base local `frontend-clients-ruta/_template`.
-- Manifiesto: ver `CLAUDE.md` y `AGENTS.md`.
-```
-
-### `ruta/frontend-clients-ruta/_template/README.md`
-
-```markdown
-# landing-template
-
-Template base para crear landings custom de Clientes Full (modalidad
-CUSTOM_LANDING_BY_RUTA).
-
-Para crear un landing nuevo desde este template local, ejecutar
-`bash ~/projects/ruta/infra-ruta/scripts/create_landing.sh {slug}`.
-```
+Fuentes vigentes para agentes y documentacion:
+- `CLAUDE.md` y `AGENTS.md` donde existan en cada repo.
+- `docs-ruta/memoria_proyecto_ruta.md`.
+- Documentos autoritativos dentro de `docs-ruta/`.
 
 ## 3.4 Resumen del estado final esperado
 
@@ -439,13 +368,11 @@ local debe verse asÃ­:
 ~/projects/ruta/
 â”œâ”€â”€ backend-ruta/
 â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â”œâ”€â”€ AGENTS.md
-â”‚   â””â”€â”€ README.md
+â”‚   â””â”€â”€ AGENTS.md
 â”‚
 â”œâ”€â”€ frontend-ruta/
 â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â”œâ”€â”€ AGENTS.md
-â”‚   â””â”€â”€ README.md
+â”‚   â””â”€â”€ AGENTS.md
 â”‚
 â”œâ”€â”€ frontend-clients-ruta/
 â”‚   â””â”€â”€ _template/
@@ -455,13 +382,11 @@ local debe verse asÃ­:
 â”‚
 â”œâ”€â”€ packages-ruta/
 â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â”œâ”€â”€ AGENTS.md
-â”‚   â””â”€â”€ README.md
+â”‚   â””â”€â”€ AGENTS.md
 â”‚
 â”œâ”€â”€ docs-ruta/
 â”‚   â”œâ”€â”€ CLAUDE.md
 â”‚   â”œâ”€â”€ AGENTS.md
-â”‚   â”œâ”€â”€ README.md
 â”‚   â”œâ”€â”€ memoria_proyecto_ruta.md
 â”‚   â”œâ”€â”€ all_ruta.md
 â”‚   â”œâ”€â”€ mvp_alcance.md
@@ -506,7 +431,7 @@ local debe verse asÃ­:
 **Conteo de archivos:**
 - 6 copias de `CLAUDE.md` (5 repos base + template local)
 - 6 copias de `AGENTS.md` (5 repos base + template local)
-- 6 archivos `README.md` (5 repos base + template local)
+- Los README locales no son obligatorios; no recrear README borrados.
 - 22 archivos de contenido Ãºnicos en `docs-ruta/` (incluye esta
   memoria)
 
@@ -646,7 +571,7 @@ consideran resueltas.
 
 | Fecha | Tipo | DescripciÃ³n | Docs afectados | Sprint |
 |---|---|---|---|---|
-| 2026-05-24 | ðŸ“ Setup | CreaciÃ³n inicial de `CODEBUFF.md` â€” manifiesto para Codebuff/Buffy con flujo automÃ¡tico de trabajo, herramientas, comandos por repo y reglas operativas. Removido posteriormente el 2026-05-26 por decision del usuario; `AGENTS.md` y `CLAUDE.md` quedan como manifiestos vigentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-24 | ðŸ“ Setup | CreaciÃ³n inicial de un manifiesto experimental para agente. Removido posteriormente el 2026-05-26 por decision del usuario; `AGENTS.md` y `CLAUDE.md` quedan como manifiestos vigentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-24 | ðŸ“ Setup | RevisiÃ³n completa del proyecto: diagnÃ³stico de documentaciÃ³n (âœ… completa) y cÃ³digo (âŒ nada escrito aÃºn) | `memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-24 | ðŸ“ Setup | VerificaciÃ³n de compatibilidad de `.md` con Codebuff/DeepSeek â€” confirmado que `AGENTS.md` es suficiente como manifiesto general para agentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-24 | ðŸ“ Setup | Agregada PARTE 6 (HistÃ³rico de cambios) a este documento. | `memoria_proyecto_ruta.md` | Sprint 0 |
@@ -673,7 +598,7 @@ consideran resueltas.
 | 2026-05-26 | Infraestructura | Removido el `.git` local que se habia inicializado en `frontend-clients-ruta/_template` durante la correccion anterior; queda nuevamente como carpeta local sin repo, acorde a la decision del usuario. | `frontend-clients-ruta/_template` | Sprint 0 |
 | 2026-05-26 | Infraestructura | Cerrada `0.INFRA-1`: verificados como publicos los cinco repos base en `orkoruta` (`backend-ruta`, `frontend-ruta`, `packages-ruta`, `docs-ruta`, `infra-ruta`); remotos locales apuntan a sus URLs `https://github.com/orkoruta/*.git`; aplicada branch protection en `main` con enforce admins y 1 review obligatorio en los cinco repos. Status checks obligatorios: `CI / test` en `backend-ruta` y `packages-ruta`, `CI / ci` en `frontend-ruta`; `docs-ruta` e `infra-ruta` quedan sin status checks por no tener workflows CI. URLs documentadas en `plan_tareas.md`. | GitHub `orkoruta`, remotos locales, `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-26 | Documentacion | Cerrada `0.DOCS-1`: documentacion inicial consolidada en `docs-ruta`, manifiestos y plan/memoria actualizados; normalizados finales de linea en archivos de texto para que `git diff --check` pase limpio. Commit local `92b5ddb` en rama `docs/close-0-docs-1`; rama subida a GitHub y PR abierto contra `main`: https://github.com/orkoruta/docs-ruta/pull/1. | `docs-ruta`, `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md`, GitHub PR #1 | Sprint 0 |
-| 2026-05-26 | Documentacion | Removido `CODEBUFF.md` del proyecto por solicitud del usuario; `AGENTS.md` y `CLAUDE.md` quedan como manifiestos vigentes para agentes. PR #1 actualizado. Verificacion: `git diff --check` OK. | `docs-ruta/memoria_proyecto_ruta.md`, GitHub PR #1 | Sprint 0 |
+| 2026-05-26 | Documentacion | Removido el manifiesto experimental por solicitud del usuario; `AGENTS.md` y `CLAUDE.md` quedan como manifiestos vigentes para agentes. PR #1 actualizado. Verificacion: `git diff --check` OK. | `docs-ruta/memoria_proyecto_ruta.md`, GitHub PR #1 | Sprint 0 |
 | 2026-05-26 | Documentacion | PR #1 de `0.DOCS-1` aprobado y mergeado a `main`; `main` local sincronizada con `origin/main`. | GitHub PR #1, `docs-ruta/main` | Sprint 0 |
 | 2026-05-26 | Infraestructura | Avance de `0.INFRA-4`: verificado secret `NPM_PUBLISH_TOKEN` en `orkoruta/packages-ruta`; autenticacion npm contra GitHub Packages OK como `axmz-dev`; confirmadas versiones publicadas `@orkoruta/shared@1.0.0` y `@orkoruta/db@1.0.0`; instalacion real desde `/tmp` OK para ambos paquetes; `packages-ruta pnpm run ci` OK; `pack --dry-run` OK para ambos paquetes; agregado script idempotente `scripts/publish-packages.mjs` para que el workflow no falle si la version ya existe; PR abierto en `packages-ruta`: https://github.com/orkoruta/packages-ruta/pull/1. Estado del PR: mergeable, CI `test` SUCCESS, review requerida. | `packages-ruta`, GitHub Packages, `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-27 | Infraestructura | Cerrada `0.INFRA-4`: PR #1 de `packages-ruta` mergeado a `main` (CI `test` SUCCESS). CI workflows de `backend-ruta` y `frontend-ruta` pusheados a `main`. `0.INFRA-1` queda completamente cerrada. Siguiente bloqueo: cambiar dependencias `file:` de `@orkoruta/shared` y `@orkoruta/db` a versiones publicadas en GitHub Packages en `backend-ruta` y `frontend-ruta` (`0.BACK-1` y `0.FRONT-1`). | `packages-ruta/main`, `backend-ruta/.github/workflows/ci.yml`, `frontend-ruta/.github/workflows/ci.yml` | Sprint 0 |
@@ -701,7 +626,7 @@ consideran resueltas.
 
 | Tarea | Estado | DescripciÃ³n | Archivos / commits |
 |---|---|---|---|
-| `0.DOCS-1` (ext.) | [-] | `CODEBUFF.md` removido por decision del usuario; se conserva la memoria historica y quedan vigentes `AGENTS.md` / `CLAUDE.md`. | `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.DOCS-1` (ext.) | [-] | Manifiesto experimental removido por decision del usuario; quedan vigentes `AGENTS.md` / `CLAUDE.md`. | `docs-ruta/memoria_proyecto_ruta.md` |
 | `0.DOCS-1` (ext.) | âœ… | RevisiÃ³n de compatibilidad de `.md` con Codebuff/DeepSeek | â€” |
 | `0.DOCS-1` (ext.) | âœ… | Agregada PARTE 6 â€” HistÃ³rico de cambios a memoria del proyecto | `docs-ruta/memoria_proyecto_ruta.md` |
 | `0.DOCS-1` (ext.) | âœ… | Regla de actualizaciÃ³n de memoria incorporada en la memoria viva del proyecto | `docs-ruta/memoria_proyecto_ruta.md` |

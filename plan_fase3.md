@@ -46,7 +46,8 @@ los bloques y aprobar la Validación Pre-Deploy Final (ver al final).
 4. Registrar resultado en el campo "Registro de ejecución" de este plan.
 5. Marcar la tarea como `[x]` en la Tabla de avance global.
 6. Avanzar al siguiente task solo si todas las validaciones pasaron.
-7. **NO hacer push. NO abrir PR.**
+7. **NO hacer push del código de funcionalidades. NO abrir PR de implementación.**
+   (Docs y configuración sí pueden pushearse con normalidad.)
 
 ### Manejo de paquetes durante el desarrollo local
 

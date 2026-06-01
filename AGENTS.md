@@ -353,3 +353,8 @@ Cuando dudes:
 ### Pendiente (acción humana)
 - Deploy a producción: checklist en `infra-ruta/docs/deploy_produccion.md`.
 - Onboarding del cliente piloto.
+
+### Simplificaciones intencionales de Fase 1 (no son bugs)
+
+**Flujo PICKUP — bypass de estados intermedios:**
+El state machine define los estados `AT_PICKUP_POINT → CUSTOMER_ARRIVED_AT_PICKUP_POINT → IDENTITY_VALIDATED → PICKED_UP` pero en Fase 1 no existen endpoints de API para transitarlos. El flujo real usa el atajo `READY_FOR_PICKUP → DELIVERED` via `POST /admin/orders/:id/pickup/mark-delivered`. Los estados intermedios y el endpoint `verify-pickup-identity` (en `pickup_ops.service.ts`) existen en el modelo pero no cambian estado del pedido — solo registran en `audit_events`. En Fase 2 se implementarán los endpoints completos para el flujo de verificación de identidad con cambio de estado.

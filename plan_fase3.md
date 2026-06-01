@@ -4,33 +4,39 @@ Alineado con `mvp_alcance.md` (sección Fase 3), `all_ruta.md` y los flujos
 `flujo_4_refund_completo.txt` a `flujo_7_devoluciones_post_cierre.txt`.
 **Inicio estimado:** tras deploy a producción de Fase 2.
 **Duración estimada:** 8-12 semanas calendario (6 bloques en paralelo parcial).
-**Estrategia:** desarrollo 100% local — sin pushes, PRs ni despliegues parciales.
-El deploy a GitHub y producción ocurre **una sola vez**, cuando toda la Fase 3
-esté completa y aprobada (ver Estrategia de desarrollo más abajo).
+**Estrategia:** el **código de funcionalidades** de Fase 3 vive en ramas locales
+hasta que toda la fase esté completa y aprobada. Docs, CLAUDE.md, AGENTS.md y
+plan files se commitean y pushean con normalidad (ver Estrategia de desarrollo).
 
 ---
 
 ## Principio de Fase 3
 
 Los 6 bloques pueden desarrollarse en paralelo respetando sus dependencias.
-Sin embargo, **la Fase 3 se desarrolla enteramente en local**: no se sube nada
-a GitHub mientras la fase no esté completa, validada y libre de errores.
+El **código de funcionalidades** de Fase 3 permanece en ramas locales hasta
+que toda la fase esté completa, validada y libre de errores. Los cambios de
+documentación y configuración (CLAUDE.md, AGENTS.md, plan files) se commitean
+y pushean a GitHub con normalidad.
 
-El deploy a GitHub y a producción es único: se realiza al terminar todos
+El deploy del código de Fase 3 a GitHub es único: se realiza al terminar todos
 los bloques y aprobar la Validación Pre-Deploy Final (ver al final).
 
 ---
 
 ## Estrategia de desarrollo: local-first, deploy único al final
 
-> **REGLA ABSOLUTA:** Todo el desarrollo de Fase 3 ocurre en ramas locales.
-> Está **prohibido** hacer push, abrir PRs, mergear, publicar paquetes a GitHub
-> Packages ni desplegar en Render mientras existan bloques incompletos, errores,
-> warnings o pruebas fallidas.
+> **REGLA:** Todo el **código de funcionalidades** de Fase 3 vive en ramas
+> locales. Está **prohibido** hacer push de código de Fase 3, abrir PRs,
+> mergear implementaciones, publicar bumps de `@orkoruta/shared` generados
+> por Fase 3 ni desplegar en Render mientras existan bloques incompletos,
+> errores, warnings o pruebas fallidas.
 >
-> El deploy a GitHub y a producción ocurre **una sola vez**: cuando todos
-> los bloques estén terminados, validados, probados y libres de errores,
-> warnings o inconsistencias de datos.
+> Los cambios de documentación y configuración (CLAUDE.md, AGENTS.md,
+> plan files, etc.) **sí pueden** commitearse y pushearse con normalidad.
+>
+> El deploy del código de Fase 3 a GitHub ocurre **una sola vez**: cuando
+> todos los bloques estén terminados, validados, probados y libres de
+> errores, warnings o inconsistencias de datos.
 
 ### Flujo de trabajo por tarea
 
@@ -141,9 +147,11 @@ Igual que Fases 1 y 2: ningún avance se da por terminado sin verificación.
 > warnings críticos, pruebas fallidas, comportamiento incompleto o
 > inconsistencias de datos.
 >
-> **Regla de Fase 3:** todo el trabajo ocurre en ramas locales. No se hace
-> push ni se abre ningún PR hasta que **toda** la Fase 3 esté completa y
-> la Validación Pre-Deploy Final esté aprobada (ver al final del documento).
+> **Regla de Fase 3:** el código de funcionalidades permanece en ramas
+> locales. No se hace push de código de Fase 3 ni se abren PRs de
+> implementación hasta que **toda** la Fase 3 esté completa y la
+> Validación Pre-Deploy Final esté aprobada (ver al final del documento).
+> Docs y configuración pueden pushearse con normalidad.
 
 ---
 

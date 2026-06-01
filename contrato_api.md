@@ -4,7 +4,7 @@
 
 - **Base URL:** `https://api.ruta.com` (sin prefijo de versión; el backend no usa `/v1`).
 - **Formato:** JSON UTF-8. `Content-Type: application/json`.
-- **Auth:** JWT en cookie HttpOnly `ruta_access_token` (modo navegador)
+- **Auth:** JWT en cookie HttpOnly `access_token` (modo navegador)
   o header `Authorization: Bearer <token>` (modo API).
 - **Idempotencia:** header `X-Idempotency-Key: <uuid>` obligatorio en
   todos los POST / PUT / PATCH / DELETE.
@@ -68,7 +68,7 @@ Auto-registro de BUYER en una página de Cliente Full.
 }
 ```
 
-Set-Cookie: `ruta_access_token` y `ruta_refresh_token` (HttpOnly,
+Set-Cookie: `access_token` y `refresh_token` (HttpOnly,
 Secure, SameSite=Strict).
 
 ### `POST /auth/login`
@@ -632,11 +632,10 @@ endpoint por endpoint en implementación.
 ## OpenAPI
 
 Este documento describe el contrato a nivel funcional. La spec
-OpenAPI 3.1 completa se genera automáticamente desde los handlers
-de Express (usando `zod-to-openapi`) y se publica en:
+OpenAPI 3.1 publicada por el backend se expone en:
 
 `https://api.ruta.com/openapi.json` y
-`https://api.ruta.com/docs` (Swagger UI).
+`https://api.ruta.com/docs`.
 
-La generación automática garantiza que la documentación nunca esté
-desincronizada del código.
+La spec publicada es operativa y debe mantenerse sincronizada con los
+handlers de Express cuando cambie el contrato.

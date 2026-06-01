@@ -1850,7 +1850,8 @@ INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, v
 (0, 'order.pending_online_payment_timeout_minutes', '15', 'INTEGER', 'Tiempo máximo para completar pago online', TRUE),
 (0, 'order.validation_max_duration_minutes', '5', 'INTEGER', 'Tiempo máximo en ORDER_VALIDATING', TRUE),
 (0, 'order.manual_review_sla_hours', '24', 'INTEGER', 'SLA para resolver MANUAL_REVIEW', TRUE),
-(0, 'order.seller_confirmation_timeout_hours', '4', 'INTEGER', 'Tiempo para aceptación del vendedor', TRUE);
+(0, 'order.seller_confirmation_timeout_hours', '4', 'INTEGER', 'Tiempo para aceptación del vendedor', TRUE),
+(0, 'order.pickup_expiration_hours', '24', 'INTEGER', 'Tiempo máximo en READY_FOR_PICKUP antes de EXPIRED', TRUE);
 
 -- Plazos de despacho (Flujo 2)
 INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, value_type, description, is_overrideable_by_client) VALUES

@@ -160,7 +160,7 @@ Igual que Fases 1 y 2: ningún avance se da por terminado sin verificación.
 
 | Bloque | Tarea | Estado | Rama local | Fecha | Agente |
 |--------|-------|:------:|----|-------|--------|
-| 3.1 | F3.B1.1.SHARED-1 | `[ ]` | — | — | — |
+| 3.1 | F3.B1.1.SHARED-1 | `[x]` | f3/shared-1 | 2026-06-01 | Claude Sonnet 4.6 |
 | 3.1 | F3.B1.2.BACK-1 | `[ ]` | — | — | — |
 | 3.1 | F3.B1.2.BACK-2 | `[ ]` | — | — | — |
 | 3.1 | F3.B1.3.ADMIN-1 | `[ ]` | — | — | — |
@@ -175,7 +175,7 @@ Igual que Fases 1 y 2: ningún avance se da por terminado sin verificación.
 | 3.3 | F3.B3.3.ADMIN-1 | `[ ]` | — | — | — |
 | 3.3 | F3.B3.3.STORE-1 | `[ ]` | — | — | — |
 | 3.3 | F3.B3.4.QA-1 | `[ ]` | — | — | — |
-| 3.4 | F3.B4.1.SHARED-1 | `[ ]` | — | — | — |
+| 3.4 | F3.B4.1.SHARED-1 | `[x]` | f3/shared-1 | 2026-06-01 | Claude Sonnet 4.6 |
 | 3.4 | F3.B4.2.BACK-1 | `[ ]` | — | — | — |
 | 3.4 | F3.B4.2.BACK-2 | `[ ]` | — | — | — |
 | 3.4 | F3.B4.3.ADMIN-1 | `[ ]` | — | — | — |
@@ -213,7 +213,7 @@ REFUND_PROVIDER_REQUESTED → REFUNDED / PARTIALLY_REFUNDED / REFUND_FAILED`
 
 ### F3.B1.1.SHARED-1 — Bump `@orkoruta/shared` con schemas de reembolso [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 **Objetivo.** Publicar `@orkoruta/shared@1.5.0` con tipos y validators
 de reembolsos.
@@ -242,10 +242,10 @@ de reembolsos.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/shared-1 (packages-ruta)
+Tests ejecutados: 71 (23 nuevos para refund + recurrence, 48 previos)
+Resultado: pnpm build EXIT 0, pnpm test EXIT 0, pnpm typecheck EXIT 0
 ```
 
 ---
@@ -838,7 +838,7 @@ pedidos futuros.
 
 ### F3.B4.1.SHARED-1 — Schemas de recurrencia en @orkoruta/shared [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 **Archivos a crear/modificar:**
 
@@ -852,9 +852,9 @@ pedidos futuros.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/shared-1 (packages-ruta)
+Resultado: incluido en mismo commit que F3.B1.1.SHARED-1; pnpm build EXIT 0, pnpm test EXIT 0
 ```
 
 ---

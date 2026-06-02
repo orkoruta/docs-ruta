@@ -185,7 +185,7 @@ Igual que Fases 1 y 2: ningún avance se da por terminado sin verificación.
 | 3.5 | F3.B5.3.ADMIN-1 | `[x]` | f3/B5-ADMIN-1 | 2026-06-02 | Claude Sonnet 4.6 |
 | 3.5 | F3.B5.4.QA-1 | `[x]` | f3/B5-QA-1 | 2026-06-02 | Claude Sonnet 4.6 |
 | 3.6 | F3.B6.1.INFRA-1 | `[x]` | (directo, sin git) | 2026-06-02 | Claude Sonnet 4.6 |
-| 3.6 | F3.B6.2.LANDING-1 | `[ ]` | — | — | — |
+| 3.6 | F3.B6.2.LANDING-1 | `[x]` | (local, sin git) | 2026-06-02 | Claude Sonnet 4.6 |
 | 3.6 | F3.B6.3.INFRA-2 | `[x]` | (docs, sin git) | 2026-06-02 | Claude Sonnet 4.6 |
 
 ---
@@ -1272,7 +1272,7 @@ Resultado: orders/[id]/page.tsx (NUEVO) + recurrence/page.tsx (NUEVO) + checkout
 
 ### F3.B6.2.LANDING-1 — Primera landing custom real [XL]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B6.1.INFRA-1, Fase 2 en producción (hay un Cliente API para referenciar)
 
@@ -1311,11 +1311,11 @@ El trabajo de esta tarea es **por cada Cliente**:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Slug del cliente:
-Repo creado localmente:
-Validación local (flujo completo):
-Resultado:
+Fecha: 2026-06-02
+Slug del cliente: pizzeria-colina (client_id=2)
+Repo creado localmente: frontend-clients-ruta/pizzeria-colina/
+Validación local (flujo completo): typecheck EXIT 0, build EXIT 0; 10 rutas generadas
+Resultado: branding rojo/ámbar/verde pizza, Playfair+Inter, todas las páginas conectadas a la API; BLOQUE 3.6 COMPLETO
 ```
 
 ---

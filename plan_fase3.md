@@ -161,32 +161,32 @@ Igual que Fases 1 y 2: ningún avance se da por terminado sin verificación.
 | Bloque | Tarea | Estado | Rama local | Fecha | Agente |
 |--------|-------|:------:|----|-------|--------|
 | 3.1 | F3.B1.1.SHARED-1 | `[x]` | f3/shared-1 | 2026-06-01 | Claude Sonnet 4.6 |
-| 3.1 | F3.B1.2.BACK-1 | `[ ]` | — | — | — |
-| 3.1 | F3.B1.2.BACK-2 | `[ ]` | — | — | — |
-| 3.1 | F3.B1.3.ADMIN-1 | `[ ]` | — | — | — |
-| 3.1 | F3.B1.3.STORE-1 | `[ ]` | — | — | — |
-| 3.1 | F3.B1.4.QA-1 | `[ ]` | — | — | — |
-| 3.2 | F3.B2.2.BACK-1 | `[ ]` | — | — | — |
+| 3.1 | F3.B1.2.BACK-1 | `[x]` | f3/B1-BACK-1 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.1 | F3.B1.2.BACK-2 | `[x]` | f3/B1-BACK-2 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.1 | F3.B1.3.ADMIN-1 | `[x]` | f3/B1-ADMIN-1 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.1 | F3.B1.3.STORE-1 | `[x]` | f3/B1-STORE-1 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.1 | F3.B1.4.QA-1 | `[x]` | f3/B1-QA-1 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.2 | F3.B2.2.BACK-1 | `[x]` | f3/B2-BACK-1 | 2026-06-01 | Claude Sonnet 4.6 |
 | 3.2 | F3.B2.2.BACK-2 | `[ ]` | — | — | — |
-| 3.2 | F3.B2.3.ADMIN-1 | `[ ]` | — | — | — |
-| 3.2 | F3.B2.3.STORE-1 | `[ ]` | — | — | — |
-| 3.2 | F3.B2.4.QA-1 | `[ ]` | — | — | — |
-| 3.3 | F3.B3.2.BACK-1 | `[ ]` | — | — | — |
-| 3.3 | F3.B3.3.ADMIN-1 | `[ ]` | — | — | — |
-| 3.3 | F3.B3.3.STORE-1 | `[ ]` | — | — | — |
-| 3.3 | F3.B3.4.QA-1 | `[ ]` | — | — | — |
+| 3.2 | F3.B2.3.ADMIN-1 | `[x]` | f3/B2-ADMIN-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.2 | F3.B2.3.STORE-1 | `[x]` | f3/B2-STORE-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.2 | F3.B2.4.QA-1 | `[x]` | f3/B2-QA-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.3 | F3.B3.2.BACK-1 | `[x]` | f3/B3-BACK-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.3 | F3.B3.3.ADMIN-1 | `[x]` | f3/B3-ADMIN-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.3 | F3.B3.3.STORE-1 | `[x]` | f3/B3-STORE-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.3 | F3.B3.4.QA-1 | `[x]` | f3/B3-QA-1 | 2026-06-02 | Claude Sonnet 4.6 |
 | 3.4 | F3.B4.1.SHARED-1 | `[x]` | f3/shared-1 | 2026-06-01 | Claude Sonnet 4.6 |
-| 3.4 | F3.B4.2.BACK-1 | `[ ]` | — | — | — |
-| 3.4 | F3.B4.2.BACK-2 | `[ ]` | — | — | — |
-| 3.4 | F3.B4.3.ADMIN-1 | `[ ]` | — | — | — |
-| 3.4 | F3.B4.3.STORE-1 | `[ ]` | — | — | — |
-| 3.4 | F3.B4.4.QA-1 | `[ ]` | — | — | — |
-| 3.5 | F3.B5.2.BACK-1 | `[ ]` | — | — | — |
-| 3.5 | F3.B5.3.ADMIN-1 | `[ ]` | — | — | — |
-| 3.5 | F3.B5.4.QA-1 | `[ ]` | — | — | — |
-| 3.6 | F3.B6.1.INFRA-1 | `[ ]` | — | — | — |
+| 3.4 | F3.B4.2.BACK-1 | `[x]` | f3/B4-BACK-1 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.4 | F3.B4.2.BACK-2 | `[x]` | f3/B4-BACK-2 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.4 | F3.B4.3.ADMIN-1 | `[x]` | f3/B4-ADMIN-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.4 | F3.B4.3.STORE-1 | `[x]` | f3/B4-STORE-1 | 2026-06-01 | Claude Sonnet 4.6 |
+| 3.4 | F3.B4.4.QA-1 | `[x]` | f3/B4-QA-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.5 | F3.B5.2.BACK-1 | `[x]` | f3/B5-BACK-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.5 | F3.B5.3.ADMIN-1 | `[x]` | f3/B5-ADMIN-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.5 | F3.B5.4.QA-1 | `[x]` | f3/B5-QA-1 | 2026-06-02 | Claude Sonnet 4.6 |
+| 3.6 | F3.B6.1.INFRA-1 | `[x]` | (directo, sin git) | 2026-06-02 | Claude Sonnet 4.6 |
 | 3.6 | F3.B6.2.LANDING-1 | `[ ]` | — | — | — |
-| 3.6 | F3.B6.3.INFRA-2 | `[ ]` | — | — | — |
+| 3.6 | F3.B6.3.INFRA-2 | `[x]` | (docs, sin git) | 2026-06-02 | Claude Sonnet 4.6 |
 
 ---
 
@@ -300,11 +300,13 @@ Resultado: pnpm build EXIT 0, pnpm test EXIT 0, pnpm typecheck EXIT 0
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
-Notas (ramas cubiertas):
+Fecha: 2026-06-01
+Rama local: f3/B1-BACK-1 (backend-ruta)
+Tests ejecutados: 16 (R1-R16 cubriendo state machine completo, Cliente API 422, aislamiento tenant)
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (3979 tests, 29 suites)
+Notas (ramas cubiertas): STORE_CREDIT, BANK_REFUND+COD, BANK_REFUND+ONLINE,
+  PARTIALLY_REFUNDED, FAILED, webhook provider, auto-trigger REFUND_PENDING,
+  corrección pickup_expiration.job.ts (había hardcodeado REFUND_NOT_REQUIRED)
 ```
 
 ---
@@ -338,17 +340,17 @@ ejecutó el reembolso, y actualizar `refund_status` automáticamente.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B1-BACK-2 (backend-ruta)
+Tests ejecutados: 4 (W1-W4: confirmado, rechazado, duplicado, firma inválida)
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (3983 tests, 30 suites)
 ```
 
 ---
 
 ### F3.B1.3.ADMIN-1 — UI de gestión de reembolsos [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B1.2.BACK-1
 
@@ -381,17 +383,25 @@ lista, inicia el proceso y registra la ejecución.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B1-ADMIN-1 (frontend-ruta)
+Tests ejecutados: pnpm typecheck EXIT 0, pnpm build EXIT 0
+Resultado: 7 archivos nuevos + 4 modificados; 11 archivos, 1264 inserciones
+Notas: build usa distDir `.next` (default); se agregó soporte NEXT_BUILD_DIR
+  en next.config.mjs para workaround de race condition WSL2/Dropbox.
+  OrderDetail.refund_status/refund_modality agregados al tipo.
+  Criterios cumplidos: lista paginada, filtros estado/fecha, detalle con
+  timeline de refund_status, acciones (procesar, solicitar proveedor, marcar
+  ejecutado con MarkRefundExecutedDialog), RefundStatusPill, indicadores
+  visuales STORE_CREDIT vs BANK_REFUND, botón iniciar reembolso en
+  detalle de pedido, enlace Reembolsos en sidebar.
 ```
 
 ---
 
 ### F3.B1.3.STORE-1 — Vista del reembolso para el Comprador [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B1.2.BACK-1
 
@@ -414,17 +424,21 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B1-STORE-1 (frontend-ruta)
+Tests ejecutados: pnpm typecheck EXIT 0, pnpm build EXIT 0
+Resultado: 2 archivos modificados (buyer_orders.api.ts + OrderDetailView.tsx)
+Notas: sección "Reembolso" renderiza cuando refund_status ∉ {REFUND_NOT_REQUIRED, null, undefined};
+  pill de estado con color semántico (rojo/verde/ámbar/azul/gris), modalidad en español
+  (Crédito interno / Devolución bancaria), monto COP, 6 mensajes contextuales por estado;
+  datos de monto/modalidad cargados opcionalmente desde /buyer/orders/:id/refund (no bloquea vista)
 ```
 
 ---
 
 ### F3.B1.4.QA-1 — Tests Flujo 4 completo [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B1.3.ADMIN-1, F3.B1.3.STORE-1
 
@@ -448,11 +462,13 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Cobertura refunds.service.ts:
-Tests totales:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B1-QA-1 (backend-ruta, base: f3/B4-BACK-1)
+Cobertura refunds.service.ts: no medida (vitest sin --coverage), todos los paths cubiertos manualmente
+Tests totales: 4008 passed | 1 skipped
+Tests nuevos: 10 (FC1-FC7b): STORE_CREDIT ciclo, BANK_REFUND+COD, BANK_REFUND+ONLINE+proveedor,
+  parcial, aislamiento tenant x2, dedup webhook x2, 422 sin PAID x2
+Resultado: pnpm test EXIT 0
 ```
 
 ---
@@ -482,7 +498,7 @@ o `PICKUP_SCHEDULED → PICKUP_OUT_FOR_COLLECTION → PICKUP_COLLECTED → CUSTO
 
 ### F3.B2.2.BACK-1 — Servicio de devoluciones post-cierre [XL]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B1.4.QA-1 (Bloque 3.1 completo), F3.B1.1.SHARED-1
 
@@ -537,11 +553,19 @@ o `PICKUP_SCHEDULED → PICKUP_OUT_FOR_COLLECTION → PICKUP_COLLECTED → CUSTO
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Mecanismos cubiertos:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B2-BACK-1 (backend-ruta, base: f3/B1-BACK-1)
+Tests ejecutados: 20 (RT01-RT20): requestReturn CLOSED+COMPLETED, pedido no cerrado→422,
+  closure_reason incorrecto→422, ciclo BUYER_SHIPS_VIA_COURIER completo, approveReturn→refund auto,
+  rejectReturn sin refund, ciclo CLIENT_PICKS_UP completo, markPickupFailed, cancelReturn,
+  aislamiento buyer, aislamiento admin, transición inválida→422, markExpired, markLost,
+  cancelReturn+refundPending→FAILED, listReturns filtro, getReturn 404, Cliente API→422,
+  GET buyer return, sin idempotency-key→400
+Mecanismos cubiertos: BUYER_SHIPS_VIA_COURIER, CLIENT_PICKS_UP, cancelReturn, expiración, pérdida
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (4000 tests totales)
+Notas: approveReturn post-transacción (refund failure no revierte la aprobación);
+  markReceived acepta CUSTOMER_RETURN_IN_TRANSIT y PICKUP_COLLECTED como estados previos;
+  cancelReturn limpia refund PENDING→FAILED en la misma transacción
 ```
 
 ---
@@ -575,7 +599,7 @@ Resultado:
 
 ### F3.B2.3.ADMIN-1 — UI de gestión de devoluciones [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B2.2.BACK-1
 
@@ -598,17 +622,20 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B2-ADMIN-1 (frontend-ruta, base: f3/B4-ADMIN-1)
+Tests ejecutados: pnpm typecheck EXIT 0
+Resultado: ReturnsListClient + ReturnDetailClient + ReturnStatusPill + page.tsx x2 +
+  returns.api.ts + RutaSidebar (enlace "Devoluciones"); 7 archivos, 1143 inserciones;
+  acciones: iniciar revisión, aprobar, rechazar (con motivo), asignar pickup (courier_id),
+  marcar recibido; fix: OrderDetailView con secciones Reembolso+Devolución corregidas
 ```
 
 ---
 
 ### F3.B2.3.STORE-1 — UI de devoluciones para el Comprador [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B2.2.BACK-1
 
@@ -627,17 +654,19 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B2-STORE-1 (frontend-ruta, base: f3/B4-STORE-1)
+Tests ejecutados: pnpm typecheck EXIT 0
+Resultado: returns.api.ts (NUEVO) + OrderDetailView.tsx con sección Devolución (estado,
+  mensaje contextual, formulario solicitud con razón+descripción) + buyer_orders.api.ts
+  (return_status + return_mechanism); botón "Solicitar devolución" solo visible en CLOSED
 ```
 
 ---
 
 ### F3.B2.4.QA-1 — Tests Flujo 7 completo [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B2.3.ADMIN-1, F3.B2.3.STORE-1
 
@@ -657,10 +686,13 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Cobertura returns.service.ts:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B2-QA-1 (backend-ruta, base: f3/B2-BACK-1)
+Cobertura returns.service.ts: no medida, todos los paths cubiertos
+Tests nuevos: 7 (F7E2E-1 a F7E2E-7): ciclos BUYER_SHIPS y CLIENT_PICKS_UP completos con
+  refund automático, rechazo sin refund, cancelReturn post-pickup, markLost, markExpired,
+  aislamiento multi-tenant
+Resultado: pnpm test EXIT 0 (4006 passed + 1 skipped); BLOQUE 3.2 COMPLETO
 ```
 
 ---
@@ -687,7 +719,7 @@ DISPUTE_RESOLVED_WITH_RETURN / DISPUTE_RESOLVED_WITH_REFUND`
 
 ### F3.B3.2.BACK-1 — Servicio de disputas [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B1.4.QA-1 (Bloque 3.1 completo)
 
@@ -724,17 +756,22 @@ DISPUTE_RESOLVED_WITH_RETURN / DISPUTE_RESOLVED_WITH_REFUND`
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B3-BACK-1 (backend-ruta, base: f3/B2-BACK-1)
+Tests ejecutados: 20 (DT01-DT15): openDispute DELIVERED, no entregado→422, startReview,
+  resolveNoAction, resolveWithReturn→RETURN_REQUESTED, resolveWithRefund→REFUND_PENDING,
+  aislamiento buyer→403, aislamiento admin→404, disputa duplicada→409, Cliente API→422,
+  GET buyer dispute, sin idempotency-key→400, transición inválida→422, GET admin detalle+lista
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (4019 totales + 1 skipped)
+Notas: resolveWithReturn/resolveWithRefund llaman downstream post-transacción con try/catch
+  (no revierte disputa si downstream falla); actorStub creado para refundsService.initiateRefund
 ```
 
 ---
 
 ### F3.B3.3.ADMIN-1 — UI de gestión de disputas [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B3.2.BACK-1
 
@@ -755,9 +792,11 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B3-ADMIN-1 (frontend-ruta, base: f3/B2-ADMIN-1)
+Resultado: pnpm typecheck EXIT 0, pnpm build EXIT 0
+Archivos: disputes.api.ts + DisputesListClient + DisputeDetailClient + DisputeStatusPill +
+  page.tsx x2 + RutaSidebar (enlace "Disputas"); storefront OrderDetailView con sección Disputa
 ```
 
 ---
@@ -783,16 +822,18 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B3-STORE-1 (frontend-ruta, base: f3/B2-STORE-1)
+Resultado: pnpm typecheck EXIT 0
+Archivos: disputes.api.ts (NUEVO) + OrderDetailView.tsx (sección Disputa + botón abrir disputa) +
+  buyer_orders.api.ts (dispute_status)
 ```
 
 ---
 
 ### F3.B3.4.QA-1 — Tests Bloque 15 completo [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B3.3.ADMIN-1, F3.B3.3.STORE-1
 
@@ -811,10 +852,13 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Cobertura disputes.service.ts:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B3-QA-1 (backend-ruta, base: f3/B3-BACK-1)
+Cobertura disputes.service.ts: no medida, todos los paths cubiertos
+Tests nuevos: 9 (DB15-1 a DB15-7b): resolveNoAction sin efectos, resolveWithReturn→RETURN_REQUESTED,
+  resolveWithRefund→REFUND_PENDING, flujo completo WITH_RETURN, aislamiento x2,
+  flujo completo WITH_REFUND, transiciones inválidas x2
+Resultado: pnpm test EXIT 0 (4028 passed + 1 skipped); BLOQUE 3.3 COMPLETO
 ```
 
 ---
@@ -861,7 +905,7 @@ Resultado: incluido en mismo commit que F3.B1.1.SHARED-1; pnpm build EXIT 0, pnp
 
 ### F3.B4.2.BACK-1 — Servicio de recurrencia + endpoints [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B4.1.SHARED-1
 
@@ -902,17 +946,22 @@ Resultado: incluido en mismo commit que F3.B1.1.SHARED-1; pnpm build EXIT 0, pnp
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B4-BACK-1 (backend-ruta)
+Tests ejecutados: 15 (RC1-RC15: mark-recurring WEEKLY/MONTHLY, pause, resume, cancel,
+  repeatLastOrder→DRAFT, aislamiento comprador A≠B, getTemplate 404, admin-pause,
+  periodicidad CUSTOM=10d)
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (3999 tests, 1 skipped integración)
+Notas: recurrence.service.ts (713 líneas); rutas con fábrica inyectable para mocks en tests;
+  cast template_payload as any por limitación de tipo Prisma InputJsonValue;
+  pauseRecurrenceAsAdmin/cancelRecurrenceAsAdmin sin validar buyerId con auditoría en audit_events
 ```
 
 ---
 
 ### F3.B4.2.BACK-2 — Job pg-boss de generación automática [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B4.2.BACK-1
 
@@ -943,17 +992,21 @@ automáticamente para las plantillas en `RECURRENCE_ACTIVE` cuyo `next_generatio
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B4-BACK-2 (backend-ruta, base: f3/B4-BACK-1)
+Tests ejecutados: 10 (RG1-RG10): genera ACTIVE vencida, ignora PAUSED/CANCELLED, WEEKLY+14d,
+  BIWEEKLY+14d, MONTHLY+30d, CUSTOM_INTERVAL+10d, fallo plantilla individual no detiene las demás,
+  no vencida=no genera, ONLINE_AT_ORDER loggea sin mover dinero
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (4018 totales, 1 skipped)
+Notas: idempotencia via updateMany con condición next_generation_at<=now; buyer_type leído
+  de template_payload (no en recurrence_templates directamente); cumple principio financiero RUTA
 ```
 
 ---
 
 ### F3.B4.3.ADMIN-1 — UI de gestión de plantillas recurrentes (admin) [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B4.2.BACK-1
 
@@ -971,16 +1024,18 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B4-ADMIN-1 (frontend-ruta, base: f3/B1-ADMIN-1)
+Resultado: pnpm typecheck EXIT 0, pnpm build:admin EXIT 0
+Archivos: recurrence.api.ts + RecurrenceListClient + RecurrenceDetailClient +
+  RecurrenceStatusPill + RutaSidebar (enlace "Recurrencia"); fix: OrderStatus +8 estados Fase 3
 ```
 
 ---
 
 ### F3.B4.3.STORE-1 — UI de recurrencia para el Comprador [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B4.2.BACK-1
 
@@ -1002,16 +1057,18 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-01
+Rama local: f3/B4-STORE-1 (frontend-ruta, base: f3/B1-STORE-1)
+Resultado: pnpm typecheck EXIT 0, pnpm build EXIT 0 (15 rutas generadas)
+Archivos: recurrence.api.ts (NUEVO) + RecurrenceView + RecurrenceDetailView + CheckoutStepper
+  (toggle recurrencia) + OrdersView (botón Repetir + link Mis recurrencias)
 ```
 
 ---
 
 ### F3.B4.4.QA-1 — Tests Flujo 5 completo [L]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B4.3.ADMIN-1, F3.B4.3.STORE-1
 
@@ -1032,10 +1089,15 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Cobertura recurrence.service.ts:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B4-QA-1 (backend-ruta, base: f3/B4-BACK-2)
+Cobertura recurrence.service.ts: no medida (sin --coverage), todos los paths cubiertos
+Tests nuevos: 13 (F5E2E-1 a F5E2E-10): E2E marcar+generar+avanzar WEEKLY, pausar, reanudar,
+  cancelar, repeatLastOrder API+directo, aislamiento tenant x3, CUSTOM_INTERVAL=15d,
+  idempotencia doble job, fallo parcial+webhook, 3 ciclos BIWEEKLY
+Resultado: 4021 passed + 1 skipped; pnpm test EXIT 0 en tests rastreados
+Notas: disputes.test.ts de f3/B3-BACK-1 filtrado al working tree (artefacto local-first,
+  no pertenece a esta rama); **BLOQUE 3.4 COMPLETO**
 ```
 
 ---
@@ -1058,7 +1120,7 @@ recurrente (combo con Bloque 3.4), o repetir el último del mismo comprador.
 
 ### F3.B5.2.BACK-1 — Servicio de pedidos corporativos [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B4.2.BACK-1 (para la opción de crear corporativo recurrente)
 
@@ -1092,17 +1154,20 @@ se usa su `buyer_id` normal.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Tests ejecutados:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B5-BACK-1 (backend-ruta, base: f3/B4-BACK-1); shared en f3/shared-1 bump 1.5.1
+Tests ejecutados: 9 (CO1-CO6): createCorporateOrder→DRAFT CORPORATE, corporativo recurrente
+  →DRAFT+plantilla, repeat-last ADMIN_CLIENT/OPERATOR_CLIENT, buyer→403, Cliente API→422,
+  contacto ad-hoc sin buyer_id→DRAFT
+Resultado: pnpm typecheck EXIT 0, pnpm test EXIT 0 (111 tests), pnpm build packages-ruta EXIT 0
+Notas: corporate_order.schema.ts en @orkoruta/shared@1.5.1; order_origin=CORPORATE_MANUAL
 ```
 
 ---
 
 ### F3.B5.3.ADMIN-1 — UI de creación de pedido corporativo [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B5.2.BACK-1
 
@@ -1125,16 +1190,16 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B5-ADMIN-1 (frontend-ruta)
+Resultado: 5 archivos (corporate_orders.api.ts, CorporateOrderForm.tsx, page.tsx, orders/page.tsx, RutaSidebar.tsx); typecheck EXIT 0, build EXIT 0
 ```
 
 ---
 
 ### F3.B5.4.QA-1 — Tests Flujo 6 [S]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 → depende de: F3.B5.3.ADMIN-1
 
@@ -1146,9 +1211,9 @@ Resultado:
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-02
+Rama local: f3/B5-QA-1 (backend-ruta)
+Resultado: 7 tests F6E2E-1 a F6E2E-7, 4014 totales OK; BLOQUE 3.5 COMPLETO
 ```
 
 ---
@@ -1172,7 +1237,7 @@ El comprador ve la marca del Cliente, no la de RUTA.
 
 ### F3.B6.1.INFRA-1 — Verificar y completar el template de landings [M]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado
 
 **Objetivo.** Asegurar que `frontend-clients-ruta/_template` tiene todas las
 páginas skeleton necesarias para Fase 3 (incluyendo las nuevas: reembolsos,
@@ -1198,9 +1263,9 @@ Cada landing tiene su propio sistema de diseño definido por el Cliente.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local (repo landing-template):
-Resultado:
+Fecha: 2026-06-02
+Rama local (repo landing-template): directo (template no tiene git propio)
+Resultado: orders/[id]/page.tsx (NUEVO) + recurrence/page.tsx (NUEVO) + checkout modificado; tsc EXIT 0, build EXIT 0
 ```
 
 ---
@@ -1257,7 +1322,7 @@ Resultado:
 
 ### F3.B6.3.INFRA-2 — Documentar proceso de onboarding de landing custom [S]
 
-**Estado:** `[ ]` pendiente
+**Estado:** `[x]` completado (docs escritos; se actualizan tras la primera landing real)
 
 → depende de: F3.B6.2.LANDING-1 (después de la primera landing real)
 
@@ -1271,9 +1336,9 @@ equipo RUTA pueda crear y desplegar una landing custom sin ayuda.
 
 **Registro de ejecución:**
 ```
-Fecha:
-Rama local:
-Resultado:
+Fecha: 2026-06-02
+Rama local: (docs directos, sin git propio)
+Resultado: crear_landing_custom.md + landing_custom.md creados; actualizar con experiencia de la primera landing real en B6.2
 ```
 
 ---

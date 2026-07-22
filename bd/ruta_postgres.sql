@@ -1501,6 +1501,30 @@ ALTER TABLE ruta.webhook_deliveries        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ruta.audit_events              ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ruta.idempotency_keys          ENABLE ROW LEVEL SECURITY;
 
+-- FORCE: sin esto las políticas NO se aplican al dueño de las tablas, y la app
+-- conecta justamente con ese rol. ENABLE por sí solo deja el aislamiento inerte.
+ALTER TABLE ruta.users                    FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.buyer_profiles           FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.courier_profiles         FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.client_api_keys          FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.client_payment_providers FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.pickup_points            FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.product_categories       FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.products                 FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.recurrence_templates     FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.orders                   FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.order_items              FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.order_state_history      FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.payments                 FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.refunds                  FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.returns                  FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.disputes                 FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.webhook_deliveries       FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.audit_events             FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.idempotency_keys         FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.client_parameters        FORCE ROW LEVEL SECURITY;
+ALTER TABLE ruta.operator_permissions     FORCE ROW LEVEL SECURITY;
+
 
 -- Política general: aislamiento por client_id del contexto
 -- El backend debe ejecutar: SET LOCAL app.current_client_id = '<n>';

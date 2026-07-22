@@ -607,24 +607,51 @@ Respuestas mutantes (201, 200 en mutaciones) incluyen:
 
 ---
 
+## Geocodificación
+
+### `GET /geocode?address=<texto>&region=<iso2>`
+
+Resuelve una dirección a coordenadas. Proxy de la Geocoding API de Google: la
+clave vive en el servidor porque Google solo acota las claves de web service por
+IP. Restringido a ADMIN_CLIENT, OPERATOR_CLIENT y ADMIN_RUTA — cada consulta
+tiene costo. Resultados cacheados 24 h.
+
+```json
+{
+  "data": {
+    "latitude": 4.728,
+    "longitude": -74.045,
+    "formatted_address": "Cl. 160 #73-32, Bogotá, Colombia",
+    "precision": "ROOFTOP",
+    "is_precise": true
+  }
+}
+```
+
+`data` es `null` cuando la dirección no se reconoce. `is_precise` es `false`
+cuando Google ubicó la vía o el sector en vez del predio.
+
+---
+
 ## Paginación
 
-Estándar `?page=1&limit=20`. Respuesta:
+Estándar `?page=1&page_size=20`. Respuesta:
 
 ```json
 {
   "data": [...],
   "pagination": {
     "page": 1,
-    "limit": 20,
-    "total": 152,
-    "total_pages": 8
+    "page_size": 20,
+    "total": 152
   }
 }
 ```
 
+El envoltorio de la lista es siempre `data`, nunca `items`.
+
 Listas grandes (ej. `/admin/orders` con muchos miles) pueden usar
-cursor-based pagination con `?cursor=<opaque>&limit=20`. Decidir
+cursor-based pagination con `?cursor=<opaque>&page_size=20`. Decidir
 endpoint por endpoint en implementación.
 
 ---

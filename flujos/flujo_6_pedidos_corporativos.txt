@@ -138,6 +138,40 @@ CONTENIDO DEL FLUJO:
 
 
 ===============================================================================
+  ACTUALIZACIÓN — EL CORPORATIVO NO PASA POR BORRADOR (2026-07-22)
+===============================================================================
+
+  Decisión del Cliente: al registrar un pedido corporativo, el sistema lo
+  adelanta automáticamente hasta PREPARING. No existe paso por DRAFT visible
+  ni acción de "confirmar y enviar".
+
+  Motivo: el pedido lo registra el propio Cliente, de modo que confirmar,
+  validar y aceptar son trámites que ya dio por hechos al crearlo. Antes el
+  pedido quedaba en DRAFT esperando acciones que nadie iba a ejecutar.
+
+  Secuencia automática al crear (cada salto pasa por el state machine y queda
+  en order_state_history):
+
+      DRAFT → ORDER_SUBMITTED → ORDER_VALIDATING
+            → VALIDATION_APPROVED → SELLER_CONFIRMED → PREPARING
+
+  Se conserva PREPARING porque representa trabajo real de la operación
+  (preparar el pedido). Desde ahí, "Marcar listo" con flota propia lo lleva a
+  AWAITING_COURIER_ASSIGNMENT y al mapa de asignación.
+
+  Dos frenos deliberados:
+
+    a) payment_method = ONLINE_AT_ORDER
+       → el pedido se detiene en ORDER_SUBMITTED con payment_status
+         PENDING_ONLINE_PAYMENT. No se prepara lo que aún no está pagado.
+
+    b) La validación resuelve MANUAL_REVIEW
+       (producto inactivo, o parámetro order.force_manual_review = 1)
+       → el pedido se queda en MANUAL_REVIEW y el Cliente lo resuelve a mano.
+
+  Lo demás del flujo común (BLOQUE 1 en adelante) no cambia.
+
+===============================================================================
   CONECTOR RECOMENDADO — DIAGRAMA 6 (FLUJO PEDIDOS CORPORATIVOS - NUEVO)
 ===============================================================================
 

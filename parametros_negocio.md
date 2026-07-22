@@ -205,6 +205,7 @@ como `INSERT` defaults en `docs-ruta/bd/ruta_postgres.sql`.
 | `limits.max_api_keys_per_client` | `5` | entero | API keys activas por Cliente API |
 | `limits.max_pickup_points_per_client` | `50` | entero | Puntos fÃ­sicos por Cliente |
 | `limits.max_couriers_per_client` | `200` | entero | Repartidores activos por Cliente |
+| `limits.max_concurrent_orders_per_courier` | `3` | entero | Pedidos simultáneos por Repartidor antes de dejar de aparecer como disponible |
 
 ### Rate limiting (API)
 

@@ -642,6 +642,12 @@ ya está en ARRIVED_AT_CUSTOMER.
 Validación: monto >= total, evidencia obligatoria (por parámetro
 `collection.evidence_required`).
 
+**Captura de la evidencia:** "Tomar foto del recibo" abre la cámara dentro de
+la misma página con `getUserMedia` (cámara trasera en móvil) y muestra
+Capturar / Repetir foto. Requiere contexto seguro (localhost o HTTPS). Si el
+dispositivo no tiene cámara o se niega el permiso, degrada a un selector de
+archivos.
+
 ---
 
 # PARTE D — ADMIN_RUTA

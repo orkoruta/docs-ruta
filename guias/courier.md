@@ -41,6 +41,17 @@ Cuando te asignan un pedido aparece en la pestaña **Asignados** con el estado *
 
 El estado del pedido cambia a **En tránsito** y el negocio puede ver que ya saliste.
 
+### Navegar hasta la dirección
+
+En el bloque **Dirección de entrega** tienes dos botones: **Google Maps** y
+**Waze**. Ambos abren la app correspondiente si la tienes instalada, y la
+versión web si no. Usa el que prefieras.
+
+Cuando el pedido trae coordenadas, el enlace lleva al punto exacto; si no las
+trae, se busca por el texto de la dirección, que en Colombia a veces cae
+impreciso. En ese caso apóyate en las indicaciones adicionales (torre,
+apartamento, color de la portería) y en el teléfono del comprador.
+
 ---
 
 ## 3. En el domicilio del comprador
@@ -72,7 +83,13 @@ Cuando el comprador debe pagar al momento de la entrega (efectivo o pago electr�
    - **Monto recibido**: escribe cuánto te dio el comprador.
    - **Método**: elige **Efectivo** o **Electrónico**.
      - Si es electrónico elige el submétodo (datáfono, QR, transferencia) e ingresa el ID o referencia de la transacción.
-3. Toca **Subir evidencia** y toma una foto del recibo o del comprobante de pago con la cámara de tu celular.
+3. Toca **Tomar foto del recibo**. Se abre la cámara dentro de la misma página:
+   - La primera vez el navegador te pide permiso para usar la cámara. Acepta.
+   - En el celular abre la cámara trasera, que es la que apunta al recibo.
+   - Encuadra el recibo o comprobante y toca **Capturar**.
+   - Si la foto salió mal, toca **Repetir foto** y vuelve a intentarlo.
+   - Si tu dispositivo no tiene cámara o negaste el permiso, aparece la opción
+     **Adjuntar foto del recibo** para elegir una imagen guardada.
 4. Si quieres agregar una nota (opcional) escríbela en el campo de notas.
 5. Toca **Confirmar cobro**.
 6. Una vez confirmado el cobro toca **Marcar como entregado**.
@@ -135,3 +152,42 @@ No. En tu app solo aparecen los pedidos que están asignados a ti.
 ### ¿Cómo cambio mi contraseña?
 
 Toca el menú de usuario (ícono en la parte superior) y selecciona **Editar perfil** o **Cambiar contraseña**.
+
+---
+
+## 8. Los estados del pedido
+
+En el detalle de cada pedido, abajo, verás la **línea de tiempo**: todo lo que le
+ha pasado a ese pedido, de lo más reciente a lo más antiguo. Incluye lo que
+ocurrió antes de que te lo asignaran, para que sepas de dónde viene.
+
+### Antes de llegar a ti
+
+| Lo que ves | Qué significa |
+|---|---|
+| El comprador hizo el pedido | El pedido entró al sistema |
+| Revisando el pedido / Pedido verificado | Comprobación automática antes de prepararlo |
+| En revisión del negocio | Algo requiere que el negocio lo mire a mano |
+| El negocio aceptó el pedido | El negocio confirmó que lo va a atender |
+| El negocio lo está preparando | Están armando el pedido |
+| Buscando repartidor | Listo, esperando a que alguien lo tome |
+| Listo para recoger en el negocio | Sale por mensajería externa, no por flota propia |
+
+### Cuando ya es tuyo
+
+| Lo que ves | Qué significa |
+|---|---|
+| Te asignaron el pedido | Aparece en tu lista |
+| Recogido en el negocio | Registraste que lo tienes contigo |
+| En camino | Vas hacia el destino |
+| En reparto final | Estás cerca del comprador |
+| Llegaste al comprador | Marcaste tu llegada |
+| Falta cobrar | Es contra entrega y aún no registras el cobro |
+| Cobraste en efectivo / por medio electrónico | El cobro quedó registrado |
+| Entregado | Completaste la entrega |
+| Intento de entrega fallido | El comprador no estaba o no recibió |
+| Devolviendo al negocio | El pedido regresa al origen |
+
+Si alguna vez ves un código en mayúsculas y sin traducir, es un estado nuevo que
+todavía no tiene nombre en la app. Repórtalo al administrador del negocio.
+

@@ -317,6 +317,9 @@ Solicitar cancelación post-despacho.
 - `PATCH /admin/client` — Editar info corporativa.
 - `GET /admin/client/parameters` — Ver parámetros vigentes.
 - `PATCH /admin/client/parameters/:key` — Override de parámetro.
+  Body: `{ value }` — **no** `parameter_value`: ese es el nombre del campo en
+  la *respuesta*, no en la petición. La respuesta devuelve el parámetro
+  completo (`parameter_key`, `parameter_value`, `value_type`, `source`).
 
 ### Productos
 
@@ -369,8 +372,15 @@ Solicitar cancelación post-despacho.
 
 ### Mapa de asignación
 
-- `GET /admin/orders/map?status=AWAITING_COURIER_ASSIGNMENT` — Pedidos
-  geolocalizados pendientes de asignación.
+- `GET /admin/orders/map` — Pedidos geolocalizados del mapa de asignación:
+  los que esperan repartidor (`AWAITING_COURIER_ASSIGNMENT`) **y** los que ya
+  lo tienen (`COURIER_ASSIGNED`, `SHIPPED`, `IN_TRANSIT`, `OUT_FOR_DELIVERY`,
+  `ARRIVED_AT_CUSTOMER`). Solo devuelve pedidos con latitud y longitud.
+  Cada elemento incluye `courier_user_id`, `courier_name` y `courier_phone`
+  (`null` mientras el pedido está sin asignar), que es lo que distingue un
+  grupo del otro en la UI.
+- `GET /admin/orders/:id/collection-evidence` — Foto del recibo del cobro COD
+  (misma respuesta que la versión del repartidor).
 - `POST /admin/orders/:id/assign-courier` — Asignar.
   Body: `{ courier_user_id }`.
 - `POST /admin/orders/:id/unassign-courier`.
@@ -446,16 +456,69 @@ Comprador, items, total a cobrar si aplica).
 
 Registrar cobro contra entrega.
 
-**Request (multipart):**
+**Request (application/json):** no es multipart. El backend no recibe archivos;
+la foto viaja embebida en `evidence_url`.
+
+```json
+{
+  "amount": 105000,
+  "currency": "COP",
+  "method": "CASH",
+  "electronic_submethod": "DATAFONO",
+  "external_txn_id": "...",
+  "notes": "...",
+  "evidence_url": "data:image/jpeg;base64,/9j/4AAQ..."
+}
 ```
-amount: 105000
-currency: COP
-method: CASH | ELECTRONIC
-electronic_submethod: DATAFONO | QR | BANK_TRANSFER  (si aplica)
-external_txn_id: "..."                                (opcional)
-notes: "..."
-evidence: <file>                                       (foto/recibo)
+
+`evidence_url` (opcional) admite dos formas:
+
+- una URL `http(s)` de máximo 1000 caracteres, o
+- un data URI `data:image/{jpeg|png|webp};base64,…` de máximo 1 400 000
+  caracteres (~1 MB de imagen).
+
+**Provisional:** la foto embebida existe porque el proyecto todavía no tiene
+object storage — `POST /uploads/presigned-url` responde 501. Se guarda dentro
+del JSONB `payments.collection_evidence`. Cuando exista un bucket, el flujo pasa
+a subir el archivo y mandar solo la URL; el campo ya acepta ambas formas, así
+que la migración no rompe el contrato.
+
+Las rutas bajo `/courier` se parsean con un límite de cuerpo de 2 MB; el resto
+de la API mantiene el default de 100 kB.
+
+**Response 200:** `{ payment_id, order_id, payment_status, order_status, amount,
+currency, evidence_url, has_evidence, collected_at }`. Cuando la evidencia se
+envió embebida, `evidence_url` vuelve en `null` y `has_evidence` en `true`: no
+se repite un megabyte que el cliente ya tiene.
+
+### `GET /courier/orders/:id/collection-evidence`
+
+Foto del recibo del cobro contra entrega. El repartidor solo puede consultar
+pedidos asignados a él (403 en caso contrario).
+
+**Response 200:**
+```json
+{
+  "payment_id": 1001,
+  "order_id": 5001,
+  "evidence_url": "data:image/jpeg;base64,/9j/4AAQ...",
+  "notes": "Recibo firmado",
+  "amount": 105000,
+  "currency": "COP",
+  "payment_method": "CASH_ON_DELIVERY",
+  "payment_method_submethod": null,
+  "collected_at": "2026-07-22T18:56:00.000Z"
+}
 ```
+
+404 `RESOURCE_NOT_FOUND` si el pedido no tiene evidencia de cobro — el caso
+normal en pedidos sin COD, no un error.
+
+Va en un endpoint aparte y no dentro del detalle del pedido: la imagen embebida
+pesa cientos de kB y penalizaría a todas las pantallas que no la muestran.
+El equivalente para el staff del Cliente es
+`GET /admin/orders/:id/collection-evidence`, con la misma respuesta y sin la
+restricción de pedido asignado.
 
 ### `POST /courier/orders/:id/mark-delivered`
 
@@ -472,7 +535,8 @@ Solicitar retorno al origen tras intentos agotados.
 
 ### `POST /courier/orders/:id/upload-evidence`
 
-Subir foto/firma adicional.
+Subir foto/firma adicional. **No implementado** — depende del object storage
+pendiente (ver la nota en `record-collection`).
 
 ---
 
@@ -493,7 +557,7 @@ Subir foto/firma adicional.
 ### Parámetros globales
 
 - `GET /ruta-admin/parameters` — Parámetros globales.
-- `PATCH /ruta-admin/parameters/:key` — Editar.
+- `PATCH /ruta-admin/parameters/:key` — Editar. Body: `{ value }`.
 
 ### Vista de Control
 

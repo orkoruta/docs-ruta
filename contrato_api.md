@@ -71,6 +71,26 @@ Auto-registro de BUYER en una página de Cliente Full.
 Set-Cookie: `access_token` y `refresh_token` (HttpOnly,
 Secure, SameSite=Strict).
 
+### `POST /auth/guest`
+
+Inicia una sesión de **invitado** (sin cuenta) para poder pedir. Crea un
+comprador con `auth_mode = 'EXTERNAL_REFERENCE'` (sin contraseña) y
+`external_buyer_id` con prefijo `guest-`, y emite las cookies normales, de modo
+que todo el flujo de compra funciona igual que con una cuenta.
+
+**Request:** `{ client_slug, full_name?, phone? }`. Solo para Cliente Full.
+**Response 201:** igual a login + `is_guest: true`. Set-Cookie de sesión.
+
+### `GET /buyer/me`
+
+… incluye `is_guest` (true en sesiones de invitado). El storefront lo usa para
+ocultarle "Mis pedidos" y la recurrencia.
+
+### `PATCH /buyer/me`
+
+Actualiza `{ full_name?, phone? }` del comprador. El invitado lo usa para
+registrar su contacto al confirmar el pedido.
+
 ### `POST /auth/login`
 
 **Request:**
@@ -184,7 +204,7 @@ Puntos físicos activos del Cliente para PICKUP.
 
 ### `GET /buyer/me`
 
-Perfil del Comprador autenticado.
+Perfil del Comprador autenticado. **Response 200:** `{ id, full_name, email, phone }`. Devuelve 401 si no hay sesión (el storefront lo usa para saber si saludar o mostrar "Iniciar sesión").
 
 ### `PATCH /buyer/me`
 
@@ -340,10 +360,17 @@ Solicitar cancelación post-despacho.
 
 ### Repartidores
 
-- `GET /admin/couriers` — Lista.
-- `POST /admin/couriers` — Crear.
-- `GET /admin/couriers/:id` — Detalle.
-- `PATCH /admin/couriers/:id` — Editar.
+- `GET /admin/couriers` — Lista. Query: `?q=&status=&page=&page_size=`
+  (**no** `search` ni `limit`: se ignoran en silencio y la búsqueda no filtra).
+- `POST /admin/couriers` — Crear. Body:
+  `{ email, password, full_name, phone, document_type?, document_number?, transport_mode? }`.
+  El repartidor es un usuario que inicia sesión, así que `email`, `password`
+  (mínimo 8) y `phone` son **obligatorios**. El medio de transporte se llama
+  `transport_mode`, no `vehicle_type`.
+- `GET /admin/couriers/:id` — Detalle. El transporte viene anidado:
+  `profile: { transport_mode, vehicle_plate }`, no plano en la raíz.
+- `PATCH /admin/couriers/:id` — Editar. Mismos campos que crear, todos
+  opcionales, más `status`.
 - `GET /admin/couriers/:id/orders` — Historial de pedidos del courier.
 - `GET /admin/couriers/:id/metrics` — Métricas (entregas, tiempos).
 
@@ -393,11 +420,12 @@ Solicitar cancelación post-despacho.
 
 ### Proveedores de pago
 
-- `GET /admin/payment-providers` — Lista.
-- `POST /admin/payment-providers` — Configurar Wompi.
-  Body: `{ provider_type, provider_name, config, applicable_methods }`.
-- `PATCH /admin/payment-providers/:id`.
-- `DELETE /admin/payment-providers/:id`.
+- `GET /admin/payment-providers/wompi` — Estado de la config Wompi del Cliente.
+  Respuesta: `{ configured, enabled, public_key, has_private_key, has_webhook_secret, updated_at }`.
+  **Los secretos nunca se devuelven** (private key, events secret): solo se informa si están cargados.
+- `PUT /admin/payment-providers/wompi` — Autogestión de credenciales por el ADMIN_CLIENT.
+  Body: `{ enabled, public_key, private_key?, events_secret? }`. Los secretos vacíos/omitidos **conservan**
+  los guardados (para editar la public key sin re-escribirlos). Se guarda en `client_payment_providers`.
 
 ### Webhooks salientes
 
@@ -677,8 +705,10 @@ Respuestas mutantes (201, 200 en mutaciones) incluyen:
 
 Resuelve una dirección a coordenadas. Proxy de la Geocoding API de Google: la
 clave vive en el servidor porque Google solo acota las claves de web service por
-IP. Restringido a ADMIN_CLIENT, OPERATOR_CLIENT y ADMIN_RUTA — cada consulta
-tiene costo. Resultados cacheados 24 h.
+IP. Requiere sesión (nunca abierto a internet): ADMIN_CLIENT, OPERATOR_CLIENT,
+ADMIN_RUTA y **BUYER** (este último para ubicar su propia dirección de entrega
+en el checkout). Cada consulta tiene costo; se acota con el debounce del
+frontend y la caché de 24 h del servidor.
 
 ```json
 {

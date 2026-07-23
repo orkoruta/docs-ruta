@@ -1916,10 +1916,10 @@ INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, v
 -- Sesiones y autenticación
 INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, value_type, description, is_overrideable_by_client) VALUES
 (0, 'auth.jwt_lifetime_admin_ruta_minutes', '15', 'INTEGER', 'Duración JWT para ADMIN_RUTA', FALSE),
-(0, 'auth.jwt_lifetime_admin_client_minutes', '15', 'INTEGER', 'Duración JWT para ADMIN_CLIENT', FALSE),
-(0, 'auth.jwt_lifetime_operator_client_minutes', '15', 'INTEGER', 'Duración JWT para OPERATOR_CLIENT', FALSE),
-(0, 'auth.jwt_lifetime_buyer_minutes', '15', 'INTEGER', 'Duración JWT para BUYER', FALSE),
-(0, 'auth.jwt_lifetime_courier_minutes', '30', 'INTEGER', 'Duración JWT para COURIER', FALSE),
+(0, 'auth.jwt_lifetime_admin_client_minutes', '30', 'INTEGER', 'Duración JWT para ADMIN_CLIENT', FALSE),
+(0, 'auth.jwt_lifetime_operator_client_minutes', '30', 'INTEGER', 'Duración JWT para OPERATOR_CLIENT', FALSE),
+(0, 'auth.jwt_lifetime_buyer_minutes', '30', 'INTEGER', 'Duración JWT para BUYER', FALSE),
+(0, 'auth.jwt_lifetime_courier_minutes', '0', 'INTEGER', 'Duración JWT para COURIER (0 = nunca expira)', FALSE),
 (0, 'auth.refresh_token_lifetime_admin_days', '30', 'INTEGER', 'Refresh para admin roles', FALSE),
 (0, 'auth.refresh_token_lifetime_buyer_days', '90', 'INTEGER', 'Refresh para BUYER', FALSE),
 (0, 'auth.refresh_token_lifetime_courier_days', '30', 'INTEGER', 'Refresh para COURIER', FALSE),

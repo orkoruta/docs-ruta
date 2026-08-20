@@ -1,4 +1,4 @@
-﻿# MEMORIA DEL PROYECTO RUTA
+# MEMORIA DEL PROYECTO RUTA
 
 > **ARCHIVO HISTÓRICO — NO USAR COMO FUENTE DE VERDAD**
 >
@@ -39,7 +39,7 @@
 
 > Documento de **memoria operativa** para Claude Cowork (y cualquier
 > agente IA o persona) que necesite tomar los archivos generados en la
-> sesiÃ³n de planning de RUTA y distribuirlos en su estructura local
+> sesión de planning de RUTA y distribuirlos en su estructura local
 > de repositorios.
 >
 > Si eres Cowork: **lee primero la PARTE 1 (contexto), luego ejecuta
@@ -48,28 +48,28 @@
 
 ---
 
-# PARTE 1 â€” Contexto del proyecto (lectura obligada)
+# PARTE 1 — Contexto del proyecto (lectura obligada)
 
-## 1.1 QuÃ© es RUTA
+## 1.1 Qué es RUTA
 
 Plataforma SaaS **multi-tenant** para administrar operaciones
 comerciales entre Clientes (negocios) y Compradores. Mercado:
-Colombia. Moneda: COP. UI en espaÃ±ol, cÃ³digo en inglÃ©s.
+Colombia. Moneda: COP. UI en español, código en inglés.
 
 **Dos tipos de Cliente:**
 
 - **Cliente API** (`client_type='API'`): tiene su propia plataforma de
-  venta; RUTA solo le hace logÃ­stica.
+  venta; RUTA solo le hace logística.
 - **Cliente Full** (`client_type='FULL'`): RUTA le provee todo
-  (catÃ¡logo, checkout, pagos, logÃ­stica). Modalidad de frontend:
-  - `NATIVE_RUTA`: usa el storefront genÃ©rico.
+  (catálogo, checkout, pagos, logística). Modalidad de frontend:
+  - `NATIVE_RUTA`: usa el storefront genérico.
   - `CUSTOM_LANDING_BY_RUTA`: tiene landing custom con branding propio.
 
 **5 roles:** ADMIN_RUTA, ADMIN_CLIENT, OPERATOR_CLIENT, BUYER, COURIER.
 
-## 1.2 Stack tÃ©cnico (no negociable)
+## 1.2 Stack técnico (no negociable)
 
-| Capa | TecnologÃ­a |
+| Capa | Tecnología |
 |---|---|
 | Backend | Express.js + TypeScript |
 | Frontend (admin, storefront, landings) | Next.js 14+ App Router + Tailwind |
@@ -83,36 +83,36 @@ Colombia. Moneda: COP. UI en espaÃ±ol, cÃ³digo en inglÃ©s.
 | Migraciones BD | `node-pg-migrate` + estado autoritativo en SQL |
 | Testing | Vitest + Supertest + Playwright + MSW |
 | Logger | `pino` |
-| ValidaciÃ³n | Zod (compartido) |
+| Validación | Zod (compartido) |
 | Workspaces internos | pnpm |
-| DistribuciÃ³n de paquetes | GitHub Packages (npm privado) |
+| Distribución de paquetes | GitHub Packages (npm privado) |
 
 ## 1.3 Estructura multi-repo (lo que Cowork debe construir)
 
-**Carpeta local raÃ­z:** `~/projects/ruta/` (puede variar por mÃ¡quina).
+**Carpeta local raíz:** `~/projects/ruta/` (puede variar por máquina).
 
 ```
-ruta/                                    â† carpeta local (NO es un repo)
-â”‚
-â”œâ”€â”€ backend-ruta/                        â† repo Git: backend-ruta
-â”‚   â””â”€â”€ api/                             â† Express API
-â”‚
-â”œâ”€â”€ frontend-ruta/                       â† repo Git: frontend-ruta
-â”‚   â”œâ”€â”€ admin/                           â† Next.js panel admin
-â”‚   â””â”€â”€ storefront/                      â† Next.js storefront nativo
-â”‚
-â”œâ”€â”€ frontend-clients-ruta/               â† carpeta local (NO es un repo)
-â”‚   â”œâ”€â”€ _template/                       â† template local, sin repo Git base
-â”‚   â”œâ”€â”€ cliente-1/                       â† repo Git: landing-{slug-cliente-1}
-â”‚   â”œâ”€â”€ cliente-2/                       â† repo Git: landing-{slug-cliente-2}
-â”‚   â””â”€â”€ cliente-n/                       â† repo Git: landing-{slug-cliente-n}
-â”‚
-â”œâ”€â”€ packages-ruta/                       â† repo Git: packages-ruta
-â”‚   â”œâ”€â”€ shared/                          â† @ruta/shared (npm)
-â”‚   â””â”€â”€ db/                              â† @ruta/db (npm)
-â”‚
-â”œâ”€â”€ docs-ruta/                           â† repo Git: docs-ruta
-â””â”€â”€ infra-ruta/                          â† repo Git: infra-ruta
+ruta/                                    ← carpeta local (NO es un repo)
+│
+├── backend-ruta/                        ← repo Git: backend-ruta
+│   └── api/                             ← Express API
+│
+├── frontend-ruta/                       ← repo Git: frontend-ruta
+│   ├── admin/                           ← Next.js panel admin
+│   └── storefront/                      ← Next.js storefront nativo
+│
+├── frontend-clients-ruta/               ← carpeta local (NO es un repo)
+│   ├── _template/                       ← template local, sin repo Git base
+│   ├── cliente-1/                       ← repo Git: landing-{slug-cliente-1}
+│   ├── cliente-2/                       ← repo Git: landing-{slug-cliente-2}
+│   └── cliente-n/                       ← repo Git: landing-{slug-cliente-n}
+│
+├── packages-ruta/                       ← repo Git: packages-ruta
+│   ├── shared/                          ← @ruta/shared (npm)
+│   └── db/                              ← @ruta/db (npm)
+│
+├── docs-ruta/                           ← repo Git: docs-ruta
+└── infra-ruta/                          ← repo Git: infra-ruta
 ```
 
 **Reglas importantes:**
@@ -126,7 +126,7 @@ ruta/                                    â† carpeta local (NO es un repo)
   existen al inicio; se crean conforme aparezcan Clientes Full con
   modalidad CUSTOM_LANDING_BY_RUTA (Fase 3 del MVP).
 
-## 1.4 Decisiones crÃ­ticas (referenciar siempre)
+## 1.4 Decisiones críticas (referenciar siempre)
 
 1. **RUTA no custodia dinero.** Pagos online van directo a la
    pasarela del Cliente. Pagos contra entrega: el Repartidor registra
@@ -136,7 +136,7 @@ ruta/                                    â† carpeta local (NO es un repo)
 3. **Particionamiento LIST por `client_id`** en todas las tablas
    operativas. Auto-creado al crear Cliente.
 4. **RLS activo** con `app.current_client_id` y `app.current_user_role`
-   por sesiÃ³n.
+   por sesión.
 5. **Tablas append-only:** `audit_events`, `order_state_history`,
    `external_webhook_events`, `webhook_deliveries`.
 6. **Idempotencia obligatoria** en POST/PUT/PATCH/DELETE con header
@@ -156,28 +156,28 @@ ruta/                                    â† carpeta local (NO es un repo)
 1, 2, 3 completos. Sin reembolsos, returns, recurrencia,
 corporativos, disputas, Cliente API ni landings custom.
 
-**Fase 2:** Cliente API (logÃ­stica-as-a-service).
+**Fase 2:** Cliente API (logística-as-a-service).
 
 **Fase 3:** Reembolsos, returns post-cierre, disputas, recurrencia,
 corporativos, landings custom.
 
 ---
 
-# PARTE 2 â€” Inventario de archivos generados
+# PARTE 2 — Inventario de archivos generados
 
 Hay **22 archivos finales** en el directorio fuente (`/mnt/user-data/outputs/`
-o equivalente). MÃ¡s 1 archivo de memoria (este).
+o equivalente). Más 1 archivo de memoria (este).
 
-## 2.1 DocumentaciÃ³n principal (.md)
+## 2.1 Documentación principal (.md)
 
-| # | Archivo | TamaÃ±o | FunciÃ³n |
+| # | Archivo | Tamaño | Función |
 |---|---|---|---|
 | 1 | `all_ruta.md` | 41 KB | README funcional general del proyecto |
 | 2 | `mvp_alcance.md` | 10 KB | MVP en 3 fases con cronograma |
 | 3 | `estructura_proyecto.md` | 16 KB | Estructura multi-repo detallada |
 | 4 | `plan_tareas.md` | 21 KB | Plan operativo 7 sprints / 10 semanas |
 | 5 | `matriz_permisos.md` | 17 KB | Permisos por rol en 15 dominios |
-| 6 | `parametros_negocio.md` | 13 KB | ~70 parÃ¡metros operativos con valores default |
+| 6 | `parametros_negocio.md` | 13 KB | ~70 parámetros operativos con valores default |
 | 7 | `contrato_api.md` | 16 KB | ~70 endpoints REST documentados |
 | 8 | `wireframes_mvp.md` | 28 KB | 28 pantallas descritas funcionalmente |
 | 9 | `estrategia_testing.md` | 14 KB | Estrategia de tests Vitest + Playwright |
@@ -186,7 +186,7 @@ o equivalente). MÃ¡s 1 archivo de memoria (este).
 
 ## 2.2 Flujos de estados de pedido (.txt)
 
-| # | Archivo | TamaÃ±o | Aplica a |
+| # | Archivo | Tamaño | Aplica a |
 |---|---|---|---|
 | 12 | `reglas_para_diagramar_flujos.txt` | (original) | Convenciones para todos los flujos |
 | 13 | `flujo_1_comun_y_decision_de_pago.txt` | 13 KB | Solo Cliente Full |
@@ -205,49 +205,49 @@ o equivalente). MÃ¡s 1 archivo de memoria (este).
 
 ## 2.4 Modelo de datos (.sql)
 
-| # | Archivo | TamaÃ±o | Uso |
+| # | Archivo | Tamaño | Uso |
 |---|---|---|---|
 | 21 | `ruta_postgres.sql` | 84 KB | Schema completo ejecutable en PostgreSQL (OCI) |
 | 22 | `ruta_oracle.sql` | 80 KB | Schema equivalente para Oracle Data Modeler (DER) |
 
 ## 2.5 Manifiestos de agentes (.md)
 
-| # | Archivo | TamaÃ±o | Uso |
+| # | Archivo | Tamaño | Uso |
 |---|---|---|---|
 | 23 | `CLAUDE.md` | 14 KB | Manifiesto master para Claude Code |
 | 24 | `AGENTS.md` | 8 KB | Manifiesto master para otros agentes IA |
 
 ---
 
-# PARTE 3 â€” Instrucciones operativas para Cowork
+# PARTE 3 — Instrucciones operativas para Cowork
 
 Estas instrucciones asumen que:
 
-- Los archivos fuente estÃ¡n en `/mnt/user-data/outputs/` (o donde el
+- Los archivos fuente están en `/mnt/user-data/outputs/` (o donde el
   usuario los haya descargado).
-- Cowork tiene permisos de creaciÃ³n de carpetas y copia/movimiento de
+- Cowork tiene permisos de creación de carpetas y copia/movimiento de
   archivos en el sistema local del usuario.
 
 ## 3.1 Crear la estructura de carpetas locales
 
-Crear esta jerarquÃ­a partiendo del directorio que el usuario indique
-como raÃ­z (tÃ­picamente `~/projects/ruta/` o equivalente):
+Crear esta jerarquía partiendo del directorio que el usuario indique
+como raíz (típicamente `~/projects/ruta/` o equivalente):
 
 ```
 ruta/
-â”œâ”€â”€ backend-ruta/
-â”œâ”€â”€ frontend-ruta/
-â”œâ”€â”€ frontend-clients-ruta/
-â”‚   â””â”€â”€ _template/
-â”œâ”€â”€ packages-ruta/
-â”œâ”€â”€ docs-ruta/
-â”‚   â”œâ”€â”€ arquitectura/
-â”‚   â”œâ”€â”€ seguridad/
-â”‚   â”œâ”€â”€ flujos/
-â”‚   â”œâ”€â”€ bd/
-â”‚   â”‚   â””â”€â”€ migrations/
-â”‚   â””â”€â”€ diseno/
-â””â”€â”€ infra-ruta/
+├── backend-ruta/
+├── frontend-ruta/
+├── frontend-clients-ruta/
+│   └── _template/
+├── packages-ruta/
+├── docs-ruta/
+│   ├── arquitectura/
+│   ├── seguridad/
+│   ├── flujos/
+│   ├── bd/
+│   │   └── migrations/
+│   └── diseno/
+└── infra-ruta/
 ```
 
 **Notas:**
@@ -255,18 +255,18 @@ ruta/
   `.git` operativo del proyecto).
 - En local, el codigo del template base vive en
   `frontend-clients-ruta/_template/`.
-- `bd/migrations/` queda vacÃ­o inicialmente; se llenarÃ¡ durante el
+- `bd/migrations/` queda vacío inicialmente; se llenará durante el
   desarrollo.
 - No crear `cliente-1/`, `cliente-2/`, etc. en
-  `frontend-clients-ruta/`. Esas carpetas se materializan despuÃ©s
+  `frontend-clients-ruta/`. Esas carpetas se materializan después
   (Fase 3) cuando aparezcan Clientes Full con landings custom.
 
 ## 3.2 Mapeo de archivos a destinos
 
-### 3.2.1 DocumentaciÃ³n â†’ `docs-ruta/`
+### 3.2.1 Documentación → `docs-ruta/`
 
-Estos archivos van a la raÃ­z de `docs-ruta/` (que cuando se inicialice
-como repo Git serÃ¡ `ruta-docs`):
+Estos archivos van a la raíz de `docs-ruta/` (que cuando se inicialice
+como repo Git será `ruta-docs`):
 
 | Archivo fuente | Destino local |
 |---|---|
@@ -280,19 +280,19 @@ como repo Git serÃ¡ `ruta-docs`):
 | `wireframes_mvp.md` | `ruta/docs-ruta/wireframes_mvp.md` |
 | `estrategia_testing.md` | `ruta/docs-ruta/estrategia_testing.md` |
 
-### 3.2.2 DocumentaciÃ³n â†’ `docs-ruta/arquitectura/`
+### 3.2.2 Documentación → `docs-ruta/arquitectura/`
 
 | Archivo fuente | Destino local |
 |---|---|
 | `estrategia_multi_tenant_ruta.md` | `ruta/docs-ruta/arquitectura/estrategia_multi_tenant_ruta.md` |
 
-### 3.2.3 DocumentaciÃ³n â†’ `docs-ruta/seguridad/`
+### 3.2.3 Documentación → `docs-ruta/seguridad/`
 
 | Archivo fuente | Destino local |
 |---|---|
 | `ciclo_vida_token.txt` | `ruta/docs-ruta/seguridad/ciclo_vida_token.txt` |
 
-### 3.2.4 Flujos â†’ `docs-ruta/flujos/`
+### 3.2.4 Flujos → `docs-ruta/flujos/`
 
 | Archivo fuente | Destino local |
 |---|---|
@@ -305,32 +305,32 @@ como repo Git serÃ¡ `ruta-docs`):
 | `flujo_6_pedidos_corporativos.txt` | `ruta/docs-ruta/flujos/flujo_6_pedidos_corporativos.txt` |
 | `flujo_7_devoluciones_post_cierre.txt` | `ruta/docs-ruta/flujos/flujo_7_devoluciones_post_cierre.txt` |
 
-### 3.2.5 Modelo de datos â†’ `docs-ruta/bd/`
+### 3.2.5 Modelo de datos → `docs-ruta/bd/`
 
 | Archivo fuente | Destino local |
 |---|---|
 | `ruta_postgres.sql` | `ruta/docs-ruta/bd/ruta_postgres.sql` |
 | `ruta_oracle.sql` | `ruta/docs-ruta/bd/ruta_oracle.sql` |
 
-### 3.2.6 DiseÃ±o â†’ `docs-ruta/diseno/`
+### 3.2.6 Diseño → `docs-ruta/diseno/`
 
 | Archivo fuente | Destino local |
 |---|---|
 | `galeria_estilos_ruta.md` | `ruta/docs-ruta/diseno/galeria_estilos_ruta.md` |
 
-### 3.2.7 Manifiestos de agentes â†’ COPIAR a cada repo
+### 3.2.7 Manifiestos de agentes → COPIAR a cada repo
 
 `CLAUDE.md` y `AGENTS.md` son **manifiestos master** que deben
-**copiarse (no moverse) a la raÃ­z de cada repo**. El contenido es el
-mismo para todos los repos; el manifiesto ya estÃ¡ diseÃ±ado para
-funcionar en cualquier contexto (su secciÃ³n 0 dice cÃ³mo identificar
-en quÃ© repo estÃ¡s).
+**copiarse (no moverse) a la raíz de cada repo**. El contenido es el
+mismo para todos los repos; el manifiesto ya está diseñado para
+funcionar en cualquier contexto (su sección 0 dice cómo identificar
+en qué repo estás).
 
 Copiar `CLAUDE.md` a:
 
 | Destino |
 |---|
-| `ruta/docs-ruta/CLAUDE.md` (versiÃ³n master) |
+| `ruta/docs-ruta/CLAUDE.md` (versión master) |
 | `ruta/backend-ruta/CLAUDE.md` |
 | `ruta/frontend-ruta/CLAUDE.md` |
 | `ruta/packages-ruta/CLAUDE.md` |
@@ -341,7 +341,7 @@ Copiar `AGENTS.md` a las mismas ubicaciones:
 
 | Destino |
 |---|
-| `ruta/docs-ruta/AGENTS.md` (versiÃ³n master) |
+| `ruta/docs-ruta/AGENTS.md` (versión master) |
 | `ruta/backend-ruta/AGENTS.md` |
 | `ruta/frontend-ruta/AGENTS.md` |
 | `ruta/packages-ruta/AGENTS.md` |
@@ -350,9 +350,9 @@ Copiar `AGENTS.md` a las mismas ubicaciones:
 
 Total: **6 copias de CLAUDE.md** y **6 copias de AGENTS.md**.
 
-### 3.2.8 Memoria â†’ `docs-ruta/`
+### 3.2.8 Memoria → `docs-ruta/`
 
-Este archivo (`memoria_proyecto_ruta.md`) debe quedar tambiÃ©n en
+Este archivo (`memoria_proyecto_ruta.md`) debe quedar también en
 `docs-ruta/` para que cualquier agente futuro pueda cargarlo como
 contexto:
 
@@ -373,86 +373,86 @@ Fuentes vigentes para agentes y documentacion:
 
 ## 3.4 Resumen del estado final esperado
 
-DespuÃ©s de ejecutar todas las instrucciones, el sistema de archivos
-local debe verse asÃ­:
+Después de ejecutar todas las instrucciones, el sistema de archivos
+local debe verse así:
 
 ```
 ~/projects/ruta/
-â”œâ”€â”€ backend-ruta/
-â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â””â”€â”€ AGENTS.md
-â”‚
-â”œâ”€â”€ frontend-ruta/
-â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â””â”€â”€ AGENTS.md
-â”‚
-â”œâ”€â”€ frontend-clients-ruta/
-â”‚   â””â”€â”€ _template/
-â”‚       â”œâ”€â”€ CLAUDE.md
-â”‚       â”œâ”€â”€ AGENTS.md
-â”‚       â””â”€â”€ README.md
-â”‚
-â”œâ”€â”€ packages-ruta/
-â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â””â”€â”€ AGENTS.md
-â”‚
-â”œâ”€â”€ docs-ruta/
-â”‚   â”œâ”€â”€ CLAUDE.md
-â”‚   â”œâ”€â”€ AGENTS.md
-â”‚   â”œâ”€â”€ memoria_proyecto_ruta.md
-â”‚   â”œâ”€â”€ all_ruta.md
-â”‚   â”œâ”€â”€ mvp_alcance.md
-â”‚   â”œâ”€â”€ estructura_proyecto.md
-â”‚   â”œâ”€â”€ plan_tareas.md
-â”‚   â”œâ”€â”€ matriz_permisos.md
-â”‚   â”œâ”€â”€ parametros_negocio.md
-â”‚   â”œâ”€â”€ contrato_api.md
-â”‚   â”œâ”€â”€ wireframes_mvp.md
-â”‚   â”œâ”€â”€ estrategia_testing.md
-â”‚   â”‚
-â”‚   â”œâ”€â”€ arquitectura/
-â”‚   â”‚   â””â”€â”€ estrategia_multi_tenant_ruta.md
-â”‚   â”‚
-â”‚   â”œâ”€â”€ seguridad/
-â”‚   â”‚   â””â”€â”€ ciclo_vida_token.txt
-â”‚   â”‚
-â”‚   â”œâ”€â”€ flujos/
-â”‚   â”‚   â”œâ”€â”€ reglas_para_diagramar_flujos.txt
-â”‚   â”‚   â”œâ”€â”€ flujo_1_comun_y_decision_de_pago.txt
-â”‚   â”‚   â”œâ”€â”€ flujo_2_ship_completo.txt
-â”‚   â”‚   â”œâ”€â”€ flujo_3_pickup_completo.txt
-â”‚   â”‚   â”œâ”€â”€ flujo_4_refund_completo.txt
-â”‚   â”‚   â”œâ”€â”€ flujo_5_recurrencia.txt
-â”‚   â”‚   â”œâ”€â”€ flujo_6_pedidos_corporativos.txt
-â”‚   â”‚   â””â”€â”€ flujo_7_devoluciones_post_cierre.txt
-â”‚   â”‚
-â”‚   â”œâ”€â”€ bd/
-â”‚   â”‚   â”œâ”€â”€ ruta_postgres.sql
-â”‚   â”‚   â”œâ”€â”€ ruta_oracle.sql
-â”‚   â”‚   â””â”€â”€ migrations/      (vacÃ­o)
-â”‚   â”‚
-â”‚   â””â”€â”€ diseno/
-â”‚       â””â”€â”€ galeria_estilos_ruta.md
-â”‚
-â””â”€â”€ infra-ruta/
-    â”œâ”€â”€ CLAUDE.md
-    â”œâ”€â”€ AGENTS.md
-    â””â”€â”€ README.md
+├── backend-ruta/
+│   ├── CLAUDE.md
+│   └── AGENTS.md
+│
+├── frontend-ruta/
+│   ├── CLAUDE.md
+│   └── AGENTS.md
+│
+├── frontend-clients-ruta/
+│   └── _template/
+│       ├── CLAUDE.md
+│       ├── AGENTS.md
+│       └── README.md
+│
+├── packages-ruta/
+│   ├── CLAUDE.md
+│   └── AGENTS.md
+│
+├── docs-ruta/
+│   ├── CLAUDE.md
+│   ├── AGENTS.md
+│   ├── memoria_proyecto_ruta.md
+│   ├── all_ruta.md
+│   ├── mvp_alcance.md
+│   ├── estructura_proyecto.md
+│   ├── plan_tareas.md
+│   ├── matriz_permisos.md
+│   ├── parametros_negocio.md
+│   ├── contrato_api.md
+│   ├── wireframes_mvp.md
+│   ├── estrategia_testing.md
+│   │
+│   ├── arquitectura/
+│   │   └── estrategia_multi_tenant_ruta.md
+│   │
+│   ├── seguridad/
+│   │   └── ciclo_vida_token.txt
+│   │
+│   ├── flujos/
+│   │   ├── reglas_para_diagramar_flujos.txt
+│   │   ├── flujo_1_comun_y_decision_de_pago.txt
+│   │   ├── flujo_2_ship_completo.txt
+│   │   ├── flujo_3_pickup_completo.txt
+│   │   ├── flujo_4_refund_completo.txt
+│   │   ├── flujo_5_recurrencia.txt
+│   │   ├── flujo_6_pedidos_corporativos.txt
+│   │   └── flujo_7_devoluciones_post_cierre.txt
+│   │
+│   ├── bd/
+│   │   ├── ruta_postgres.sql
+│   │   ├── ruta_oracle.sql
+│   │   └── migrations/      (vacío)
+│   │
+│   └── diseno/
+│       └── galeria_estilos_ruta.md
+│
+└── infra-ruta/
+    ├── CLAUDE.md
+    ├── AGENTS.md
+    └── README.md
 ```
 
 **Conteo de archivos:**
 - 6 copias de `CLAUDE.md` (5 repos base + template local)
 - 6 copias de `AGENTS.md` (5 repos base + template local)
 - Los README locales no son obligatorios; no recrear README borrados.
-- 22 archivos de contenido Ãºnicos en `docs-ruta/` (incluye esta
+- 22 archivos de contenido únicos en `docs-ruta/` (incluye esta
   memoria)
 
 ---
 
-# PARTE 4 â€” Lo que falta despuÃ©s de que Cowork distribuya los archivos
+# PARTE 4 — Lo que falta después de que Cowork distribuya los archivos
 
-Una vez Cowork termine la distribuciÃ³n de archivos, lo siguiente NO es
-automÃ¡tico y requiere acciones del equipo humano:
+Una vez Cowork termine la distribución de archivos, lo siguiente NO es
+automático y requiere acciones del equipo humano:
 
 ## 4.1 Inicializar repos Git
 
@@ -495,7 +495,7 @@ consideran resueltas.
 
 ---
 
-# PARTE 5 â€” Referencias rÃ¡pidas
+# PARTE 5 — Referencias rápidas
 
 ## 5.1 Glosario
 
@@ -505,13 +505,13 @@ consideran resueltas.
 - **ADMIN_RUTA** = equipo de RUTA.
 - **ADMIN_CLIENT** = administrador del Cliente.
 - **OPERATOR_CLIENT** = staff operativo del Cliente.
-- **Vista de Control** = impersonaciÃ³n auditada.
+- **Vista de Control** = impersonación auditada.
 - **SHIP** = entrega a domicilio.
-- **PICKUP** = recogida en punto fÃ­sico.
-- **NATIVE_RUTA** = Cliente Full usa storefront genÃ©rico.
+- **PICKUP** = recogida en punto físico.
+- **NATIVE_RUTA** = Cliente Full usa storefront genérico.
 - **CUSTOM_LANDING_BY_RUTA** = Cliente Full con landing propio.
 - **Cliente plataforma** = `client_id = 0`, registro especial donde
-  viven los ADMIN_RUTA y parÃ¡metros globales.
+  viven los ADMIN_RUTA y parámetros globales.
 
 ## 5.2 Rutas DNS planeadas
 
@@ -527,14 +527,14 @@ consideran resueltas.
 | Tarea | Documento prioritario |
 |---|---|
 | Cualquier cosa | `all_ruta.md` |
-| Arquitectura tÃ©cnica | `arquitectura/estrategia_multi_tenant_ruta.md` |
+| Arquitectura técnica | `arquitectura/estrategia_multi_tenant_ruta.md` |
 | Estados de pedido | `flujos/flujo_1.txt` a `flujo_7.txt` |
 | Convenciones diagramas | `flujos/reglas_para_diagramar_flujos.txt` |
 | Endpoints HTTP | `contrato_api.md` |
 | Pantallas UI | `wireframes_mvp.md` |
 | Estilos y componentes | `diseno/galeria_estilos_ruta.md` |
 | Permisos por rol | `matriz_permisos.md` |
-| Plazos y parÃ¡metros | `parametros_negocio.md` |
+| Plazos y parámetros | `parametros_negocio.md` |
 | Estructura del proyecto | `estructura_proyecto.md` |
 | Testing | `estrategia_testing.md` |
 | Auth detallada | `seguridad/ciclo_vida_token.txt` |
@@ -546,17 +546,17 @@ consideran resueltas.
 
 | Flujo | Cliente API | Cliente Full | Notas |
 |---|---|---|---|
-| 1 â€” ComÃºn y decisiÃ³n de pago | NO | SÃ | Cliente API entra directo en preparaciÃ³n |
-| 2 â€” SHIP completo | SÃ | SÃ | Con notas especÃ­ficas por tipo |
-| 3 â€” PICKUP completo | SÃ | SÃ | Con notas especÃ­ficas por tipo |
-| 4 â€” Refund completo | NO | SÃ | Solo Cliente Full |
-| 5 â€” Recurrencia | NO | SÃ | Solo Cliente Full |
-| 6 â€” Pedidos corporativos | NO | SÃ | Solo Cliente Full |
-| 7 â€” Devoluciones post-cierre | NO | SÃ | Solo Cliente Full |
+| 1 — Común y decisión de pago | NO | SÍ | Cliente API entra directo en preparación |
+| 2 — SHIP completo | SÍ | SÍ | Con notas específicas por tipo |
+| 3 — PICKUP completo | SÍ | SÍ | Con notas específicas por tipo |
+| 4 — Refund completo | NO | SÍ | Solo Cliente Full |
+| 5 — Recurrencia | NO | SÍ | Solo Cliente Full |
+| 6 — Pedidos corporativos | NO | SÍ | Solo Cliente Full |
+| 7 — Devoluciones post-cierre | NO | SÍ | Solo Cliente Full |
 
 ## 5.5 Naming conventions
 
-- **CÃ³digo:** inglÃ©s. **UI y docs:** espaÃ±ol.
+- **Código:** inglés. **UI y docs:** español.
 - **Services y routes:** `snake_case` para alinear con BD.
 - **Variables/funciones:** `camelCase`.
 - **Tipos/clases:** `PascalCase`.
@@ -570,29 +570,29 @@ consideran resueltas.
 
 ---
 
-# PARTE 6 â€” HistÃ³rico de cambios del proyecto
+# PARTE 6 — Histórico de cambios del proyecto
 
-> âš ï¸ **Regla**: cada avance, cambio, mejora, nueva funcionalidad o
-> tarea que quede en memoria debe registrarse aquÃ­. Este documento es
+> ⚠️ **Regla**: cada avance, cambio, mejora, nueva funcionalidad o
+> tarea que quede en memoria debe registrarse aquí. Este documento es
 > la **memoria viva** del proyecto.
 >
-> Cualquier agente IA que llegue nuevo debe leer esta secciÃ³n primero
-> para ponerse al dÃ­a.
+> Cualquier agente IA que llegue nuevo debe leer esta sección primero
+> para ponerse al día.
 
-## 6.1 LÃ­nea de tiempo cronolÃ³gica
+## 6.1 Línea de tiempo cronológica
 
-| Fecha | Tipo | DescripciÃ³n | Docs afectados | Sprint |
+| Fecha | Tipo | Descripción | Docs afectados | Sprint |
 |---|---|---|---|---|
-| 2026-05-24 | ðŸ“ Setup | CreaciÃ³n inicial de un manifiesto experimental para agente. Removido posteriormente el 2026-05-26 por decision del usuario; `AGENTS.md` y `CLAUDE.md` quedan como manifiestos vigentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-24 | ðŸ“ Setup | RevisiÃ³n completa del proyecto: diagnÃ³stico de documentaciÃ³n (âœ… completa) y cÃ³digo (âŒ nada escrito aÃºn) | `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-24 | ðŸ“ Setup | VerificaciÃ³n de compatibilidad de `.md` con Codebuff/DeepSeek â€” confirmado que `AGENTS.md` es suficiente como manifiesto general para agentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-24 | ðŸ“ Setup | Agregada PARTE 6 (HistÃ³rico de cambios) a este documento. | `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-25 | DecisiÃ³n | Confirmadas decisiones de arranque: dominio principal `ruta.com`, Cliente piloto existente, credenciales Wompi pendientes, parÃ¡metros de negocio confirmados en SQL, Fase 1 = Cliente Full, Fase 2 = Cliente API, carrito persistido en BD como pedido `DRAFT` | `mvp_alcance.md`, `estrategia_testing.md`, `wireframes_mvp.md`, `plan_tareas.md`, `contrato_api.md`, `parametros_negocio.md`, `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-25 | Regla operativa | Agregada Definition of Done: ningÃºn avance se considera terminado sin verificaciÃ³n; cada cambio debe ejecutar pruebas proporcionales al riesgo o registrar explÃ­citamente por quÃ© no se pudieron ejecutar | `plan_tareas.md`, `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-25 | Regla operativa | Registrada autorizaciÃ³n operativa del usuario: los agentes pueden ejecutar comandos, scripts, pruebas, builds, instalaciones y operaciones de sistema necesarias sin confirmaciÃ³n manual previa; si el runtime exige aprobaciÃ³n, deben solicitar escalaciÃ³n directamente con prefijos persistentes acotados cuando aplique | `AGENTS.md`, `CLAUDE.md`, copias por repo, `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-26 | DecisiÃ³n infraestructura | Confirmado por el usuario que la BD de DEV ya existe en OCI y contiene todos sus objetos; la conexiÃ³n de desarrollo estÃ¡ en `backend-ruta/.env`. Se trabajarÃ¡ primero contra DEV y PROD queda diferido para una etapa posterior. No registrar credenciales en documentaciÃ³n. | `memoria_proyecto_ruta.md` | Sprint 0 |
-| 2026-05-26 | VerificaciÃ³n infraestructura | Verificada conexiÃ³n a BD DEV OCI desde `backend-ruta/.env` sin exponer secretos. Resultado: conexiÃ³n OK a `rutadb` con PostgreSQL 18.4; schema `ruta` existe; 48 tablas base; 104 filas en `state_catalog`; 70 filas en `client_parameters`; 1 cliente; 21 polÃ­ticas RLS `tenant_isolation`; 20 particiones de tabla para `client_id=0`. Se contrastÃ³ con `docs-ruta/bd/ruta_postgres.sql` y 20 particiones es el diseÃ±o correcto; algunas tablas con `client_id` no se particionan por diseÃ±o (`sessions`, `client_api_keys`, `webhook_subscriptions`, `external_webhook_events`, entre otras). | `memoria_proyecto_ruta.md`, `plan_tareas.md`, BD DEV OCI | Sprint 0 |
-| 2026-05-26 | Desarrollo | Avance local DEV de `0.SHARED-1`: generado `@ruta/db/prisma/schema.prisma` por introspecciÃ³n contra BD DEV OCI; generado Prisma Client; corregido `withTenant` para ejecutar callbacks con el transaction client dentro del contexto RLS; completado barrel de enums; agregados validators de auth, client, product, category, buyer, courier y pickup_point; agregada suite mÃ­nima de tests de validators. VerificaciÃ³n: typecheck/build OK en `@ruta/shared` y `@ruta/db`; tests `@ruta/shared` OK (4). Pendiente para cierre total: GitHub Packages/CI/publicaciÃ³n de `@ruta/shared@1.0.0` y `@ruta/db@1.0.0`. | `packages-ruta`, `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-24 | 📝 Setup | Creación inicial de un manifiesto experimental para agente. Removido posteriormente el 2026-05-26 por decision del usuario; `AGENTS.md` y `CLAUDE.md` quedan como manifiestos vigentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-24 | 📝 Setup | Revisión completa del proyecto: diagnóstico de documentación (✅ completa) y código (❌ nada escrito aún) | `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-24 | 📝 Setup | Verificación de compatibilidad de `.md` con Codebuff/DeepSeek — confirmado que `AGENTS.md` es suficiente como manifiesto general para agentes. | `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-24 | 📝 Setup | Agregada PARTE 6 (Histórico de cambios) a este documento. | `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-25 | Decisión | Confirmadas decisiones de arranque: dominio principal `ruta.com`, Cliente piloto existente, credenciales Wompi pendientes, parámetros de negocio confirmados en SQL, Fase 1 = Cliente Full, Fase 2 = Cliente API, carrito persistido en BD como pedido `DRAFT` | `mvp_alcance.md`, `estrategia_testing.md`, `wireframes_mvp.md`, `plan_tareas.md`, `contrato_api.md`, `parametros_negocio.md`, `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-25 | Regla operativa | Agregada Definition of Done: ningún avance se considera terminado sin verificación; cada cambio debe ejecutar pruebas proporcionales al riesgo o registrar explícitamente por qué no se pudieron ejecutar | `plan_tareas.md`, `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-25 | Regla operativa | Registrada autorización operativa del usuario: los agentes pueden ejecutar comandos, scripts, pruebas, builds, instalaciones y operaciones de sistema necesarias sin confirmación manual previa; si el runtime exige aprobación, deben solicitar escalación directamente con prefijos persistentes acotados cuando aplique | `AGENTS.md`, `CLAUDE.md`, copias por repo, `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-26 | Decisión infraestructura | Confirmado por el usuario que la BD de DEV ya existe en OCI y contiene todos sus objetos; la conexión de desarrollo está en `backend-ruta/.env`. Se trabajará primero contra DEV y PROD queda diferido para una etapa posterior. No registrar credenciales en documentación. | `memoria_proyecto_ruta.md` | Sprint 0 |
+| 2026-05-26 | Verificación infraestructura | Verificada conexión a BD DEV OCI desde `backend-ruta/.env` sin exponer secretos. Resultado: conexión OK a `rutadb` con PostgreSQL 18.4; schema `ruta` existe; 48 tablas base; 104 filas en `state_catalog`; 70 filas en `client_parameters`; 1 cliente; 21 políticas RLS `tenant_isolation`; 20 particiones de tabla para `client_id=0`. Se contrastó con `docs-ruta/bd/ruta_postgres.sql` y 20 particiones es el diseño correcto; algunas tablas con `client_id` no se particionan por diseño (`sessions`, `client_api_keys`, `webhook_subscriptions`, `external_webhook_events`, entre otras). | `memoria_proyecto_ruta.md`, `plan_tareas.md`, BD DEV OCI | Sprint 0 |
+| 2026-05-26 | Desarrollo | Avance local DEV de `0.SHARED-1`: generado `@ruta/db/prisma/schema.prisma` por introspección contra BD DEV OCI; generado Prisma Client; corregido `withTenant` para ejecutar callbacks con el transaction client dentro del contexto RLS; completado barrel de enums; agregados validators de auth, client, product, category, buyer, courier y pickup_point; agregada suite mínima de tests de validators. Verificación: typecheck/build OK en `@ruta/shared` y `@ruta/db`; tests `@ruta/shared` OK (4). Pendiente para cierre total: GitHub Packages/CI/publicación de `@ruta/shared@1.0.0` y `@ruta/db@1.0.0`. | `packages-ruta`, `memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-26 | Regla operativa | Creado `README.md` en la raiz local del proyecto con instruccion obligatoria para que cualquier agente lea primero `docs-ruta/memoria_proyecto_ruta.md` y registre alli todo avance, cambio, ajuste, decision o tarea importante. | `README.md`, `memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-26 | Desarrollo/CI | Avance ejecutado de tareas 1, 2 y 3: `@ruta/shared` y `@ruta/db` quedan con CI local verificable, `@ruta/db` empaqueta Prisma Client generado dentro de `dist/generated` y usa imports ESM compatibles con Node; agregados workflows de CI/publicacion para `ruta-shared`; backend consume `@ruta/shared` y `@ruta/db` via dependencias locales `file:` para DEV, agrega `/healthz/ready` con Prisma y CI de backend. Verificacion: `packages-ruta pnpm run ci` OK; `pnpm pack --dry-run` OK para `@ruta/shared@1.0.0` y `@ruta/db@1.0.0` con tarballs limpios; `backend-ruta pnpm typecheck`, `pnpm build`, `pnpm test` OK; `pnpm start` levanta API y `curl /healthz` responde 200. Pendiente externo: configurar `NPM_PUBLISH_TOKEN` y publicar realmente `@ruta/shared@1.0.0`/`@ruta/db@1.0.0` en GitHub Packages desde `main`. | `packages-ruta`, `backend-ruta`, `memoria_proyecto_ruta.md` | Sprint 0 |
 | 2026-05-26 | Bugfix | Corregido error intermitente en build de `@ruta/shared` y `@ruta/db` en entorno WSL2/Dropbox: `rm -rf dist` fallaba con "Permission denied" cuando Dropbox tenia archivos bloqueados tras generar Prisma Client. Solucion: cambiar build script a `(rm -rf dist || true) && tsc`. Verificado: `pnpm run ci` en `packages-ruta` pasa sin errores. | `packages-ruta/shared/package.json`, `packages-ruta/db/package.json` | Sprint 0 |
@@ -628,27 +628,27 @@ consideran resueltas.
 | 2026-05-28 | Desarrollo | Cerradas `2.STORE-3` y `2.STORE-4` (frontend storefront): Mis pedidos BUYER con timeline y acciones condicionales (PR #11 mergeado a main). Confirmación post-Wompi compatible con `output: export`, polling a `/buyer/orders/:id`, estados procesando/confirmado/fallido (PR #13 mergeado a main). Typecheck storefront EXIT 0 en ambas. | `frontend-ruta/storefront/src/`, PR #11, PR #13 | Sprint 2 |
 | 2026-05-28 | QA | Cerrada `2.QA-1`: tests backend del state machine y Wompi. Suite data-driven para transiciones permitidas/rechazadas, tests de webhook Wompi con HMAC valido/invalido, deduplicacion por `provider_event_id`, mapping DECLINED y mock compatible con MSW para sandbox. Verificacion: 3393 tests focalizados OK; suite completa 3662 passed, 1 skipped; `pnpm typecheck` EXIT 0. | `backend-ruta/api/src/__tests__/payments.test.ts`, `backend-ruta/api/src/__tests__/wompi_webhook.test.ts`, `backend-ruta/api/src/__tests__/__mocks__/wompi_server.ts`, `docs-ruta/plan_tareas.md`, `docs-ruta/project_sprint2_status.md`, `docs-ruta/memoria_proyecto_ruta.md` | Sprint 2 |
 
-> *A partir de aquÃ­ se registran cronolÃ³gicamente todos los avances del proyecto.*
+> *A partir de aquí se registran cronológicamente todos los avances del proyecto.*
 
 ---
 
 ## 6.2 Detalle por Sprint
 
-### Sprint 0 â€” Setup multi-repo
+### Sprint 0 — Setup multi-repo
 
-| Tarea | Estado | DescripciÃ³n | Archivos / commits |
+| Tarea | Estado | Descripción | Archivos / commits |
 |---|---|---|---|
 | `0.DOCS-1` (ext.) | [-] | Manifiesto experimental removido por decision del usuario; quedan vigentes `AGENTS.md` / `CLAUDE.md`. | `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.DOCS-1` (ext.) | âœ… | RevisiÃ³n de compatibilidad de `.md` con Codebuff/DeepSeek | â€” |
-| `0.DOCS-1` (ext.) | âœ… | Agregada PARTE 6 â€” HistÃ³rico de cambios a memoria del proyecto | `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.DOCS-1` (ext.) | âœ… | Regla de actualizaciÃ³n de memoria incorporada en la memoria viva del proyecto | `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.DOCS-1` (ext.) | âœ… | Actualizadas decisiones operativas: `ruta.com` como dominio principal, Cliente piloto confirmado, Wompi pendiente, parÃ¡metros confirmados en SQL, correcciÃ³n Fase 1/2 y carrito en BD | `docs-ruta/mvp_alcance.md`, `docs-ruta/estrategia_testing.md`, `docs-ruta/wireframes_mvp.md`, `docs-ruta/plan_tareas.md`, `docs-ruta/contrato_api.md`, `docs-ruta/parametros_negocio.md`, `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.DOCS-1` (ext.) | âœ… | Agregada Definition of Done por avance: pruebas obligatorias segÃºn riesgo y registro explÃ­cito cuando no se puedan ejecutar | `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.DOCS-1` (ext.) | âœ… | Registrada autorizaciÃ³n operativa para ejecutar acciones necesarias sin confirmaciÃ³n manual previa, con escalaciÃ³n directa cuando el runtime la exija y reglas persistentes acotadas | `docs-ruta/AGENTS.md`, `docs-ruta/CLAUDE.md`, copias por repo, `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.INFRA-2` | âœ… DEV | Confirmado que la base de datos de desarrollo ya estÃ¡ creada en OCI; la conexiÃ³n local estÃ¡ en `backend-ruta/.env`. El proyecto/entorno PROD queda pendiente para mÃ¡s adelante. | `backend-ruta/.env` (no documentar secretos) |
-| `0.INFRA-3` | âœ… DEV | VerificaciÃ³n ejecutada contra DEV OCI: `DATABASE_URL` presente; conexiÃ³n OK; schema `ruta` OK; 48 tablas base; `state_catalog` y `client_parameters` cargados; RLS instalado en tablas operativas; 20 particiones de tabla para `client_id=0`, confirmado como diseÃ±o correcto segÃºn `docs-ruta/bd/ruta_postgres.sql`. Se actualizÃ³ `plan_tareas.md` para dejar el criterio alineado al SQL autoritativo. | BD DEV OCI, `docs-ruta/bd/ruta_postgres.sql`, `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` |
-| `0.SHARED-1` | [/] DEV local | Inicializados/ajustados paquetes `@ruta/shared` y `@ruta/db` para trabajo local: enums/validators exportados, Prisma introspectado desde BD DEV OCI, Prisma Client generado, helper `withTenant` transaccional y tipado. Verificado con `pnpm --filter @ruta/shared typecheck`, `pnpm --filter @ruta/shared test`, `pnpm --filter @ruta/shared build`, `pnpm --filter @ruta/db typecheck`, `pnpm --filter @ruta/db build`. No se publica a GitHub Packages todavÃ­a porque `0.INFRA-4` queda pendiente. | `packages-ruta/shared`, `packages-ruta/db`, `packages-ruta/pnpm-workspace.yaml`, `packages-ruta/package.json` |
-| `0.DOCS-1` (ext.) | âœ… | Creado `README.md` raiz con regla de arranque: leer siempre `docs-ruta/memoria_proyecto_ruta.md` antes de trabajar y actualizar la memoria con cualquier avance, cambio, ajuste, decision o tarea importante. | `README.md`, `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.DOCS-1` (ext.) | ✅ | Revisión de compatibilidad de `.md` con Codebuff/DeepSeek | — |
+| `0.DOCS-1` (ext.) | ✅ | Agregada PARTE 6 — Histórico de cambios a memoria del proyecto | `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.DOCS-1` (ext.) | ✅ | Regla de actualización de memoria incorporada en la memoria viva del proyecto | `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.DOCS-1` (ext.) | ✅ | Actualizadas decisiones operativas: `ruta.com` como dominio principal, Cliente piloto confirmado, Wompi pendiente, parámetros confirmados en SQL, corrección Fase 1/2 y carrito en BD | `docs-ruta/mvp_alcance.md`, `docs-ruta/estrategia_testing.md`, `docs-ruta/wireframes_mvp.md`, `docs-ruta/plan_tareas.md`, `docs-ruta/contrato_api.md`, `docs-ruta/parametros_negocio.md`, `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.DOCS-1` (ext.) | ✅ | Agregada Definition of Done por avance: pruebas obligatorias según riesgo y registro explícito cuando no se puedan ejecutar | `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.DOCS-1` (ext.) | ✅ | Registrada autorización operativa para ejecutar acciones necesarias sin confirmación manual previa, con escalación directa cuando el runtime la exija y reglas persistentes acotadas | `docs-ruta/AGENTS.md`, `docs-ruta/CLAUDE.md`, copias por repo, `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.INFRA-2` | ✅ DEV | Confirmado que la base de datos de desarrollo ya está creada en OCI; la conexión local está en `backend-ruta/.env`. El proyecto/entorno PROD queda pendiente para más adelante. | `backend-ruta/.env` (no documentar secretos) |
+| `0.INFRA-3` | ✅ DEV | Verificación ejecutada contra DEV OCI: `DATABASE_URL` presente; conexión OK; schema `ruta` OK; 48 tablas base; `state_catalog` y `client_parameters` cargados; RLS instalado en tablas operativas; 20 particiones de tabla para `client_id=0`, confirmado como diseño correcto según `docs-ruta/bd/ruta_postgres.sql`. Se actualizó `plan_tareas.md` para dejar el criterio alineado al SQL autoritativo. | BD DEV OCI, `docs-ruta/bd/ruta_postgres.sql`, `docs-ruta/plan_tareas.md`, `docs-ruta/memoria_proyecto_ruta.md` |
+| `0.SHARED-1` | [/] DEV local | Inicializados/ajustados paquetes `@ruta/shared` y `@ruta/db` para trabajo local: enums/validators exportados, Prisma introspectado desde BD DEV OCI, Prisma Client generado, helper `withTenant` transaccional y tipado. Verificado con `pnpm --filter @ruta/shared typecheck`, `pnpm --filter @ruta/shared test`, `pnpm --filter @ruta/shared build`, `pnpm --filter @ruta/db typecheck`, `pnpm --filter @ruta/db build`. No se publica a GitHub Packages todavía porque `0.INFRA-4` queda pendiente. | `packages-ruta/shared`, `packages-ruta/db`, `packages-ruta/pnpm-workspace.yaml`, `packages-ruta/package.json` |
+| `0.DOCS-1` (ext.) | ✅ | Creado `README.md` raiz con regla de arranque: leer siempre `docs-ruta/memoria_proyecto_ruta.md` antes de trabajar y actualizar la memoria con cualquier avance, cambio, ajuste, decision o tarea importante. | `README.md`, `docs-ruta/memoria_proyecto_ruta.md` |
 | `0.DOCS-1` | [x] Cerrada | Commit y push realizados en rama `docs/close-0-docs-1`; PR #1 aprobado y mergeado a `main`: https://github.com/orkoruta/docs-ruta/pull/1. Verificacion: `git diff --check` OK. | `docs-ruta`, PR #1 |
 | `0.INFRA-4` | [x] Cerrada | Secret `NPM_PUBLISH_TOKEN` existe; `@orkoruta/shared@1.0.0` y `@orkoruta/db@1.0.0` publicados en GitHub Packages; PR #1 mergeado a `main` con CI `test` SUCCESS. | `packages-ruta`, GitHub Packages, https://github.com/orkoruta/packages-ruta/pull/1 |
 | `0.SHARED-1` | [/] DEV/CI local OK | Ajustado `@ruta/db` para generar Prisma Client en `src/generated/prisma-client`, copiarlo a `dist/generated` en build limpio y usar imports ESM con extension `.js`; `@ruta/shared` removio sourcemaps que apuntaban a fuentes no publicadas. Verificado `pnpm run ci` en `packages-ruta`: generate, typecheck, tests shared (4) y build OK. Verificado `pnpm pack --dry-run` para ambos paquetes con contenido limpio. Falta publicacion real de `@ruta/shared@1.0.0` y `@ruta/db@1.0.0`. | `packages-ruta/shared`, `packages-ruta/db`, `packages-ruta/package.json` |
@@ -740,13 +740,58 @@ como usuario real (admin, corporativo y repartidor).
 | Checkout invitado: selector de país en el teléfono | Se portó `phone_country_codes.ts` al storefront y el campo de teléfono de "Tus datos" (invitado) pasó a selector de indicativo (bandera + código, Colombia por defecto) + número local, recompuesto con `composePhone` al guardar en `PATCH /buyer/me`. Los condicionales de tipo de entrega (offersPickup) y de pago Wompi (onlinePaymentEnabled) ya aplicaban en el `CheckoutStepper`, que es el mismo para invitado y con cuenta. | `frontend-ruta/storefront/src/lib/phone_country_codes.ts`, `checkout/_components/CheckoutStepper.tsx` |
 | Despacho por Servientrega (aplazado) | Se decidió que al elegir "envío por externo" (`delivery_carrier_type='EXTERNAL_COURIER'`) se genere la guía vía API de Servientrega. **Aplazado**: faltan cuenta + credenciales + documentación/WSDL de su API (SOAP), y tiene costo por guía. Hoy esa rama solo pasa el pedido a `READY_TO_SHIP` sin llamar a nadie (`markReady` en `admin_orders.ts`). Paso a paso completo en `COSAS POR HACER MAS ADELANTE.md` §2 (engancha tras confirmar READY_TO_SHIP, cola pg-boss con reintentos, config por cliente, campo de guía). | `COSAS POR HACER MAS ADELANTE.md`, `backend-ruta/api/src/routes/admin_orders.ts` |
 | Pago online roto: initiate-payment sin cuerpo | `POST /buyer/orders/:id/initiate-payment` daba 400 "Datos inválidos / Required": el frontend lo llama **sin cuerpo** (redirect_url es opcional) y `initiatePaymentSchema.parse(req.body)` con `req.body` indefinido falla porque `undefined` no es objeto. Rompía el pago online para **todos** los compradores (no solo invitados). Fix: `parse(req.body ?? {})`. Verificado E2E: initiate-payment devuelve `wompi_checkout_url` + referencia (200); 3 tests de ruta nuevos. **Aparte:** la config Wompi de pizzeria-colina estaba desactivada/sin public key (de pruebas previas en el admin), por eso además daba 422 "no hay proveedor"; se reactivó con llaves de prueba. | `backend-ruta/api/src/routes/buyer_payment.ts`, `backend-ruta/api/src/__tests__/buyer_payment.test.ts` |
+| Código postal automático desde el mapa | Al ubicar la dirección en el mapa (checkout storefront) se rellena solo el código postal. El geocoding directo ahora extrae `postal_code` de los `address_components` de Google (sin llamada extra), y se agregó geocodificación **inversa** `GET /geocode/reverse?lat=&lng=` (coordenadas → dirección) para cuando el comprador arrastra el pin: se saca el postal de ese punto. `AddressStep` rellena el campo desde ambos; si Google no trae postal, conserva el que el comprador escribió. Verificado: directo 'Cra 7 #71-52' → 110231 (ROOFTOP), inverso coords → 110221. | `backend-ruta/api/src/services/geocoding.service.ts`, `routes/geocoding.ts`, `frontend-ruta/storefront/src/lib/geocoding.ts`, `checkout/_components/AddressStep.tsx`, `docs-ruta/contrato_api.md` |
+| Ocultar del admin los pedidos cerrados por abandono | Los carritos de invitado abandonados terminaban en CLOSED (`closure_reason` PAYMENT_TIMEOUT o EXPIRED) y le aparecían al Cliente. **Todo** pedido terminal es CLOSED (incl. completados, `closure_reason='COMPLETED_SUCCESSFULLY'`), así que no se puede filtrar por estado. La lista del admin ahora excluye solo los CLOSED con razón de **abandono** (`EXPIRED, PAYMENT_TIMEOUT, CANCELLED_NO_PAYMENT, PAYMENT_REJECTED, CANCELLED_BY_SYSTEM`), con `NOT: { order_status: CLOSED, closure_reason: { in: [...] } }` (null-safe: los no-CLOSED no se afectan). Se conservan completados, fallos de entrega y las cancelaciones hechas por persona (`CANCELLED_BY_CUSTOMER/SELLER/ADMIN`). Verificado E2E: los abandonados desaparecen, los CLOSED visibles son solo CANCELLED_BY_ADMIN; 1 test nuevo. | `backend-ruta/api/src/routes/admin_orders.ts`, `backend-ruta/api/src/__tests__/admin_orders_list_filter.test.ts` |
+| Pedido recurrente pre-aprobado (salta a SELLER_CONFIRMED) | Un pedido recurrente pasaba por ORDER_SUBMITTED→ORDER_VALIDATING→VALIDATION_APPROVED y quedaba esperando que el Cliente lo **aceptara** a mano. Ahora nace pre-aprobado en `SELLER_CONFIRMED` (el Cliente ve directo "Marcar preparando"). Solo para contra entrega; un pago online debe completarse antes. Implementación: `isRecurring` en `TransitionContext`; reglas nuevas (SYSTEM+isRecurring) `ORDER_SUBMITTED→SELLER_CONFIRMED` y `ORDER_VALIDATING→SELLER_CONFIRMED`, y se amplió `VALIDATION_APPROVED→SELLER_CONFIRMED` a SYSTEM con la misma condición. `markOrderAsRecurring` da el salto en UN update (checkout: historial queda `DRAFT→ORDER_SUBMITTED→SELLER_CONFIRMED`, sin los estados de validación); el generador crea directo en SELLER_CONFIRMED. Verificado E2E: pedido COD marcado recurrente queda en SELLER_CONFIRMED con historial limpio; suite 4198/4200 (1 flaky de cancellation ajeno, pasa aislado). | `backend-ruta/api/src/services/orders/state_machine.ts`, `services/recurrence.service.ts`, `jobs/recurrence_generator.job.ts`, tests de recurrencia actualizados |
+| Recurrencia admin: cancelar, periodicidad/estado y nombre clickable | Tres arreglos en la lista de plantillas del admin. (1) **Bug:** cancelar/pausar/reanudar daban 400 "Header X-Idempotency-Key requerido" — las mutaciones no mandaban el header; se agregó. (2) Periodicidad y estado salían **vacíos**: el backend emite `recurrence_periodicity`/`recurrence_status` y el admin leía `periodicity`/`status` (otro desajuste de contrato); se alineó el frontend y se completaron las etiquetas (`CUSTOM_INTERVAL`, `DAILY`). (3) El nombre del comprador salía como "Comprador #17" porque el backend no traía `buyer_name`; `listTemplates` ahora lo consulta en batch a `users` (sin N+1) y el nombre es el enlace al detalle (se quitó el botón "Ver"). Verificado E2E: la lista muestra nombres reales/periodicidad/estado y cancelar da 200. | `frontend-ruta/admin/src/lib/recurrence.api.ts`, `admin/recurrence/RecurrenceListClient.tsx`, `admin/recurrence/[id]/RecurrenceDetailClient.tsx`, `backend-ruta/api/src/services/recurrence.service.ts` |
 | **Capacidad del repartidor** | Un repartidor puede llevar **varios pedidos a la vez**. El tope lo configura cada cliente con el parámetro `limits.max_concurrent_orders_per_courier` (default 3). `getAvailableCouriers` devuelve `active_orders`, `max_concurrent_orders` y `remaining_capacity`, filtra los que están al tope y ordena por capacidad libre; `assignCourier` revalida el límite en el servidor (422). La pantalla de parámetros ahora mezcla los globales (`client_id = 0`) con los overrides del cliente, marcando el origen con `source: 'CLIENT' \| 'GLOBAL'`. | `backend-ruta/api/src/services/orders/courier_assignment.service.ts`, `backend-ruta/api/src/routes/admin_parameters.ts`, `docs-ruta/parametros_negocio.md` |
 | **Flujo corporativo** | **Cambio de flujo:** un pedido corporativo ya no pasa por `DRAFT` ni por "Confirmar y enviar". Al crearlo, `advanceCorporateOrderToPreparing()` lo lleva por el state machine hasta `PREPARING` (`DRAFT → ORDER_SUBMITTED → ORDER_VALIDATING → SELLER_CONFIRMED → PREPARING`), deteniéndose en `ORDER_SUBMITTED` si el pago es `ONLINE_AT_ORDER` y respetando `MANUAL_REVIEW`. Así llega directo al mapa de asignación. La regla `DRAFT → PENDING_CONFIRM` se restringió a `buyerType === 'CORPORATE'` para no alterar el flujo del comprador final. | `backend-ruta/api/src/services/corporate_orders.service.ts`, `backend-ruta/api/src/services/orders/state_machine.ts`, `docs-ruta/flujos/flujo_6_pedidos_corporativos.txt` |
 | Tema y contraseñas | Se eliminó el toggle claro/oscuro de todos los frontends: el tema sigue al del sistema operativo (`darkMode: 'media'`). Todos los campos de contraseña usan `RutaPasswordInput` (botón de ojo, fuera del orden de tabulación). | `frontend-ruta/packages/ui/src/components/RutaPasswordInput.tsx`, configs de Tailwind |
 | Foto del recibo | El botón abría el selector de archivos en vez de la cámara (`<input capture>` solo funciona en móvil). Ahora `ReceiptCapture` usa `getUserMedia` con `facingMode: 'environment'`, captura a canvas → JPEG 0.9 y ofrece Capturar / Repetir. Apaga los tracks al capturar, cancelar y desmontar. Si no hay cámara o se niega el permiso, cae al selector de archivos. Requiere contexto seguro (localhost o HTTPS). | `frontend-ruta/admin/src/app/(protected)/courier/[id]/_components/ReceiptCapture.tsx` |
 | **Estados para el repartidor** | El historial mostraba estados administrativos crudos (`VALIDATION_APPROVED`) que no le dicen nada a quien entrega. Se creó un diccionario único con ~35 estados escritos desde su punto de vista (`SELLER_CONFIRMED` → "El negocio aceptó el pedido"), reemplazando dos copias locales de `statusLabel`/`statusColor`. Se decidió **traducir** en vez de filtrar el historial, para que el repartidor vea de dónde viene el pedido. Los estados sin traducir se muestran en crudo antes que ocultar información. | `frontend-ruta/admin/src/lib/courier_status_labels.ts`, `CourierOrderDetail.tsx`, `CourierDashboard.tsx`, `docs-ruta/guias/courier.md` §8 |
+| **Día de entrega programada** | El Cliente fija a mano el día de entrega desde el detalle del pedido, y lo ven el comprador y el repartidor. **Columna nueva** `orders.scheduled_delivery_date DATE` (+ índice `idx_orders_client_scheduled_delivery`): es `DATE` y no `TIMESTAMPTZ` a propósito, porque es un día calendario del negocio y en Colombia (UTC-5) un timestamp se renderiza como el día anterior con facilidad. Todo el cruce Date↔string pasa por `services/orders/delivery_schedule.ts` (`toDateOnly`/`fromDateOnly`, anclados a UTC) y el formateo en el front por `lib/delivery_date.ts` (`Intl` con `timeZone: 'UTC'`). Endpoint `PUT /admin/orders/:id/delivery-date` con `{ scheduled_delivery_date: "YYYY-MM-DD" \| null }`: **no** pasa por el state machine (no es un cambio de estado) pero **sí** se audita (`order_delivery_date_set` / `_cleared`), porque `order_state_history` no lo registraría y es un compromiso con el comprador. Rechaza con 422 si el pedido ya terminó (`SCHEDULING_CLOSED_STATUSES`, espejado en el front solo para ocultar el formulario). 11 tests nuevos. **Migración pendiente de correr:** `infra-ruta/scripts/add_scheduled_delivery_date.sql`. | `docs-ruta/bd/ruta_postgres.sql`, `packages-ruta/db/prisma/schema.prisma`, `backend-ruta/api/src/services/orders/delivery_schedule.ts`, `routes/admin_orders.ts`, `services/orders/{orders,courier_orders,courier_assignment}.service.ts`, `frontend-ruta/admin/src/lib/delivery_date.ts`, `admin/orders/[id]/_components/DeliveryDateCard.tsx`, `courier/[id]/_components/CourierOrderDetail.tsx`, `courier/_components/CourierDashboard.tsx`, `storefront/.../orders/[id]/_components/OrderDetailView.tsx`, `storefront/.../orders/_components/OrdersView.tsx`, `docs-ruta/contrato_api.md` |
+| **Deudas técnicas: 6 cerradas** | Sesión dedicada a `DEUDAS TECNICAS.md`. Cerradas: **401 global en el admin** (patrón `session-events` portado del storefront; 20 de 22 módulos de API emiten, se excluyen `auth` —401 = contraseña mala— y `control_view` —401 = contraseña maestra—); **cuatro módulos duplicados** movidos a `@orkoruta/web-shared` (paquete nuevo, fuente sin build, 13 ficheros actualizados); **mojibake** en dos documentos reparado con `ftfy`; **`isCod` siempre falso**; **config JWT muerta** (eran dos variables, no una); **«Código de empresa»** mal etiquetado. Sigue abierta la #4 con tres hipótesis descartadas. | `DEUDAS TECNICAS.md`, `frontend-ruta/admin/src/lib/session-events.ts`, `frontend-ruta/packages/web-shared/`, `infra-ruta/scripts/build_shared.sh` |
+| **Filtros de fecha: 400 en tres pantallas** | Los `<input type="date">` mandan `2026-08-11` y pedidos, auditoría y reembolsos validaban con `z.string().datetime()`, que exige ISO-8601 completo: **elegir una fecha rompía el listado entero con 400**. En entregas de webhook el corte era `lte` a medianoche **UTC**, así que «hasta el 11» excluía el 11. Ahora un único `dateFilterSchema` en shared acepta día calendario e instante ISO, y las fronteras son las del día **en Bogotá** (UTC-5, sin horario de verano) con límite superior **exclusivo**. Ojo: `Date.parse('2026-02-30')` no falla, se desborda a 2 de marzo — el validador comprueba que la fecha construida sea la escrita. 11 tests. | `packages-ruta/shared/src/utils/date_range.ts`, `backend-ruta/api/src/routes/{admin_orders,admin_audit,admin_webhooks}.ts`, `services/{disputes,refunds}.service.ts` |
+| **Buscador y filtro de origen de pedidos** | La pantalla mandaba `q` y `order_origin`; el esquema no los tenía y Zod los descartaba en silencio, así que salía la lista completa y parecía que no había coincidencias. Además el tipo del frontend decía `'UI' \| 'API'`, que **no son valores de `order_origin`**: al empezar a validarse habrían dado 400, y la insignia de la tabla y el `isApiOrder` del detalle (que oculta acciones de Flujo 1/4/6 a Cliente API) nunca coincidían. Corregidos a los cinco valores reales con etiquetas en español. `q` busca por nombre y correo del comprador y, si es solo dígitos, por id acotado al rango de BIGINT. 13 tests. | `backend-ruta/api/src/routes/admin_orders.ts`, `frontend-ruta/admin/src/lib/orders.api.ts`, `admin/orders/page.tsx`, `admin/orders/[id]/OrderDetailClient.tsx` |
+| **Puntos físicos: el módulo hablaba otro idioma** | La interfaz y los formularios usaban `address`, `phone` y `schedule`; la API emite y espera `address_line`, `contact_phone` y `opening_hours`. Dirección y teléfono salían **en blanco**, y al guardar solo se persistían nombre, ciudad y departamento (el único punto de la BD lo creó el seed). Además `opening_hours` es JSON, no texto (ahora se edita como `días: horas`, una franja por línea, con round-trip exacto); el `status` iba en el cuerpo, que no lo acepta (se cambia con `/activate` y `/deactivate`); «Eliminar» llamaba a un `DELETE` **inexistente** → 404; y `page.tsx` arrastraba 152 líneas de un componente duplicado y muerto. | `frontend-ruta/admin/src/lib/{users.api,pickup_point_hours}.ts`, `admin/pickup-points/**` |
+| **Marcar reembolso ejecutado: 400 siempre** | El panel mandaba `result` donde la API espera `outcome`, que además es **obligatorio**: no era un campo ignorado en silencio, era un 400 en cada intento. Los esquemas de reembolso de shared también divergían (`order_id` en el cuerpo cuando va en la ruta, sin `refund_modality`, sin `outcome`). Consolidados: shared define, el servicio reexporta, y el tipo del frontend se deriva del esquema. | `packages-ruta/shared/src/validators/refund.schema.ts`, `backend-ruta/api/src/services/refunds.service.ts`, `frontend-ruta/admin/src/lib/refunds.api.ts` |
+| **Tarjeta «Pago» invisible** | El serializador del detalle no emitía `payment` y la tarjeta está envuelta en `{order.payment && …}`: **nunca se pintó**. Se emite, pero **sin** la evidencia de cobro —es el JSONB con la foto en base64 y arrastrarla metería cientos de kB en cada lectura del pedido; ya la sirve su endpoint dedicado—. `isCod` **no** se arregló con `payment.method` como proponía la deuda: en PICKUP la fila de `payments` se crea al cobrar, así que antes es `null` justo cuando el operador necesita ver el paso. Sale de `orders.payment_method`. 7 tests. | `backend-ruta/api/src/routes/admin_orders.ts`, `frontend-ruta/admin/src/lib/orders.api.ts` |
+| **Contrato: cero esquemas duplicados** | Se eliminaron **todos** los pares en los que un endpoint estaba definido a la vez en `@orkoruta/shared` y en el backend: shared define, el backend reexporta. Al consolidarlos aparecieron seis divergencias latentes, ninguna con síntoma visible aún porque las pantallas que las usarían no existen: `updateProduct`/`updateCategory` admitían un estado **`ARCHIVED` que el CHECK de la BD no permite**; `updateCourier` ofrecía `email`/`password` (que el PATCH descarta) y omitía `vehicle_plate` (que sí acepta); `registerBuyer` exigía nombre y documento que la API acepta opcionales; `controlViewEnter` exigía `reason` (al conectarlo, tres tests pasaron a 400); `updateBuyerProfile` declaraba tres campos que el endpoint descarta y perdía el `.trim()`. **Regla fijada con tests: el contrato describe lo que la API acepta, no lo que la UI exige** — una pantalla puede pedir más, el esquema compartido nunca. Quedan 43 esquemas solo en el backend: no pueden divergir, pero tampoco protegen al frontend. | `packages-ruta/shared/src/validators/*`, `backend-ruta/api/src/{routes,services}/*` |
+| **La suite «flaky»: tres hipótesis descartadas** | Falla ~1 de cada 3–8 corridas, fichero distinto cada vez, y **aislados pasan siempre**. Los errores son de infraestructura (404 en ruta existente, `socket hang up`, cuerpo `undefined`), no de negocio. Descartado que sea el paralelismo con `vi.mock` (vitest 2.1 usa `forks`: ni `process.env` ni el registro de módulos se comparten, comprobado con ficheros sonda); descartado que la causa sea recompilar `@orkoruta/shared` durante la suite (lo **empeora** —2 de 4— pero sin build cerca sigue fallando); descartado el agotamiento por forks (`--maxWorkers=4` no mejora: 2/8 vs 1/8). Queda abierta. **Aviso:** `pnpm vitest run --maxWorkers=N` no funciona (pnpm se come la bandera) y sale con código 0 sin ejecutar nada. | `DEUDAS TECNICAS.md` §4, `infra-ruta/scripts/build_shared.sh` |
+| Mapa de asignación: un solo panel + dos filtros | La barra lateral tenía cuatro tarjetas (leyenda, "Pedidos por asignar", "En reparto" y el repartidor del pedido seleccionado). Ahora es **un solo rectángulo** con la lista filtrada, y el estado se elige arriba: un desplegable junto al título con "En reparto" / "Pedidos por asignar" / "Todos", más un selector de fecha que filtra **el mapa y el panel a la vez**. La leyenda de colores pasó a una línea inline en la cabecera para no gastar una tarjeta. Decisión sobre el filtro de fecha, **corregida en la misma sesión**: al principio se dejó que los pedidos sin fecha siguieran visibles con cualquier día elegido (para no esconder trabajo), pero como el 100% de los pedidos existentes tenía la fecha vacía el filtro no descartaba nada y en pantalla parecía roto. Ahora el filtro es **estricto** (solo los programados para ese día) y, cuando algún pedido queda fuera por no tener fecha, se muestra un aviso con el conteo y un botón **Incluirlos**/**Ocultarlos**. Lección: una salvaguarda invisible se lee como un bug; si se va a relajar un filtro, hay que decirlo en pantalla. El filtrado es **en el cliente**: `/admin/orders/map` ya devuelve solo pedidos activos (conjunto acotado), así que cambiar de filtro es instantáneo y no parpadea con el refresco de 30 s. Si el pedido seleccionado deja de estar visible al cambiar un filtro, se suelta la selección para no dejar el mapa centrado en un pin ausente. `PendingOrdersPanel.tsx` se eliminó (reemplazado por `OrdersPanel.tsx`). | `frontend-ruta/admin/src/app/(protected)/admin/orders/map/_components/{AssignmentMapView,OrdersPanel}.tsx`, `map_legend.tsx`, `frontend-ruta/admin/src/lib/assignment.api.ts`, `backend-ruta/api/src/services/orders/courier_assignment.service.ts` |
+| **Identidad de marca RUTA** | Se aplicó la marca (`docs-ruta/branding/`) a los dos frontends. **Favicon**: imagotipo en `src/app/icon.svg` de cada app (convención de Next, sin `<link>` a mano). **Logo completo**: cabecera de la barra lateral del admin, barra superior en móvil y login; en el storefront **no** va en la cabecera (ahí manda el logo del Cliente, la tienda es suya) sino en el pie como "Con tecnología de RUTA by ORKO". Componentes `RutaLogo`/`RutaMark` en `@orkoruta/ui`, con `currentColor` y `viewBox` recortado al contenido — los SVG originales son lienzos de 2000×2000 con el logo pequeño en el centro; el recorte se calculó parseando los trazos y se verificó renderizando (márgenes de 1.5% simétricos, sin corte). **El "by ORKO" del SVG original viene en `#FF0000`**, residuo de la vectorización (en el PNG de referencia es naranja): en código se unifica a color de marca. Dimensionar **por ancho**, no por alto: con 1.82:1, `h-9` deja el "by ORKO" ilegible. | `frontend-ruta/packages/ui/src/components/RutaLogo.tsx`, `{admin,storefront}/src/app/icon.svg`, `admin/src/components/{RutaSidebar,RutaHeader}.tsx`, `admin/src/app/login/page.tsx`, `storefront/src/app/c/[slug]/layout.tsx` |
+| **Recolor de marca: `sky` → `brand`** | El acento primario era `sky`, que hacía doble trabajo: acento de marca **y** azul semántico de "en curso". Se separaron: primero las **11 líneas** que definen el azul de estado pasaron de `sky` a `blue` (casi idéntico a la vista), liberando el token; después las **386** ocurrencias restantes de `sky-` pasaron a `brand-` en 55 archivos. Escala `brand.50…950` derivada de `#FD8B43` conservando el tono 23° (en `tailwind.config.ts` de ambas apps). **Regla que queda:** los colores semánticos (verde/ámbar/rojo/azul) no se tiñen de marca — ahí el color comunica estado, no identidad. Los pines del mapa (`map_legend.tsx`) se dejaron en sus hex actuales a propósito: el "seleccionado" es ámbar y con la marca naranja al lado se confundirían. | `frontend-ruta/{admin,storefront}/tailwind.config.ts`, 55 archivos de `admin/src`, `storefront/src` y `packages/ui/src`, `docs-ruta/diseno/galeria_estilos_ruta.md` |
+| Sistema de diseño más moderno (sin tocar tipografía ni distribución) | Restricción explícita del usuario: misma fuente (Inter) y mismas distribuciones. Los cambios son de superficie y jerarquía. `RutaButton`: `primary` pasa a **relleno sólido de marca** con sombra tintada — en pantallas llenas de botones tintados no se distinguía la acción principal; el resto sigue tintado y ahora lee como secundario. Se añadieron foco visible de marca (`focus-visible`, solo teclado), `active:translate-y-px` y `disabled:opacity-50`. `RutaCard`: radio `lg`→`xl` y borde duro sustituido por borde + sombra muy suave (en oscuro se anula, ahí el borde basta). `RutaPill`: `rounded-md`→`rounded-full` y variante `brand` nueva. Barra lateral: ítem activo con barra de marca de 3px en el borde izquierdo, porque en oscuro el tinte de fondo solo es demasiado sutil. | `frontend-ruta/packages/ui/src/components/{RutaButton,RutaCard,RutaPill}.tsx`, `admin/src/components/RutaSidebar.tsx` |
+| Cabecera agrandada para que el logo se lea | La barra de marca (56px) no podía contener el logo a tamaño legible: a 128px de ancho el "by ORKO" se empasta. Se **midió** renderizando el logo a 96/128/160/192/224px: a partir de ~160px se lee. La barra lateral y la cabecera superior suben juntas a `h-24` (96px) —juntas, para que sus bordes inferiores sigan alineados— y el logo va a `w-36` (144×79px). **Regla aprendida:** dentro de una barra de altura fija el logo se dimensiona por **altura**; dimensionarlo por ancho (`w-32`) lo desbordó por arriba y por abajo, que fue el bug que reportó el usuario. `overflow-hidden` en el contenedor como seguro. | `admin/src/components/{RutaSidebar,RutaHeader}.tsx` |
+| **Sistema de movimiento** | `globals.css` de ambas apps. Tres reglas: el movimiento explica algo o no existe; una sola familia de curvas y duraciones (`--u-ease`, `--u-ease-pop`, `--u-fast/base/slow`); y **`prefers-reduced-motion` apaga todo**, incluidos los bucles, dejando los trazos en su estado final visible (`stroke-dashoffset: 0 !important`) — sin eso, quien pide menos movimiento vería las ilustraciones en blanco. Utilidades: `u-in*` (entradas), `u-stagger` (escalonado, con tope a los 8 hijos para que una lista larga no tarde un segundo), `u-lift`, `u-nudge`, `u-draw`, `u-travel`, `u-float`, `u-skeleton`. | `frontend-ruta/{admin,storefront}/src/app/globals.css` |
+| **Ilustraciones de estado vacío** | Cuatro ilustraciones SVG de trazo en `@orkoruta/ui` (`illustrations.tsx`) más `RutaEmptyState`. Vocabulario tomado de la marca: mismo grosor de trazo que el logotipo y la **ruta punteada** recurrente, que se dibuja o se recorre. `u-draw`/`u-travel` funcionan gracias a `pathLength="1"`, que normaliza la longitud del trazo y evita medir el recorrido real. `IllustrationAllDone` reusa el ángulo del chulo del imagotipo: un "no tienes pedidos" es un vacío **bueno** y la ilustración lo dice, en vez de tratarlo como carencia. **Nota de verificación:** en capturas estáticas (`qlmanage`) las ilustraciones salen incompletas porque el fotograma 0 tiene `stroke-dashoffset: 1`; hay que verificarlas en un navegador real. | `frontend-ruta/packages/ui/src/components/{illustrations.tsx,RutaEmptyState.tsx}` |
+| Movimiento aplicado | Dashboard: métricas con cuenta ascendente (`useCountUp`, con `tabular-nums` para que el número no tiemble mientras cuenta, y que devuelve el valor final de una si hay `prefers-reduced-motion`), rejilla escalonada, esqueletos de carga. Mapa: panel escalonado, filas con empuje al pasar por encima, toast deslizante, ilustración cuando los filtros no devuelven nada. Repartidor: tarjetas con elevación, esqueletos, "Estás al día" con el chulo. Login: **ruta ambiental** de fondo recorriéndose (el momento de marca de la app) y la tarjeta entrando con `u-in-pop`. Storefront: catálogo escalonado, tarjetas con elevación e ilustración de catálogo vacío. | `admin/src/lib/use_count_up.ts`, `admin/dashboard/page.tsx`, `admin/orders/map/_components/{AssignmentMapView,OrdersPanel}.tsx`, `courier/_components/CourierDashboard.tsx`, `admin/src/app/login/page.tsx`, `storefront/.../CatalogView.tsx` |
+| Fondo de rutas generalizado | Al usuario le gustó la ruta ambiental del login y pidió más. Se extrajo a `RutaRouteBackdrop` con tres variantes (`flow` portadas, `descend` columnas, `corner` cabeceras) y se colocó en barra lateral, cabecera del dashboard, cabecera del panel del repartidor, portada del catálogo y estados vacíos grandes. **No** se puso en el mapa ni en las tablas: ahí compite con el contenido. Opacidad graduada según con qué compite (0.18 portadas → 0.09 barra lateral). **Trampa resuelta:** el fondo va en `-z-10` y `position: relative` **no** crea contexto de apilamiento, así que sin `isolate` el `-z-10` se escapa al contexto raíz y queda escondido detrás del fondo de la tarjeta. Se añadió `isolate` a todos los contenedores anfitriones y se verificó en navegador con un estado vacío dentro de una tarjeta, que era el caso que fallaba. | `frontend-ruta/packages/ui/src/components/{RutaRouteBackdrop,RutaEmptyState}.tsx`, `admin/src/components/RutaSidebar.tsx`, `admin/dashboard/page.tsx`, `courier/_components/CourierDashboard.tsx`, `admin/src/app/login/page.tsx`, `storefront/.../CatalogView.tsx` |
+| Raíz del storefront mostraba el muestrario del design system | En `localhost:3003` (y en el dominio de producción a secas) se veía "RUTA Storefront — Design System": una página de pruebas que estaba en `/` desde el desarrollo inicial (commit `d28d62b`), no una regresión. Se **movió** a `/design-system` en vez de borrarla (sigue siendo útil como referencia visual) y `/` pasó a ser una pantalla de marca que explica que cada tienda vive en `/c/{slug}`. El storefront es multi-tenant y no existe una "tienda principal", así que la raíz no puede mostrar catálogo: lo honesto es indicar cómo llegar. | `storefront/src/app/page.tsx`, `storefront/src/app/design-system/page.tsx` |
+| Logo de la barra lateral con doble salto | El logo enlazaba a `/`, que en el admin redirige a `/login`, que a su vez rebota al panel del rol: dos saltos y un parpadeo del formulario de acceso para acabar donde ya estabas. Ahora `getHomeHref()` lo lleva directo a la primera pantalla del rol (`/ruta-admin/dashboard`, `/courier` o `/admin/dashboard`). | `admin/src/components/RutaSidebar.tsx` |
+| **`order_origin` con valores fuera del CHECK — 3 rutas rotas** | El job de recurrencia fallaba cada hora con `23514 orders_order_origin_check`. La causa: `order_origin` se escribía con cadenas sueltas y **tres** rutas inventaron valores que el CHECK no admite (`BUYER_UI, CORPORATE_MANUAL, RECURRENCE, FULL_LANDING_API, API_LOGISTICS`). (1) `recurrence_generator.job.ts` escribía `SCHEDULED_RECURRING`, que es un **`recurrence_mode`**, no un origen → el generador **nunca** creó un pedido. (2) `recurrence.service.ts` (repetir pedido) escribía `REPEAT_LAST` → misma muerte. (3) `api_client_orders.ts` usaba `'API'` en **tres** sitios: el `where` del listado (devolvía siempre vacío, sin error) y dos guardas `order_origin !== 'API'` que hacían que un Cliente API recibiera **404 al consultar o cancelar sus propios pedidos**. Confirmado contra la BD: solo existen `BUYER_UI` y `CORPORATE_MANUAL`. **Los tests estaban en verde porque afirmaban los valores equivocados** — mockean Prisma, así que el CHECK nunca se ejercita. Arreglo de fondo: enum `OrderOrigin` en `@orkoruta/shared` que espeja el CHECK, usado en todos los sitios de escritura; ahora un valor inventado es error de compilación. 7 tests corregidos; suite 4210/4211. | `packages-ruta/shared/src/enums/order_config.ts`, `backend-ruta/api/src/jobs/recurrence_generator.job.ts`, `services/recurrence.service.ts`, `routes/api_client_orders.ts`, `services/orders/orders.service.ts`, `services/corporate_orders.service.ts`, tests de recurrencia y api_client |
+| Landing comercial de RUTA | La raíz del storefront pasó de la pantalla de "abre la tienda desde su enlace" a una **landing comercial** dirigida a negocios: qué es, el ciclo de un pedido, capacidades reales, las dos modalidades (RUTA completo / solo logística) y llamada a demo. El hilo visual es la ruta de la marca; la sección "El camino de un pedido" es una ruta vertical con paradas **numeradas**, y van numeradas porque el ciclo de un pedido *es* una secuencia. Diferenciador destacado: "tu dinero no pasa por nosotros", que es la regla 4.1 del manifiesto y no una promesa de marketing. Todo lo que afirma la página existe implementado. | `storefront/src/app/page.tsx` |
+| Nombre de la marca: era RUTA, no "Uruta" | Los archivos de `docs-ruta/branding/` se llaman `Uruta_*.svg` y me guié por ese nombre al aplicar la identidad, cuando **toda la documentación del proyecto (README, CLAUDE.md, guías) siempre ha dicho RUTA**. El logotipo es el imagotipo en forma de U seguido de la palabra «ruta»; no dice «Uruta». Corregidas 61 ocurrencias en código y 15 en docs: componentes renombrados a `RutaLogo`/`RutaMark`/`RutaRouteBackdrop` (que además ahora sí siguen la convención `Ruta*` del resto del sistema), títulos de pestaña, textos de la landing, pie del storefront y `aria-label`s. Los archivos fuente de marca **no** se renombraron: son los entregados por el usuario. Queda una nota en la galería de estilos advirtiendo del desfase entre el nombre de archivo y el de la marca, para que nadie repita el error. | `frontend-ruta/packages/ui/src/components/{RutaLogo,RutaRouteBackdrop}.tsx` (renombrados), 18 archivos de `admin/src`, `storefront/src` y `packages/ui/src`, `docs-ruta/diseno/galeria_estilos_ruta.md` |
+| Teléfono del comprador invitado en el panel | El checkout **ya** pedía nombre y teléfono al invitado y los guardaba con `PATCH /buyer/me` (verificado en BD: los invitados que completan el checkout tienen teléfono; los que aparecen vacíos son sesiones abandonadas que nunca llegaron al checkout). Lo que faltaba era el lado del Cliente. Ahora `GET /admin/orders` devuelve `buyer_phone` y `buyer_is_guest`, y el detalle devuelve `buyer.is_guest`. En la lista el teléfono va bajo el nombre, clicable con `tel:`, junto a una etiqueta «invitado». **Hallazgo colateral:** el detalle mostraba el correo del invitado como si fuera real, y es **sintético** (`guest-<uuid>@guest.ruta`) — un operador podía intentar escribirle ahí. Ahora ese correo se oculta para invitados, se muestra un aviso de que el contacto es el teléfono, y el teléfono aparece siempre (con «Sin registrar» si falta) en vez de desaparecer. La regla de «es invitado» se extrajo a `lib/guest_buyer.ts` para que el admin y el storefront no la definan por separado. | `backend-ruta/api/src/lib/guest_buyer.ts`, `routes/admin_orders.ts`, `routes/buyer_profile.ts`, `frontend-ruta/admin/src/lib/orders.api.ts`, `admin/orders/page.tsx`, `admin/orders/[id]/OrderDetailClient.tsx` |
+| **Link de pago Nequi Negocios** | Nuevo medio de pago configurable por el Cliente, junto a Wompi. Se modela como proveedor `PAYMENT_LINK` (`provider_name='nequi'`) en `client_payment_providers` — la CHECK ya admitía ese tipo, así que **no hizo falta tocar el esquema**. Endpoints `GET/PUT /admin/payment-providers/nequi`, pestaña «Nequi» en Configuración, y `GET /public/clients/:slug` expone `nequi_payment_link`. El checkout muestra la opción **solo** si el link está activo. En la UI es una elección propia (`NEQUI_LINK`) que se guarda como `ONLINE_AT_ORDER` + submétodo `PAYMENT_LINK`: son dos experiencias distintas y mezclarlas confundiría al comprador. **Lo esencial: un link de Nequi no tiene webhook**, nadie avisa a RUTA de que pagaron. De ahí tres decisiones que no son opcionales: (1) esos pedidos se **excluyen** de `payment_timeout.job.ts`, que si no los cancelaría **a todos, incluidos los ya pagados**; (2) endpoint nuevo `POST /admin/orders/:id/confirm-payment` para que el Cliente confirme a mano, tras lo cual `validate_order` sigue el curso normal; (3) se le dice en pantalla al Cliente y al comprador, para que nadie espere una conciliación automática que no existe. **Bug evitado:** `isOnlinePaymentEnabled` buscaba cualquier proveedor con `ONLINE_AT_ORDER`; al añadir Nequi con ese mismo método podía devolver el proveedor equivocado y apagar Wompi — ahora filtra por `provider_name`. | `backend-ruta/api/src/services/payment_config.service.ts`, `routes/{admin_payment_config,public_catalog,admin_orders}.ts`, `jobs/payment_timeout.job.ts`, `frontend-ruta/admin/src/lib/payment_config.api.ts`, `settings/_components/NequiTab.tsx`, `settings/page.tsx`, `admin/orders/[id]/OrderDetailClient.tsx`, `storefront/.../checkout/_components/{CheckoutStepper,PaymentStep}.tsx`, `storefront/.../orders/[id]/_components/OrderDetailView.tsx`, `docs-ruta/contrato_api.md` |
+| **Seguimiento del repartidor en el mapa** | El comprador ve por dónde va su pedido desde que el repartidor pulsa "Iniciar despacho" (`SHIPPED`) hasta que llega. `POST /courier/location` recibe la posición; `GET /buyer/orders/:id/courier-location` la sirve; tarjeta con mapa en el detalle del pedido del comprador, sondeando cada 20 s. **Decisiones de diseño:** (1) Se guarda **solo la última posición** en `courier_profiles` (3 columnas nuevas), no historial: serían ~1.400 filas/repartidor/día y para "dónde está ahora" no aportan; historial pediría tabla particionada y retención. (2) **Sondeo, no websockets**: no hay esa infraestructura y con reportes cada 20 s un canal en vivo no enseñaría nada más. (3) El reporte **no exige `X-Idempotency-Key`** — es un latido que sobrescribe, y una clave por latido llenaría `idempotency_keys`. **Privacidad** (es la ubicación de una persona): el comprador solo ve al repartidor de *su* pedido, solo mientras va en camino, y `COURIER_ASSIGNED` queda fuera adrede porque aún no ha salido; todos los casos sin seguimiento responden **404 idéntico** para que no se puedan sondear pedidos ajenos; y al repartidor se le dice en pantalla cuándo se está compartiendo su ubicación. **Limitación real y asumida:** el panel del repartidor es una web y `watchPosition` se suspende al bloquear el teléfono o pasarse a Waze —cosa que la propia pantalla le invita a hacer—, así que esto es "última posición conocida", no seguimiento en vivo. Por eso `is_stale` + `tracking.courier_location_ttl_seconds` (300 s) y la UI dice *cuándo* se tomó en vez de fingir que está al día. Seguimiento continuo de verdad exige app nativa con ubicación en segundo plano. **Migración pendiente de correr:** `infra-ruta/scripts/add_courier_last_location.sql`. | `docs-ruta/bd/ruta_postgres.sql`, `packages-ruta/db/prisma/schema.prisma`, `backend-ruta/api/src/services/orders/courier_location.service.ts`, `routes/courier_location.ts`, `app.ts`, `jobs`—, `frontend-ruta/admin/src/lib/use_courier_location_reporter.ts`, `courier/[id]/_components/CourierOrderDetail.tsx`, `storefront/src/lib/tracking.api.ts`, `storefront/.../orders/[id]/_components/CourierTrackingCard.tsx` |
+| **Aviso por correo al entregar** | Cuando el pedido se marca como entregado (SHIP por el repartidor y PICKUP en punto físico) se le envía un correo al comprador. Cola pg-boss con reintentos, calcada de `webhook_sender.job.ts`, encolada con `setImmediate` tras el webhook de entrega: **nunca** con `await` en la ruta crítica — si el correo falla, el pedido sigue entregado. **Config por Cliente** en `client_parameters` (`notifications.delivery_email_*`), sin migración: el Cliente elige nombre visible, **correo de respuesta**, asunto y mensaje desde la pestaña «Correos» de Configuración. **El correo sale siempre desde la dirección de RUTA** (`EMAIL_FROM`) con el nombre del negocio delante y su correo en `Reply-To` — decisión tomada con el usuario para evitar que cada Cliente tenga que verificar su dominio con el proveedor, que sería un trámite por cliente; las respuestas del comprador le llegan igual al negocio, con marcas `{{comprador}}`, `{{pedido}}`, `{{total}}`, `{{negocio}}`. **A los invitados no se les escribe**, y es decisión explícita: su correo es sintético (`guest-<uuid>@guest.ruta`) y enviarlo generaría rebotes que queman la reputación del dominio remitente. El worker descarta sin reintentar lo que nunca va a funcionar (sin proveedor, invitado, rechazo 4xx) y solo reintenta fallos transitorios. Proveedor: **API HTTP de Resend** vía `fetch`, elegida sobre SMTP para no añadir `nodemailer`; todo el trato con el proveedor está aislado en `lib/email_client.ts`, así que cambiarlo es reescribir un archivo. **Falta la credencial** (`EMAIL_API_KEY`) y verificar el dominio remitente: sin eso el envío se salta con un log y no rompe nada. | `backend-ruta/api/src/lib/email_client.ts`, `services/notifications/delivery_email.service.ts`, `jobs/delivery_email.job.ts`, `jobs/maintenance_boss.ts`, `services/orders/{courier_ops,pickup_ops}.service.ts`, `routes/admin_notifications.ts`, `config/env.ts`, `app.ts`, `frontend-ruta/admin/src/lib/notifications.api.ts`, `settings/_components/DeliveryEmailTab.tsx`, `settings/page.tsx` |
+| **Deuda técnica: dos jobs de limpieza + RLS automatizada** | Arranca el plan de saneamiento (`DEUDAS TECNICAS.md`, creado con 12 deudas verificadas contra código y BD, no heredadas de notas). **(a) Invitados huérfanos**: job `cleanup_guest_buyers` cada 5 min borra los invitados sin **ningún** pedido pasados 10 min (`cleanup.guest_orphan_minutes`); sin retención, por decisión del usuario. Borra `sessions` y `buyer_profiles` primero, y va fila por fila para que una FK inesperada no aborte la pasada. Un invitado con pedidos no se toca nunca. **(b) Evidencia base64**: job `purge_collection_evidence` diario purga las fotos a los **14 días** (`storage.evidence_retention_days`, bajado de 730). **No** las pone a `null`: deja `{ purged_at, had_evidence }` y el endpoint devuelve **410 `EVIDENCE_EXPIRED`** en vez de 404 — un 404 diría «nunca tuvo foto», que es lo contrario de lo que pasó. Código de error nuevo en `shared`. **(c) FORCE RLS**: verificado que la BD compartida tiene las 21 tablas con RLS activo y forzado, y que el esquema es coherente (21 ENABLE = 21 FORCE). Producción no es alcanzable desde aquí, así que en vez de dejar un recordatorio se **automatizó**: `verify_prod.sh` ahora lista por nombre las tablas con RLS sin forzar y **sale con error** si hay alguna, y se añadió `fix_force_rls.sh` (idempotente, seco por defecto, transaccional). **Hallazgo colateral:** `lib/errors.ts` duplicaba a mano la lista `ERROR_CODES` de `shared` — añadir un código rompía la compilación hasta duplicarlo; ahora se importa. | `backend-ruta/api/src/jobs/{cleanup_guest_buyers,purge_collection_evidence}.job.ts`, `jobs/maintenance_boss.ts`, `services/orders/collection.service.ts`, `lib/errors.ts`, `packages-ruta/shared/src/constants/error_codes.ts`, `docs-ruta/bd/ruta_postgres.sql`, `docs-ruta/parametros_negocio.md`, `infra-ruta/scripts/{verify_prod.sh,fix_force_rls.sh}`, `DEUDAS TECNICAS.md` |
+| **Deuda #2: pg-boss ya no muere en silencio** | Eran **tres** fallos, no uno. (1) No había `boss.on('error')`, y un evento `error` sin oyente es excepción no capturada en Node: los fallos de ejecución se perdían. (2) Un fallo de `boss.start()` dejaba la promesa **rechazada y memoizada** en `initPromise`, así que ningún intento posterior podía prosperar — un hipo de la BD al arrancar dejaba los jobs muertos para toda la vida del proceso. (3) Nada exponía el estado. Ahora: reintento con backoff (5 s → 5 min, indefinido, con `unref` para no bloquear el cierre), registro de errores de ejecución, y `GET /healthz/jobs` que responde **503** mientras no estén corriendo. Va aparte de `/ready` a propósito: si los jobs caen, la API sirve bien y sacarla del balanceador sería peor. **Política distinta por proceso, y explícita en el código:** la API reintenta por dentro porque debe seguir en pie; el worker, que no expone HTTP, sale con error para que Render lo reinicie. 6 tests nuevos que fijan sobre todo que *un fallo de arranque ya no es definitivo*. Verificado en caliente: `/healthz/jobs` devuelve `running`. | `backend-ruta/api/src/jobs/maintenance_boss.ts`, `routes/healthz.ts`, `index.ts`, `index.worker.ts`, `__tests__/maintenance_boss_recovery.test.ts`, `docs-ruta/contrato_api.md` |
 
 ### Pendientes abiertos de esta sesión
+
+> Los pendientes se movieron a dos archivos en la raíz del workspace, cada uno
+> con su diagnóstico y por dónde entrarle:
+>
+> - **Funcionalidades** (dominio para el correo, seguimiento en vivo, captura de
+>   leads, cierre de pedidos Nequi abandonados) → `COSAS POR HACER MAS ADELANTE.md` §3–§6.
+> - **Deuda técnica** (object storage, FORCE RLS en producción, pg-boss, tipos
+>   desde OpenAPI, 401 global, tests flaky, duplicados, mojibake…) →
+>   `DEUDAS TECNICAS.md`, verificada contra código y BD el 2026-08-11.
+>
+> Lo que queda abajo es el histórico de la sesión; la lista viva está en esos
+> dos archivos.
 
 - Generar los tipos del frontend desde OpenAPI: seis bugs de la sesión fueron
   el mismo desajuste de contrato.
@@ -757,6 +802,38 @@ como usuario real (admin, corporativo y repartidor).
 - En el login, "Código de empresa" está etiquetado como opcional y su error
   se descarta con un `catch {}`.
 - Confirmar `FORCE ROW LEVEL SECURITY` en la BD de producción.
+- **RUTA no tiene dominio todavía**, y el aviso de entrega lo necesita: el
+  correo sale desde `EMAIL_FROM`, que debe ser una dirección de un dominio
+  propio verificado en Resend. Faltan tres cosas, en este orden: comprar el
+  dominio, verificarlo en Resend (registros DNS), y poner `EMAIL_API_KEY` y
+  `EMAIL_FROM` en el `.env`. Hasta entonces el aviso se encola, el worker lo
+  descarta con un log y nadie recibe nada — sin romper la entrega.
+- **Correr la migración del seguimiento** en la BD compartida:
+  `psql "$DATABASE_URL" -f infra-ruta/scripts/add_courier_last_location.sql`.
+  Hasta entonces, cualquier lectura de `courier_profiles` falla.
+- **Seguimiento en vivo de verdad**: lo actual es "última posición conocida"
+  porque el navegador deja de reportar en segundo plano. Si se quiere continuo,
+  hace falta app nativa (o PWA con background geolocation), que es otro
+  proyecto. Conviene decidirlo antes de prometérselo a un cliente.
+- **Aviso a los repartidores**: se les muestra en pantalla cuándo se comparte su
+  ubicación, pero conviene dejarlo por escrito en su contrato o en la guía.
+- **Pedidos por link de Nequi abandonados**: al quedar fuera del job de
+  expiración, un pedido que nadie pagó se queda abierto indefinidamente. Es el
+  mal menor frente a cancelar uno ya pagado, pero conviene darle al Cliente una
+  forma cómoda de cerrarlos (o un plazo propio, más largo, solo para ellos).
+- **Suite flaky**: `refunds.test.ts` y `api_keys.test.ts` fallan de forma
+  intermitente en la corrida completa (401/404 en vez de 422) y pasan aislados y
+  en corridas repetidas. Comparten el mock de `@orkoruta/db` y vitest corre los
+  archivos en paralelo: es contaminación entre tests, no código roto.
+- **Captura de leads**: la landing contacta por correo
+  (`simon.marquez@orko.com.co`, en la constante `CONTACTO_EMAIL` de
+  `storefront/src/app/page.tsx`) porque **no existe** endpoint ni tabla para
+  registrar interesados. Un formulario propio necesita backend (tabla +
+  endpoint público con anti-spam).
+- **Correr la migración del día de entrega** en la BD compartida:
+  `psql "$DATABASE_URL" -f infra-ruta/scripts/add_scheduled_delivery_date.sql`.
+  El código ya la asume; hasta que se aplique, cualquier lectura de pedidos
+  falla porque Prisma pide una columna que no existe.
 - **Object storage**: no existe. Las evidencias fotográficas viven en base64
   dentro de `payments.collection_evidence` como solución provisional, y
   `POST /uploads/presigned-url` y `POST /courier/orders/:id/upload-evidence`
@@ -771,17 +848,30 @@ como usuario real (admin, corporativo y repartidor).
 
 # FIN DE MEMORIA
 
-Última actualización: 2026-07-22 — Sesión de pruebas manuales del MVP (sección 6.4): fuga cross-tenant cerrada con `FORCE ROW LEVEL SECURITY`, migración de mapas a Google Maps, capacidad concurrente del repartidor, flujo corporativo sin `DRAFT`, captura de recibo con cámara y estados traducidos para el repartidor.
+Última actualización: 2026-08-11 — Deuda #2 cerrada: pg-boss reintenta y su estado es monitorizable.
+Actualización previa: 2026-08-11 — Saneamiento de deuda técnica: limpieza de invitados, purga de evidencias y verificación automática de RLS.
+Actualización previa: 2026-08-11 — Aviso por correo al comprador al entregar, configurable por Cliente.
+Actualización previa: 2026-08-11 — Seguimiento del repartidor en el mapa para el comprador.
+Actualización previa: 2026-08-11 — Link de pago Nequi Negocios configurable por el Cliente.
+Actualización previa: 2026-08-11 — Teléfono del comprador invitado visible en el panel del Cliente (y correo sintético oculto).
+Actualización previa: 2026-08-11 — Corregido el nombre de la marca (RUTA, no "Uruta") en código y docs.
+Actualización previa: 2026-08-11 — Tres rutas rotas por `order_origin` fuera del CHECK (recurrencia, repetir pedido y Cliente API) + landing comercial.
+Actualización previa: 2026-08-11 — Raíz del storefront con pantalla de marca (el muestrario del design system se movió a /design-system) y logo de la barra lateral sin doble salto.
+Actualización previa: 2026-08-11 — Fondo de rutas generalizado a toda la app.
+Actualización previa: 2026-08-11 — Cabecera agrandada para el logotipo, sistema de movimiento e ilustraciones de estado vacío.
+Actualización previa: 2026-08-11 — Identidad de marca RUTA aplicada a los frontends (favicon, logo, escala `brand`, recolor `sky`→`brand`) y modernización del sistema de diseño sin tocar tipografía ni distribuciones.
+Actualización previa: 2026-08-11 — Día de entrega programada (columna nueva `orders.scheduled_delivery_date`, endpoint `PUT /admin/orders/:id/delivery-date`, visible para comprador y repartidor) y rediseño del mapa de asignación (un solo panel + filtro de estado y de fecha).
+Actualización previa: 2026-07-22 — Sesión de pruebas manuales del MVP (sección 6.4): fuga cross-tenant cerrada con `FORCE ROW LEVEL SECURITY`, migración de mapas a Google Maps, capacidad concurrente del repartidor, flujo corporativo sin `DRAFT`, captura de recibo con cámara y estados traducidos para el repartidor.
 Total de archivos generados: 44 + esta memoria = 45.
 
-Si encuentras inconsistencias o falta informaciÃ³n, consulta
+Si encuentras inconsistencias o falta información, consulta
 `docs-ruta/all_ruta.md` o `docs-ruta/estructura_proyecto.md` (que son
-las fuentes de verdad mÃ¡s actuales) y reporta al equipo.
+las fuentes de verdad más actuales) y reporta al equipo.
 
 ---
 
 **Regla de memoria viva:**
 - Cada avance, cambio o mejora debe registrarse en la PARTE 6.
-- Actualizar tabla cronolÃ³gica (6.1) + secciÃ³n del sprint correspondiente (6.2+).
-- No borrar entradas anteriores â€” solo agregar nuevas.
-- Si el cambio afecta otro `.md` (contrato_api.md, flujos, etc.), actualizar ese documento tambiÃ©n.
+- Actualizar tabla cronológica (6.1) + sección del sprint correspondiente (6.2+).
+- No borrar entradas anteriores — solo agregar nuevas.
+- Si el cambio afecta otro `.md` (contrato_api.md, flujos, etc.), actualizar ese documento también.

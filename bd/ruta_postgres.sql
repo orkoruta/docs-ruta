@@ -208,6 +208,14 @@ CREATE TABLE ruta.courier_profiles (
   transport_method TEXT,
   vehicle_plate TEXT,
   additional_data JSONB,
+
+  -- Última posición conocida, para que el comprador siga la entrega en el mapa.
+  -- Solo la última: el historial serían miles de filas por repartidor y día, y
+  -- para "dónde está ahora" no aporta. `last_location_at` es imprescindible
+  -- para distinguir una posición viva de una de hace dos horas.
+  last_latitude NUMERIC(10,7),
+  last_longitude NUMERIC(10,7),
+  last_location_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -596,6 +604,14 @@ CREATE TABLE ruta.orders (
 
   -- Punto de recogida (para PICKUP)
   pickup_point_id BIGINT,
+
+  -- Programación de la entrega
+  -- Día en que el Cliente se compromete a entregar. Lo fija a mano desde el
+  -- detalle del pedido; NULL mientras no lo haya decidido. Es DATE y no
+  -- TIMESTAMPTZ a propósito: es un día calendario del negocio (Colombia,
+  -- UTC-5) y un timestamp se renderiza como el día anterior con facilidad.
+  -- No confundir con `delivered_at`, que es cuándo se entregó de verdad.
+  scheduled_delivery_date DATE,
 
   -- Financiero
   subtotal NUMERIC(12,2) NOT NULL DEFAULT 0,
@@ -1065,6 +1081,9 @@ CREATE INDEX idx_orders_client_refund_status
   WHERE refund_status != 'REFUND_NOT_REQUIRED';
 CREATE INDEX idx_orders_client_delivery_type
   ON ruta.orders (client_id, delivery_type);
+-- El mapa de asignación filtra los pedidos del día de entrega elegido.
+CREATE INDEX idx_orders_client_scheduled_delivery
+  ON ruta.orders (client_id, scheduled_delivery_date);
 
 -- order_items
 CREATE INDEX idx_oi_client_order
@@ -1956,7 +1975,8 @@ INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, v
 INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, value_type, description, is_overrideable_by_client) VALUES
 (0, 'storage.max_file_size_mb', '10', 'INTEGER', 'Tamaño máximo de archivo', FALSE),
 (0, 'storage.allowed_image_formats', '["jpg","jpeg","png","webp"]', 'JSON', 'Formatos permitidos', FALSE),
-(0, 'storage.evidence_retention_days', '730', 'INTEGER', 'Retención de evidencias en días', TRUE),
+(0, 'storage.evidence_retention_days', '14', 'INTEGER', 'Días que se conserva la foto del recibo antes de purgarla (job purge_collection_evidence)', TRUE),
+(0, 'cleanup.guest_orphan_minutes', '10', 'INTEGER', 'Minutos tras los cuales se borra un invitado que no llegó a hacer ningún pedido (job cleanup_guest_buyers)', TRUE),
 (0, 'storage.product_image_max_count', '5', 'INTEGER', 'Imágenes máximas por producto', TRUE);
 
 -- Catálogo

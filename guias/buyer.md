@@ -140,6 +140,9 @@ Haz clic en **Ver mi pedido** para seguir el estado de tu compra.
 Haz clic en cualquier pedido para ver su detalle:
 
 - **Estado actual**: indicado en la parte superior (por ejemplo: "En tránsito", "Listo para retiro", "Entregado").
+- **Entrega programada**: si el negocio ya fijó el día en que te va a entregar,
+  aparece destacado en **Detalle de entrega** (y resumido en la lista de
+  pedidos). Si no lo ves, todavía no han comprometido una fecha.
 - **Línea de tiempo**: muestra todos los eventos del pedido en orden cronológico (creado, pago confirmado, en preparación, despachado, etc.).
 - **Datos de entrega**: dirección o punto de retiro, y el nombre del repartidor si ya fue asignado.
 - **Resumen del pedido**: los productos comprados y los totales.

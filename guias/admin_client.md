@@ -58,6 +58,23 @@ Accedes al panel en `app.ruta.com` con tu correo y contraseña. Al iniciar sesi�
    - **Buscar**: escribe el número de pedido o el nombre del comprador.
 4. Para exportar la lista filtrada haz clic en **Exportar**.
 
+### Fijar el día de entrega
+
+En el detalle de un pedido, la tarjeta **Día de entrega** te deja comprometer
+una fecha:
+
+1. Abre el pedido desde la lista.
+2. En **Día de entrega**, elige la fecha en el selector y pulsa **Guardar**.
+3. Si te equivocaste, **Quitar** borra la programación y el pedido vuelve a
+   quedar sin día.
+
+Ese día lo ven **el comprador** (en el detalle y en su lista de pedidos) y **el
+repartidor** (en su app, arriba de la dirección). También es lo que filtra el
+selector de fecha del mapa de asignación.
+
+No se puede cambiar en un pedido que ya terminó (entregado, cerrado o
+cancelado). Cada cambio queda registrado en la auditoría.
+
 ### Vista de detalle 360 de un pedido
 
 1. Haz clic en cualquier fila de la lista de pedidos.
@@ -101,22 +118,39 @@ Si un pedido ya fue despachado y el comprador pide cancelarlo, aparecerá en est
 ### Cómo ver el mapa
 
 1. En el menú lateral selecciona **Mapa**.
-2. Verás un mapa interactivo (OpenStreetMap) con:
-   - Pines de color que representan los pedidos listos para ser asignados.
-   - Íconos de repartidor que muestran la ubicación de tus repartidores disponibles.
-3. El mapa se actualiza automáticamente cada 30 segundos.
+2. Verás un mapa interactivo (Google Maps) con un pin por pedido:
+   - **Índigo**: espera repartidor.
+   - **Verde**: ya tiene repartidor encima.
+   - **Ámbar**: el pedido que estás mirando ahora.
+3. A la derecha, un panel con la lista de esos mismos pedidos. El punto de cada
+   fila repite el color de su pin, para emparejar lista y mapa de un vistazo.
+4. El mapa se actualiza automáticamente cada 30 segundos.
+
+### Filtrar lo que ves
+
+Junto al título **Mapa de asignación** hay dos filtros que afectan al mismo
+tiempo al mapa y al panel de la derecha:
+
+- **Mostrar**: `En reparto` (solo los que ya tienen repartidor),
+  `Pedidos por asignar` (los que esperan) o `Todos`.
+- **Día de entrega**: muestra **solo** los pedidos programados para el día que
+  elijas. Si algún pedido queda fuera por no tener día asignado, aparece un
+  aviso ámbar diciendo cuántos son, con **Incluirlos** para traerlos de vuelta
+  (y **Ocultarlos** para sacarlos otra vez). Así el filtro filtra de verdad, sin
+  esconderte trabajo pendiente en silencio. Usa **Ver todas las fechas** para
+  quitar el filtro.
 
 ### Cómo asignar un repartidor a un pedido
 
-1. Haz clic sobre el pin de un pedido en el mapa. Se abrirá un panel con el detalle del pedido.
-2. En el panel lateral derecho verás la lista de **Repartidores disponibles**.
-3. Selecciona el repartidor que quieres asignar y haz clic en **Asignar**.
-4. Confirma la asignación en el mensaje de verificación.
-5. El pedido cambia de estado a **Repartidor asignado** y el repartidor recibe la notificación en su app.
+1. Haz clic sobre el pin en el mapa, o sobre la fila en el panel derecho.
+2. Pulsa **Asignar** en la fila del pedido (solo aparece si no tiene repartidor).
+3. Se abre la ventana con los **repartidores disponibles**: para cada uno verás
+   cuántos pedidos lleva encima y cuánta capacidad le queda. Los que están al
+   tope no aparecen.
+4. Elige uno y confirma.
+5. El pedido pasa a **Repartidor asignado** y le aparece en su app.
 
-### Ver couriers disponibles
-
-El panel derecho del mapa muestra en todo momento la lista de repartidores activos con el número de pedidos que llevan en ese momento. También puedes verlos en el menú **Repartidores**.
+Reasignar no se hace desde este mapa: entra al detalle del pedido.
 
 ---
 

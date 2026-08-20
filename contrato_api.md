@@ -312,6 +312,10 @@ Lista de mis pedidos.
 
 Detalle con timeline (estados históricos).
 
+Ambos incluyen `scheduled_delivery_date` (`YYYY-MM-DD` o `null`): el día de
+entrega que fijó el Cliente desde su panel. Es de solo lectura para el
+comprador.
+
 ### `POST /buyer/orders/:id/cancel`
 
 Solo permitido en DRAFT, PENDING_CONFIRM, PENDING_ONLINE_PAYMENT,
@@ -382,8 +386,13 @@ Solicitar cancelación post-despacho.
 
 - `GET /admin/orders` — Lista con filtros amplios.
   `?status=&payment_status=&buyer_id=&courier_id=&date_from=&date_to=`.
+  Cada fila incluye `buyer_phone` y `buyer_is_guest`. Un invitado (pedido sin
+  cuenta) tiene correo **sintético** `guest-<uuid>@guest.ruta`, que no existe:
+  su teléfono es el único contacto real y por eso viaja en el listado.
 - `GET /admin/orders/:id` — Detalle completo (incluye history,
-  payments, evidence).
+  payments, evidence). `buyer.is_guest` marca a los compradores sin cuenta;
+  cuando es `true`, `buyer.email` es sintético y no debe ofrecerse como
+  contacto.
 - `POST /admin/orders/:id/transition` — Transición manual de estado.
   Body: `{ to_state, reason, dimension: "order_status" }`.
 - `POST /admin/orders/:id/accept` — VALIDATION_APPROVED →
@@ -396,6 +405,78 @@ Solicitar cancelación post-despacho.
 - `POST /admin/orders/:id/cancel-request/approve` — Aprobar
   CUSTOMER_CANCEL_REQUEST.
 - `POST /admin/orders/:id/cancel-request/reject` — Rechazar.
+- `POST /admin/orders/:id/confirm-payment` — Marca como recibido un pago hecho
+  por **link de Nequi Negocios**. Ese medio no tiene webhook, así que la
+  confirmación la da el Cliente tras verificarlo en su app. Deja
+  `payment_status = PAID` y el job `validate_order` continúa el flujo normal.
+  422 si el pedido no es de submétodo `PAYMENT_LINK` o si su pago ya no está
+  pendiente. Se audita como `order_link_payment_confirmed`. Requiere
+  `X-Idempotency-Key`.
+- `PUT /admin/orders/:id/delivery-date` — Fija el día de entrega que el Cliente
+  se compromete a cumplir. Body: `{ scheduled_delivery_date: "YYYY-MM-DD" | null }`
+  (`null` quita la programación). No cambia el estado del pedido; se audita como
+  `order_delivery_date_set` / `order_delivery_date_cleared`. Responde 422
+  `INVALID_STATE_TRANSITION` si el pedido ya terminó (entregado, cerrado o
+  cancelado). Requiere `X-Idempotency-Key`.
+
+### Salud del servicio
+
+- `GET /healthz` — Vivo. No toca la BD.
+- `GET /healthz/ready` — Listo: comprueba la BD. **503** si no responde.
+- `GET /healthz/jobs` — Estado de los jobs de mantenimiento (pg-boss):
+  `{ state: 'disabled'|'starting'|'running'|'failed', since, lastError,
+  lastErrorAt, failedAttempts, runtimeErrors }`. Responde **503** mientras no
+  estén corriendo.
+
+Va **aparte de `/ready`** a propósito: si los jobs se caen, la API sigue
+sirviendo peticiones perfectamente y sacarla del balanceador sería peor que el
+problema. Pero alguien tiene que enterarse — antes se morían en silencio y la
+expiración de pedidos, la recurrencia y los webhooks quedaban parados sin rastro
+en los logs. **Este es el endpoint que conviene monitorizar.**
+
+### Avisos al comprador
+
+- `GET /admin/notifications/delivery-email` — Config del aviso de entrega:
+  `{ enabled, reply_to, from_name, subject, body, placeholders }`.
+- `PUT /admin/notifications/delivery-email` — Body `{ enabled, reply_to,
+  from_name, subject, body }`. Activar sin `reply_to` guarda `enabled: false`:
+  un aviso al que el comprador no puede contestar deja su duda sin destinatario.
+
+Se guarda en `client_parameters` (`notifications.delivery_email_*`), no en una
+tabla nueva: es config por tenant.
+
+El asunto y el mensaje admiten marcas `{{comprador}}`, `{{pedido}}`,
+`{{total}}` y `{{negocio}}`, que se reemplazan al enviar.
+
+**El correo sale siempre desde la dirección de RUTA** (`EMAIL_FROM`), que es el
+único dominio verificado con el proveedor, mostrando el nombre del negocio como
+remitente y con su correo en `Reply-To`. Así ningún Cliente tiene que verificar
+su dominio —sería un trámite por cliente— y las respuestas del comprador le
+llegan igual.
+
+A los compradores **invitados no se les escribe**: su correo es sintético y
+enviarlo generaría rebotes que perjudican la reputación del dominio, que aquí es
+compartido por todos los Clientes.
+
+### Medios de pago del Cliente
+
+- `GET /admin/payment-providers/wompi` — Estado de la pasarela. Los secretos
+  nunca vuelven: solo `has_private_key` / `has_webhook_secret`.
+- `PUT /admin/payment-providers/wompi` — Body `{ enabled, public_key,
+  private_key?, events_secret? }`. Secreto vacío = conservar el guardado.
+- `GET /admin/payment-providers/nequi` — Link de pago de Nequi Negocios.
+- `PUT /admin/payment-providers/nequi` — Body `{ enabled, payment_link }`.
+  El link **no se enmascara**: es una URL pensada para compartirse. Activar sin
+  link guarda el proveedor como `INACTIVE`.
+
+Ambos viven en `client_payment_providers`: Wompi como `PAYMENT_GATEWAY`
+(`provider_name='wompi'`) y Nequi como `PAYMENT_LINK` (`provider_name='nequi'`).
+No hizo falta tocar el esquema.
+
+**Diferencia esencial:** Wompi confirma el pago por webhook; el link de Nequi
+**no avisa a nadie**. Por eso un pedido con submétodo `PAYMENT_LINK` queda
+esperando confirmación manual y está **excluido** del job de expiración por
+falta de pago (si no, se cancelarían pedidos ya pagados).
 
 ### Mapa de asignación
 
@@ -405,7 +486,11 @@ Solicitar cancelación post-despacho.
   `ARRIVED_AT_CUSTOMER`). Solo devuelve pedidos con latitud y longitud.
   Cada elemento incluye `courier_user_id`, `courier_name` y `courier_phone`
   (`null` mientras el pedido está sin asignar), que es lo que distingue un
-  grupo del otro en la UI.
+  grupo del otro en la UI, y `scheduled_delivery_date` (`YYYY-MM-DD` o `null`),
+  con el que la pantalla filtra por día de entrega (filtro estricto: solo los del
+  día elegido, con un aviso para incluir los que no tienen fecha). El filtrado
+  por estado y por fecha se hace en el cliente: el endpoint devuelve el conjunto completo de
+  pedidos activos, que es acotado.
 - `GET /admin/orders/:id/collection-evidence` — Foto del recibo del cobro COD
   (misma respuesta que la versión del repartidor).
 - `POST /admin/orders/:id/assign-courier` — Asignar.
@@ -463,10 +548,46 @@ Pedidos asignados a mí, agrupados por estado.
 }
 ```
 
+### `POST /courier/location`
+
+El repartidor reporta su posición. Body `{ latitude, longitude, accuracy? }`.
+Responde `{ accepted: true, recorded_at }`, o `{ accepted: false, reason:
+'LOW_ACCURACY' }` cuando el GPS aún no fija bien (>1000 m de error): se descarta
+en silencio para no hacer saltar el pin por el mapa.
+
+**No exige `X-Idempotency-Key`**, a diferencia del resto de mutaciones: es un
+latido cada 20 s que sobrescribe un valor, no crea nada. Guardar una clave por
+latido llenaría `idempotency_keys` sin ganar nada.
+
+Solo se guarda la **última** posición (`courier_profiles.last_latitude/…`), no
+el historial.
+
+### `GET /buyer/orders/:id/courier-location`
+
+Posición del repartidor que trae **ese** pedido, para el comprador. Devuelve
+`{ latitude, longitude, updated_at, age_seconds, is_stale, courier_name,
+destination }`.
+
+Responde **404 en todos los casos sin seguimiento** —pedido ajeno, fuera de
+reparto, sin repartidor o sin posición— a propósito: distinguirlos permitiría
+sondear pedidos de otros compradores.
+
+Solo hay seguimiento en `SHIPPED`, `IN_TRANSIT`, `OUT_FOR_DELIVERY` y
+`ARRIVED_AT_CUSTOMER`: empieza con "Iniciar despacho" y termina al entregar.
+`COURIER_ASSIGNED` queda fuera adrede — el repartidor aún no ha salido.
+
+`is_stale` marca que la posición superó `tracking.courier_location_ttl_seconds`
+(300 s por defecto). El frontend **debe** decirlo: mostrar una posición vieja
+como actual deja al comprador esperando en la puerta.
+
 ### `GET /courier/orders/:id`
 
 Detalle del pedido para el COURIER (incluye dirección, contacto del
 Comprador, items, total a cobrar si aplica).
+
+Incluye `scheduled_delivery_date` (`YYYY-MM-DD` o `null`), el día que el negocio
+le prometió al comprador. También viene en `GET /courier/orders/assigned`, para
+que el repartidor priorice sin abrir cada pedido. Es de solo lectura.
 
 ### `POST /courier/orders/:id/start-shipping`
 
@@ -520,6 +641,12 @@ envió embebida, `evidence_url` vuelve en `null` y `has_evidence` en `true`: no
 se repite un megabyte que el cliente ya tiene.
 
 ### `GET /courier/orders/:id/collection-evidence`
+
+Responde **410 `EVIDENCE_EXPIRED`** (con `purged_at` en `details`) cuando la foto
+existió y se purgó por vencimiento, y **404** solo cuando el cobro nunca tuvo
+evidencia. Son casos distintos y la UI debe decirlo distinto: un 404 para una
+foto vencida afirmaría que nunca hubo respaldo.
+
 
 Foto del recibo del cobro contra entrega. El repartidor solo puede consultar
 pedidos asignados a él (403 en caso contrario).
@@ -721,6 +848,16 @@ frontend y la caché de 24 h del servidor.
   }
 }
 ```
+
+La respuesta incluye `postal_code` (código postal del punto, o `null`).
+
+### `GET /geocode/reverse?lat=<n>&lng=<n>`
+
+Geocodificación **inversa**: de coordenadas a dirección. Se usa para sacar el
+código postal del punto donde el comprador deja el pin en el mapa. Misma
+autorización y caché que `/geocode`. Respuesta: `{ data: { latitude, longitude,
+formatted_address, precision, is_precise, postal_code } | null }`.
+
 
 `data` es `null` cuando la dirección no se reconoce. `is_precise` es `false`
 cuando Google ubicó la vía o el sector en vez del predio.

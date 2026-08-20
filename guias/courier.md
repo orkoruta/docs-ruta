@@ -35,6 +35,10 @@ Cuando te asignan un pedido aparece en la pestaña **Asignados** con el estado *
 
 1. Toca la tarjeta del pedido para abrirlo.
 2. Revisa la dirección del comprador y los productos que debes llevar.
+   Si el negocio le prometió un día de entrega al comprador, lo verás arriba de
+   la dirección como **📅 Entrega: <día>** (y también en la tarjeta de la lista,
+   para saber qué es de hoy sin abrir cada pedido). Si no aparece, ese pedido no
+   tiene día comprometido.
 3. Revisa el método de pago: si dice **Contra entrega** deberás cobrar cuando llegues. Si dice **Pago online** ya está pagado.
 4. Toca el botón **Iniciar despacho**.
 5. Luego toca **Marcar en camino** para confirmar que ya estás en ruta hacia el comprador.

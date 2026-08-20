@@ -137,14 +137,133 @@ muted:      #94a3b8;
 Los colores **no se usan por decoración**, sino por significado
 operativo. Cada color tiene una intención específica.
 
-| Color    | Uso |
-|----------|-----|
-| Azul     | Acción principal, en tránsito, asignar ruta, buscar pedido |
-| Verde    | Entregado, completado, confirmado, éxito |
-| Ámbar    | Pendiente, en espera, advertencia, pago pendiente |
-| Rojo     | Cancelado, error, acción destructiva |
-| Violeta  | Validado, acción secundaria especial |
-| Gris     | Borrador, neutro, filtro, exportar, navegación |
+| Color              | Uso |
+|--------------------|-----|
+| Naranja (`brand`)  | Marca RUTA: acción principal, foco, elemento activo, resalte de plataforma |
+| Azul (`blue`)      | En curso, en tránsito, informativo |
+| Verde              | Entregado, completado, confirmado, éxito |
+| Ámbar              | Pendiente, en espera, advertencia, pago pendiente |
+| Rojo               | Cancelado, error, acción destructiva |
+| Violeta            | Validado, ADMIN_RUTA, acción secundaria especial |
+| Gris               | Borrador, neutro, filtro, exportar, navegación |
+
+### 5.1 Escala de marca
+
+Derivada del naranja del logotipo (`#FD8B43`) conservando el tono (23°) y
+modulando la luminosidad. Vive en `tailwind.config.ts` de `admin` y
+`storefront` como `brand.50 … brand.950`.
+
+| Token | Hex | Uso típico |
+|---|---|---|
+| `brand-500` | `#FD8B43` | Color del logo. Relleno del botón primario. |
+| `brand-600` | `#EF7427` | Hover del botón primario. |
+| `brand-700` | `#CC5D17` | Texto de marca sobre fondo claro (contraste AA). |
+| `brand-300` | `#FEB98D` | Texto de marca sobre fondo oscuro. |
+| `brand-400` | `#FDA268` | Bordes y anillos de foco. |
+
+**Antes de este cambio el acento primario era `sky`.** Se migró a `brand` en
+todo el producto; el azul semántico de "en curso" pasó de `sky` a `blue`, que
+es casi idéntico visualmente y deja `sky` libre. Regla que se desprende:
+**los colores semánticos no se tiñen de marca.** Un pedido en curso es azul
+aunque la marca sea naranja, porque el color ahí comunica estado, no identidad.
+
+### 5.2 Marca y logotipo
+
+Los originales están en `docs-ruta/branding/`. **Ojo con el nombre:** esos
+archivos se llaman `Uruta_*.svg`, pero **el negocio se llama RUTA** — el logotipo
+es el imagotipo en forma de U seguido de la palabra «ruta», no la palabra
+«Uruta». En código y en texto siempre va **RUTA**. En código se usan los
+componentes `RutaLogo` (completo) y `RutaMark` (imagotipo) de
+`@orkoruta/ui`, que pintan con `currentColor`.
+
+- **Favicon**: el imagotipo, en `src/app/icon.svg` de cada app (Next lo publica
+  como icono automáticamente).
+- **Panel administrativo**: logo completo en la cabecera de la barra lateral,
+  en la barra superior en móvil y en el login.
+- **Storefront**: la cabecera lleva el logo **del Cliente**, no el de RUTA —
+  la tienda es del Cliente. La marca de plataforma va en el pie.
+- **Dimensionar por ancho** (`w-40`, `w-32`), no por alto: el logo completo es
+  muy apaisado (1.82:1) y fijarle la altura lo deja ilegible.
+- Los `viewBox` de los componentes están recortados al contenido; los SVG
+  originales son lienzos con mucho aire. El "by ORKO" del original viene en
+  `#FF0000` por un residuo de la vectorización: en código va en color de marca.
+
+### 5.3 Movimiento
+
+Definido en `globals.css` de cada app. Tres reglas lo gobiernan:
+
+1. **El movimiento explica algo o no existe.** Entrar dice de dónde viene el
+   contenido; el hover dice qué es pulsable; el trazo del chulo dice que algo
+   se cumplió. Nada se mueve por adorno.
+2. **Una sola familia de curvas y duraciones**, para que toda la app se sienta
+   del mismo material: `--u-ease` (salida suave, la de por defecto),
+   `--u-ease-pop` (con rebote mínimo, para lo que aparece encima) y
+   `--u-fast` 180ms / `--u-base` 320ms / `--u-slow` 640ms.
+3. **Nada es obligatorio.** Con `prefers-reduced-motion: reduce` se apaga todo
+   —incluidos los bucles— y la interfaz queda idéntica pero quieta.
+
+| Clase | Para qué |
+|---|---|
+| `u-in` / `u-in-fade` / `u-in-pop` / `u-in-right` | Entradas: subir, fundir, aparecer, deslizar |
+| `u-stagger` | Escalona la entrada de los hijos (tope a los 8, para que una lista larga no tarde un segundo) |
+| `u-lift` | Tarjeta pulsable: se eleva al pasar por encima |
+| `u-nudge` | Fila de lista: se desplaza un poco |
+| `u-draw` | Dibuja un trazo SVG. Requiere `pathLength="1"` |
+| `u-travel` | Recorre una ruta punteada en bucle |
+| `u-float` | Flotación suave |
+| `u-skeleton` | Bloque de carga con barrido |
+
+**`pathLength="1"`** es la clave de `u-draw`/`u-travel`: normaliza la longitud
+del trazo a 1, así se anima `stroke-dashoffset` sin medir el recorrido real.
+
+### 5.3b Fondo de rutas (`RutaRouteBackdrop`)
+
+El motivo de la marca —el trazo que se recorre— como atmósfera de pantalla.
+Nació en el login y se generalizó a un componente para que todas las pantallas
+que lo lleven se muevan igual.
+
+| Variante | Forma | Dónde |
+|---|---|---|
+| `flow` | Curvas que barren de lado a lado | Portadas y pantallas completas (login, estados vacíos grandes) |
+| `descend` | Ruta que baja | Columnas estrechas (barra lateral) |
+| `corner` | Entra por una esquina | Cabeceras de página: deja limpio el centro |
+
+**Reglas:**
+
+- **Solo donde hay aire.** En pantallas densas (tablas, el mapa) compite con el
+  contenido. No se pone "porque queda bonito".
+- El contenedor padre necesita **`relative isolate overflow-hidden`**.
+  `isolate` **no es opcional**: el fondo va en `-z-10` y, sin un contexto de
+  apilamiento propio, ese `-z-10` se escapa al contexto raíz y acaba escondido
+  detrás del fondo de la tarjeta o de la página. `position: relative` por sí
+  solo **no** crea contexto de apilamiento.
+- Opacidad según competencia: `0.18` en portadas, `0.14` sobre contenido ligero,
+  `0.09` en la barra lateral (ahí compite con los rótulos de navegación).
+- Máximo **tres trazos** por variante y como mucho dos en bucle: es animación de
+  repintado continuo y se acumula.
+- Siempre `aria-hidden` y `pointer-events-none`. Es decoración.
+
+### 5.4 Ilustraciones
+
+En `@orkoruta/ui` (`illustrations.tsx`), con `RutaEmptyState` para montarlas.
+Todas hablan el mismo idioma: **trazo de línea** del grosor del logotipo,
+esquinas redondeadas, y la **ruta punteada** como elemento recurrente —
+es lo que hace la empresa, y aparece dibujándose en vez de estar quieta.
+
+| Ilustración | Cuándo |
+|---|---|
+| `IllustrationNoOrders` | No hay nada que gestionar todavía |
+| `IllustrationEmptyMap` | Los filtros no devuelven nada |
+| `IllustrationNoResults` | Una búsqueda sin coincidencias |
+| `IllustrationAllDone` | Vacío **bueno**: el trabajo está hecho |
+
+Convenciones: `currentColor` en el trazo principal (heredan el color de marca),
+`slate` translúcido en el secundario, y la animación siempre en clases de
+`globals.css`, nunca en línea.
+
+Un estado vacío es **una invitación a actuar**, no un error: el texto dice qué
+hacer y no se disculpa. `IllustrationAllDone` existe justamente para no tratar
+un "no tienes pedidos" como una carencia.
 
 ---
 
@@ -303,7 +422,7 @@ escribirse con sintaxis arbitraria (corchetes).
 
 | Forma | Correcto | Incorrecto |
 |-------|----------|------------|
-| Color con opacidad arbitraria | `bg-sky-500/[0.12]` | `bg-sky-500/12` |
+| Color con opacidad arbitraria | `bg-brand-500/[0.12]` | `bg-brand-500/12` |
 | Blanco con opacidad arbitraria | `bg-white/[0.76]` | `bg-white/76` |
 | Hex con opacidad | `bg-[#1d2025]/[0.78]` | `bg-[#1d2025]/78` |
 
@@ -334,7 +453,7 @@ dark: {
 ### 10.2 Tokens exactos de botones / pills en modo dark
 
 ```tsx
-blue:   "bg-sky-500/[0.12] text-sky-300 border-sky-400/25"
+blue:   "bg-blue-500/[0.12] text-blue-300 border-blue-400/25"
 green:  "bg-emerald-500/[0.12] text-emerald-300 border-emerald-400/25"
 amber:  "bg-amber-500/[0.12] text-amber-300 border-amber-400/25"
 red:    "bg-rose-500/[0.12] text-rose-300 border-rose-400/25"
@@ -384,8 +503,8 @@ RutaSidebar, RutaHeader.
 
 Para Tailwind, usar siempre sintaxis arbitraria de opacidad cuando el
 valor no esté en la escala estándar:
-- Correcto: bg-sky-500/[0.12], bg-white/[0.76], bg-[#1d2025]/[0.78]
-- Incorrecto: bg-sky-500/12, bg-white/76, bg-[#1d2025]/78
+- Correcto: bg-brand-500/[0.12], bg-white/[0.76], bg-[#1d2025]/[0.78]
+- Incorrecto: bg-brand-500/12, bg-white/76, bg-[#1d2025]/78
 ```
 
 ---

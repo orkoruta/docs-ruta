@@ -150,6 +150,7 @@ Al resolver una, **borrar su sección** y dejar el registro en
 | 1 | Sin object storage: fotos en base64 dentro de la BD | **Mitigado** (purga a 14 días); falta el bucket | Alto |
 | 2 | Tipos del frontend escritos a mano en vez de generados | **Parcial**: cero esquemas duplicados; faltan 43 sin gemelo en shared | Medio |
 | 4 | Suite de tests con fallos intermitentes | Medio (erosiona confianza) | **Alto**: tres hipótesis descartadas |
+| 6 | Una sola cookie de sesión para todos los roles y frontends | Medio: entrar al panel cierra la sesión de comprador y al revés | Medio |
 | 5 | Cookies de sesión con `SameSite=None` en Render | Bajo hoy (CSRF cubierto por otra vía); se deshace solo al tener dominios propios | **Bajo**: cambiar una variable |
 
 ---
@@ -333,5 +334,45 @@ relacione el cambio con esta decisión.
    `ruta-browser` en Google Cloud (si no, los mapas salen en blanco).
 3. Poner `COOKIE_SAMESITE=strict` en `ruta-orko-api` y redesplegar.
 4. Comprobar la cabecera: `SameSite=Strict` y sesión que persiste.
+
+---
+
+## 6. Una sola cookie de sesión para todos los roles y todos los frontends
+
+**Cómo se comprobó:** el 2026-09-18, con sesión abierta en el panel como
+`ADMIN_CLIENT`, la landing de Avocado mostraba un error al pedir sus pedidos.
+En consola: `GET /buyer/me 403 (Forbidden)`. Reproducido fuera del navegador:
+
+```
+login como ADMIN_CLIENT  ->  rol: ADMIN_CLIENT
+con esa misma cookie:
+  GET /buyer/me      -> 403 FORBIDDEN
+  GET /buyer/orders  -> 403 FORBIDDEN
+```
+
+**Causa:** las cookies `access_token` y `refresh_token` se emiten para el
+dominio de la **API**, no para el del frontend. El panel
+(`ruta-admin.onrender.com`), el storefront (`ruta-by-orko.onrender.com`) y cada
+landing custom llaman todos a `ruta-orko-api.onrender.com` con
+`credentials: 'include'`, así que **comparten el mismo tarro de cookies**. Solo
+puede haber una sesión activa por navegador, sea del rol que sea.
+
+**Qué se rompe:** entrar al panel cierra de hecho la sesión de comprador en la
+tienda, y entrar en la tienda cierra la del panel. Le pasa a cualquiera que sea
+las dos cosas —el dueño del negocio probando su propia tienda es el caso
+típico— y a cualquiera que haga QA. No es un fallo visible: no desloguea, deja
+la sesión "de otro rol" y las pantallas fallan con 403.
+
+**Mitigado el 2026-09-18:** la landing trata el 403 como «no hay sesión de
+comprador» y ofrece entrar, en vez de mostrar un error. Eso quita la confusión
+pero **no permite tener las dos sesiones a la vez**.
+
+**Por dónde entrarle:** darle a la cookie un nombre por audiencia
+(`ruta_staff` para ADMIN_RUTA/ADMIN_CLIENT/OPERATOR_CLIENT, `ruta_buyer` para
+BUYER, `ruta_courier` para COURIER) y que `authenticate` elija según la ruta.
+Con eso conviven las tres sesiones en el mismo navegador. Tocar `routes/auth.ts`
+(`setAuthCookies`/`clearAuthCookies`) y `middleware/auth.ts`. Ojo al migrar: las
+sesiones vivas con el nombre viejo se pierden, así que conviene leer ambos
+nombres durante una temporada.
 
 ---

@@ -295,9 +295,13 @@ Verificación:
     en `packageManager`, CI y `render.yaml`; `minimumReleaseAgeExclude`
     usa `@orkoruta/*` para que Render no bloquee paquetes internos recién
     publicados. CI `backend-ruta/main` verde en run 26540623500.
-    Healthcheck público pendiente de reconfirmar con la URL real de Render:
-    `ruta-api.onrender.com` y `api-dev.onrender.com` devuelven
-    `x-render-routing: no-server`.
+    Actualización 2026-09-18: resuelta la incógnita de la URL. Los servicios
+    no se llaman como el blueprint suponía: la API es `ruta-orko-api` y el
+    storefront `ruta-by-orko` (por eso `ruta-api.onrender.com` y
+    `api-dev.onrender.com` daban `x-render-routing: no-server`).
+    `https://ruta-orko-api.onrender.com/healthz` responde 200. Los `name:` de
+    los `render.yaml` ya coinciden con el panel; si no coincidieran, aplicar el
+    blueprint crearía servicios duplicados en vez de actualizar los existentes.
 [x] `ruta-api` (Web Service): `/healthz` responde 200 (2026-05-27).
 [x] `ruta-admin` (Static Site): desplegado en Render (2026-05-27).
 [x] `ruta-storefront` (Static Site): desplegado en Render (2026-05-27).

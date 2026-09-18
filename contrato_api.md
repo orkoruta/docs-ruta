@@ -81,6 +81,30 @@ que todo el flujo de compra funciona igual que con una cuenta.
 **Request:** `{ client_slug, full_name?, phone? }`. Solo para Cliente Full.
 **Response 201:** igual a login + `is_guest: true`. Set-Cookie de sesión.
 
+### `POST /auth/claim-account`
+
+Convierte la sesión de **invitado** en una cuenta con contraseña: el comprador
+"se queda" con la cuenta que ya usó para pedir.
+
+**Requiere sesión** (la del invitado) y `X-Idempotency-Key`.
+
+**Request:** `{ email, password (mín. 8), full_name?, phone? }`.
+**Response 200:** igual a login + `is_guest: false`. Set-Cookie **nuevas**: la
+identidad cambia y los tokens del invitado se sustituyen.
+
+No crea un usuario nuevo: completa el que ya existe, así que **los pedidos que
+hizo como invitado se conservan**. Sin este endpoint quedaban huérfanos —
+registrarse después creaba otro usuario al que no se asociaban.
+
+No acepta `client_slug`: el Cliente sale de la sesión. Aceptarlo del cuerpo
+permitiría intentar arrastrar un invitado a otro tenant.
+
+| Error | Cuándo |
+|---|---|
+| 401 `AUTHENTICATION_REQUIRED` | sin sesión |
+| 422 `INVALID_STATE_TRANSITION` | la sesión ya tiene cuenta (evita cambiar correo y contraseña sin pedir la actual) |
+| 409 `IDEMPOTENCY_CONFLICT` | ese correo ya tiene cuenta en el Cliente |
+
 ### `GET /buyer/me`
 
 … incluye `is_guest` (true en sesiones de invitado). El storefront lo usa para

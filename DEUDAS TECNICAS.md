@@ -150,6 +150,7 @@ Al resolver una, **borrar su sección** y dejar el registro en
 | 1 | Sin object storage: fotos en base64 dentro de la BD | **Mitigado** (purga a 14 días); falta el bucket | Alto |
 | 2 | Tipos del frontend escritos a mano en vez de generados | **Parcial**: cero esquemas duplicados; faltan 43 sin gemelo en shared | Medio |
 | 4 | Suite de tests con fallos intermitentes | Medio (erosiona confianza) | **Alto**: tres hipótesis descartadas |
+| 5 | Cookies de sesión con `SameSite=None` en Render | Bajo hoy (CSRF cubierto por otra vía); se deshace solo al tener dominios propios | **Bajo**: cambiar una variable |
 
 ---
 
@@ -289,5 +290,48 @@ si algo queda sin cerrar entre ficheros (handles abiertos, `server.listen` sin
 `close`, pools de Prisma contra la BD remota). `vitest --reporter=verbose
 --logHeapUsage` y `why-is-node-running` en un `afterAll` son los siguientes
 pasos.
+
+---
+
+## 5. Cookies de sesión con `SameSite=None` mientras el front y la API no compartan dominio
+
+**Cómo se comprobó:** el 2026-09-18, recién desplegado el panel, iniciar sesión
+funcionaba y al instante saltaba «Tu sesión caducó». En consola:
+`GET https://ruta-orko-api.onrender.com/admin/metrics 401 (Unauthorized)`. El
+login era correcto; la petición siguiente salía **sin cookie**. La cabecera de
+`POST /auth/login` decía `SameSite=Strict`, y `onrender.com` aparece en la
+[Public Suffix List](https://publicsuffix.org/list/public_suffix_list.dat)
+(verificado contra el fichero oficial), así que `ruta-admin.onrender.com` y
+`ruta-orko-api.onrender.com` son **sitios distintos** para el navegador y una
+cookie `Strict` no viaja entre ellos jamás.
+
+**Estado hoy:** resuelto el síntoma. `sameSite` ya no está fijo en el código
+(estaba en `routes/auth.ts`): sale de `COOKIE_SAMESITE` (`config/env.ts`), con
+`strict` por defecto y `none` en Render. Verificado en producción: la cabecera
+es `SameSite=None; Secure` y `GET /admin/metrics` con la cookie devuelve 200.
+`validateEnv` rechaza al arrancar un valor inválido o `none` sin `Secure`,
+porque los dos fallan en silencio en el navegador y el síntoma sería otra vez
+una sesión que no persiste.
+
+**Por qué es deuda y no un arreglo cerrado:** `SameSite` existe para frenar
+CSRF, y `none` lo desactiva. Aquí es aceptable por una razón concreta, no por
+optimismo: las **102 rutas de mutación exigen `X-Idempotency-Key`**, una
+cabecera personalizada obliga a *preflight*, y el preflight lo rechaza CORS para
+cualquier origen fuera de `CORS_ORIGINS`. Las lecturas tampoco se pueden leer
+desde otro origen. Si algún día se relaja la exigencia de idempotencia o se
+amplía la allowlist de CORS, esta protección se cae **sin que nada avise**.
+
+**Qué se rompe si no se arregla:** nada visible mientras se cumplan las dos
+condiciones de arriba. El riesgo es que se dejen de cumplir sin que nadie
+relacione el cambio con esta decisión.
+
+**Por dónde entrarle:** desaparece sola al hacer el Paso 8 de
+`infra-ruta/docs/deploy_produccion.md` (DNS). Con `app.ruta.com` y
+`api.ruta.com` los dos vuelven a ser el mismo sitio (`ruta.com`):
+1. Apuntar los CNAME y añadir los dominios en Render.
+2. Añadir los dominios nuevos a `CORS_ORIGINS` **y** a los referrers de la clave
+   `ruta-browser` en Google Cloud (si no, los mapas salen en blanco).
+3. Poner `COOKIE_SAMESITE=strict` en `ruta-orko-api` y redesplegar.
+4. Comprobar la cabecera: `SameSite=Strict` y sesión que persiste.
 
 ---

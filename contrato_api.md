@@ -888,6 +888,64 @@ cuando Google ubicó la vía o el sector en vez del predio.
 
 ---
 
+## Correcciones Avocado (2026-11)
+
+Endpoints y cambios de contrato añadidos por las correcciones reportadas por
+Avocado Delivery. Todos son de Cliente Full salvo el público de Instagram.
+
+### `POST /admin/orders/:id/mark-delivered`
+El propio negocio entregó el pedido (sin repartidor o en su lugar). Roles:
+ADMIN_CLIENT, OPERATOR_CLIENT, ADMIN_RUTA. Requiere `X-Idempotency-Key`.
+
+Body (todo opcional): `{ collected_amount?: number, collection_method?: 'CASH'|'ELECTRONIC', notes?: string }`.
+
+- Solo SHIP, desde cualquier estado entre `AWAITING_COURIER_ASSIGNMENT` y la
+  entrega (`ADMIN_DIRECT_DELIVERY_FROM` en `state_machine.ts`).
+- Contra entrega sin cobro: registra el cobro (por defecto el total) con
+  `collected_by_courier_user_id = NULL` — es dinero del negocio, no de un
+  repartidor.
+- 422 si el pago online está pendiente, si es PICKUP o si el pedido aún no salió.
+- 409 `OPTIMISTIC_LOCK_FAILED` si el pedido cambió entre lectura y escritura.
+- Responde el detalle del pedido (`GET /admin/orders/:id`).
+
+### `GET /admin/orders/daily-dispatch?date=YYYY-MM-DD`
+Qué sale ese día de entrega: unidades por producto (las líneas libres se
+agrupan por descripción), pedidos del día y cuántos pedidos activos no tienen
+día de entrega (`undated_pending_count`).
+
+### `GET /admin/orders/courier-collections?date_from&date_to`
+Cobros contra entrega por repartidor en el rango (días de Bogotá): efectivo,
+electrónico y el detalle de cada cobro. Lo cobrado por el propio negocio va en
+un grupo con `courier_id: null`.
+
+### `POST /admin/orders/:id/cancel` — cambio
+Ahora acepta `COURIER_ASSIGNED`: lo devuelve a la cola de asignación (quita el
+repartidor) y lo cancela, en la misma transacción.
+
+### `GET /admin/orders/:id` — campos nuevos
+`delivery_instructions_text` (indicación legible del comprador), `notes`
+(notas internas del staff) y `corporate_contact`. `delivery_instructions` en
+crudo se mantiene.
+
+### `POST /admin/orders/corporate` y `/corporate/recurring` — cambios
+- `buyer_type: 'CORPORATE' | 'INDIVIDUAL'` (default `CORPORATE`). Con
+  `INDIVIDUAL` es un pedido al detal tomado por el staff (`order_origin`
+  sigue siendo `CORPORATE_MANUAL`: «lo registró el staff»).
+- `new_buyer: { full_name, phone }` como alternativa a `buyer_id`: crea un
+  comprador sin cuenta (como un invitado). Sin ninguno de los dos → 422.
+- Ítems: `{ product_id, quantity }` **o** línea libre
+  `{ description, unit_price, quantity }` (queda con `product_id = NULL`).
+
+### `GET /admin/buyers?q=` — cambio
+La búsqueda ya no distingue mayúsculas y también busca por celular.
+
+### `GET /public/clients/:slug/instagram?limit=2`
+Últimas publicaciones de Instagram del Cliente (`data: [{ id, permalink,
+media_type, timestamp, thumbnail_url }]`), más recientes primero. Lista vacía
+si no tiene Instagram conectado. Caché de 10 min en el servidor y
+`Cache-Control: max-age=300`. El token se carga con
+`infra-ruta/scripts/set_instagram_token.sh` y se renueva solo.
+
 ## Paginación
 
 Estándar `?page=1&page_size=20`. Respuesta:

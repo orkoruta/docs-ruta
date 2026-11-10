@@ -2004,7 +2004,8 @@ INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, v
 (0, 'limits.max_buyer_addresses', '10', 'INTEGER', 'Direcciones guardadas por Comprador', TRUE),
 (0, 'limits.max_api_keys_per_client', '5', 'INTEGER', 'API keys activas por Cliente API', TRUE),
 (0, 'limits.max_pickup_points_per_client', '50', 'INTEGER', 'Puntos físicos por Cliente', TRUE),
-(0, 'limits.max_couriers_per_client', '200', 'INTEGER', 'Repartidores activos por Cliente', TRUE);
+(0, 'limits.max_couriers_per_client', '200', 'INTEGER', 'Repartidores activos por Cliente', TRUE),
+(0, 'limits.max_concurrent_orders_per_courier', '3', 'INTEGER', 'Pedidos simultáneos por Repartidor antes de dejar de aparecer como disponible', TRUE);
 
 -- Rate limiting
 INSERT INTO ruta.client_parameters (client_id, parameter_key, parameter_value, value_type, description, is_overrideable_by_client) VALUES

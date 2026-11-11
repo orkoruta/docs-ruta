@@ -936,6 +936,19 @@ crudo se mantiene.
 - Ítems: `{ product_id, quantity }` **o** línea libre
   `{ description, unit_price, quantity }` (queda con `product_id = NULL`).
 
+### `PUT /admin/orders/:id/items`
+Reemplaza los productos de un pedido ya creado. Body: `{ items: [...], reason?: string }`,
+con ítems `{ product_id, quantity }` o `{ description, unit_price, quantity }`.
+- Solo en MANUAL_REVIEW, VALIDATION_APPROVED, SELLER_CONFIRMED, PREPARING,
+  AWAITING_COURIER_ASSIGNMENT, COURIER_ASSIGNED, READY_TO_SHIP, SHIPMENT_HOLD o
+  READY_FOR_PICKUP, y con `payment_status` PAYMENT_NOT_STARTED o
+  PENDING_COLLECTION; si no, 422.
+- Un producto que ya estaba conserva su precio; uno nuevo toma el vigente.
+  Recalcula subtotal y total (respeta envío, impuestos y descuento).
+- No cambia el estado del pedido. Auditado como `ORDER_ITEMS_UPDATED` con el
+  antes y el después. 409 si el pedido cambió mientras se editaba.
+- Responde el detalle del pedido.
+
 ### `GET /admin/buyers?q=` — cambio
 La búsqueda ya no distingue mayúsculas y también busca por celular.
 

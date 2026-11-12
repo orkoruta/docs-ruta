@@ -918,6 +918,27 @@ Cobros contra entrega por repartidor en el rango (días de Bogotá): efectivo,
 electrónico y el detalle de cada cobro. Lo cobrado por el propio negocio va en
 un grupo con `courier_id: null`.
 
+### `GET /admin/metrics/operations?date_from&date_to&courier_id&delivery_type&include_backlog`
+Dashboard operativo. ADMIN_CLIENT, OPERATOR_CLIENT y ADMIN_RUTA (matriz §15;
+`GET /admin/metrics` también admite ya a OPERATOR_CLIENT). Fechas `YYYY-MM-DD`
+en días de Bogotá; sin fechas = hoy. `delivery_type`: `SHIP | PICKUP`.
+
+- `pending` (por entregar): pedidos vivos sin `delivered_at`, ubicados por
+  `scheduled_delivery_date` o, si no tienen, por su día de creación. Los de días
+  anteriores al rango son «atrasados»: siempre se cuentan
+  (`backlog_count`, `backlog_amount`) y se listan solo con
+  `include_backlog=true` (`overdue: true` en cada pedido).
+- `delivered`: pedidos con `delivered_at` en el rango (respaldo: estado
+  entregado + `updated_at` para los antiguos sin marca).
+- Cada sección: `count`, `total_amount`, `units`, `by_status`, `by_courier`,
+  `by_day`, `by_payment_method`, `products` y `orders` (con `items`; máximo 300,
+  `truncated` avisa si hay más — los totales cuentan todos).
+- 400 si una fecha no es `YYYY-MM-DD`; 422 si `date_from > date_to`.
+
+### `GET /admin/orders` — productos en el listado
+Cada pedido trae `items` (`product_name`, `quantity`, …). El panel los muestra
+en la columna «Productos»; antes leía un `item_count` que la API nunca envió.
+
 ### `POST /admin/orders/:id/cancel` — cambio
 Ahora acepta `COURIER_ASSIGNED`: lo devuelve a la cola de asignación (quita el
 repartidor) y lo cancela, en la misma transacción.
